@@ -1,0 +1,13 @@
+*{
+  box-sizing: border-box;
+}
+
+html, body, #root, #root > div {
+  height: 100%;  
+  width: 100% !important;
+  margin: 0;
+  overflow: auto;
+  padding: 0;
+  background-color: rgb(53, 53, 53);
+  font-family: 'Roboto', sans-serif;
+}
