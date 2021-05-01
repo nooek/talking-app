@@ -8,7 +8,6 @@ import {
 } from "./Styles";
 import { useUserData } from "../../store/userDataProvider";
 import Sidebar from "./Sidebar/Sidebar";
-import { useActualChat } from "../../store/ActualChatProvider";
 import { useSocket } from "../../store/socketProvider";
 import { useMessages } from "../../store/messagesProvider";
 import { useFriend } from "../../store/friendProvider";
@@ -22,7 +21,6 @@ import NotFriendAlert from "./NotFriendAlert/NotFriendAlert";
 const Chat = () => {
   const { userData } = useUserData();
   const { messages, setMessages } = useMessages();
-  const { currentChat } = useActualChat();
   const { socket } = useSocket();
   const { friend } = useFriend()
 
@@ -48,11 +46,11 @@ const Chat = () => {
   return (
     <Container>
       <Sidebar />
-      {currentChat !== undefined ? (
+      {friend.user_id !== undefined ? (
         <ChatSide>
           <MobileTopbar chat={true} />
           <ChatTopbar />
-          {friend.friend_add === false ? 
+          {friend.user_add === false ? 
             <NotFriendAlert />
             : null
           }
@@ -60,9 +58,9 @@ const Chat = () => {
             {messages.map((each, index) => {
               if (
                 (each.author === userData[0].user_id ||
-                  each.author === currentChat) &&
+                  each.author === friend.user_id) &&
                 (each.receiver === userData[0].user_id ||
-                  each.receiver === currentChat)
+                  each.receiver === friend.user_id)
               ) {
                 return (
                   <MessageContainer

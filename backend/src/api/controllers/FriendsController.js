@@ -20,8 +20,8 @@ module.exports = {
 
     getFriendsByUser: (req, res) => {
         const { userId } = req.params
-        const query = `SELECT user.user_id, user.user_name, user.user_pfp, user.user_desc
-        FROM user JOIN friendss where  user.user_id = friendss.user_id AND friendss.friend_with = ${userId}`
+        const query = `SELECT user.user_id, user.user_name, user.user_pfp, user.user_desc, friend.blocked, friend.friend_id
+        FROM user JOIN friend where  user.user_id = friend.user_id AND friend.friend_with = ${userId}`
         con.query(query, (error, results) => {
             if (error){
                 res.send({error: error})
@@ -38,7 +38,7 @@ module.exports = {
     addFriend: (req, res) => {
         const { id, userId } = req.body
         const query = `
-            INSERT INTO friendss VALUES
+            INSERT INTO friend (friend_id, user_id, friend_with) VALUES
             (DEFAULT, ${id}, ${userId})
         `
 
@@ -55,6 +55,23 @@ module.exports = {
     findFriend: (req, res) => {
         const { name, me } = req.params
         const query = `SELECT * FROM friend WHERE friend_name LIKE '%${name}%' AND friend_with = ${me}`
+        con.query(query, (error, results) => {
+            if (error){
+                res.json({error: error})
+            }else{
+                res.status(200).json(results)
+            }
+        })
+    },
+
+    blockFriend: (req, res) => {
+        const { personId, userId } = req.body
+        console.log(personId)
+        console.log(userId)
+        const query = `UPDATE friend
+        SET blocked = TRUE
+        WHERE user_id = ${userId} AND friend_with = ${personId}`
+
         con.query(query, (error, results) => {
             if (error){
                 res.json({error: error})

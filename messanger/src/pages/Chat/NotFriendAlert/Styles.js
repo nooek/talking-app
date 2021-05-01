@@ -7,20 +7,29 @@ export const Container = styled.div`
     align-items: center;
     text-align: center;
     border: 2px solid white;
-    background: black;
+    background: rgb(26, 26, 26);
     position: relative;
     margin-top: 80px;
+    @media(max-width: 700px){
+        margin-top: 20px;
+    }
 `
 
 export const Parent = styled.div`
     width: 350px;
     height: 250px;
+    @media(max-width: 400px){
+        width: 100%;
+    }
 `
 
 export const Message = styled.h2`
     font-size: 20px;
     color: red;
     font-weight: bold;
+    @media(max-width: 400px){
+        font-size: 20px;
+    }
 `
 
 export const ButtonsContainer = styled.div`
@@ -30,10 +39,18 @@ export const ButtonsContainer = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
+    @media(max-width: 400px){
+        flex-direction: column;
+    }
 `
 
 export const Buttons = styled(Button)`
     text-transform: none;
     width: 100px;
     height: 50px;
+    @media(max-width: 400px){
+        width: 80%;
+        height: 30px;
+        margin-bottom: 10px;
+    }
 `

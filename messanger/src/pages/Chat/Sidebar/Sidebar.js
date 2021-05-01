@@ -19,7 +19,6 @@ import {
 import { useUserData } from "../../../store/userDataProvider";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useActualChat } from "../../../store/ActualChatProvider";
 import { useMessages } from "../../../store/messagesProvider";
 import { useFriend } from "../../../store/friendProvider";
 import getMessagesFromStranger from "./functions/getMessagesFromStranger";
@@ -33,7 +32,6 @@ const Sidebar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
   const [friendsOnline, setFriendsOnline] = useState([]);
-  const { currentChat, setCurrentChat } = useActualChat();
   const { messages } = useMessages();
   const { friend, setFriend } = useFriend();
   const { socket } = useSocket();
@@ -71,9 +69,11 @@ const Sidebar = () => {
   useEffect(() => {
     const newContact = getMessagesFromStranger(friends, messages, userData[0].user_id)
     if (newContact.length){
-      setFriends([...friends, {friend_id: newContact[0].friend_id, friend_name: newContact[0].friend_name}])
+      setFriends([...friends, {user_id: newContact[0].user_id, user_name: newContact[0].user_name, user_add: false}])
+    }else{
+      return
     }
-  }, [messages, userData, friends])
+  }, [messages, setFriends, friends,userData])
 
   useEffect(() => {
     if (friendSearchName.length > 0) {
@@ -91,7 +91,7 @@ const Sidebar = () => {
     }
   }, [friendSearchName, userData, updateFriends]);
 
-  console.log(friend)
+  console.log(friendsOnline)
 
   return (
     <SideBar>
@@ -121,10 +121,9 @@ const Sidebar = () => {
             <FriendContainer
               key={index}
               onClick={() => {
-                setCurrentChat(each.user_id);
                 setFriend(each);
               }}
-              selected={currentChat === each.user_id ? true : false}
+              selected={friend.user_id === each.user_id ? true : false}
             >
               {each.user_pfp ? <FriendPfp src={each.user_pfp} /> : null}
               <FriendName>{each.user_name}</FriendName>
@@ -133,7 +132,7 @@ const Sidebar = () => {
 
               <OnlineBubble
                 online={
-                  friendsOnline.includes(each.user_id)
+                  friendsOnline.includes(each.user_id.toString())
                     ? true
                     : false
                 }

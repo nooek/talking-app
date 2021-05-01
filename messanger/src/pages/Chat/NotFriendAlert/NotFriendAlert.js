@@ -2,25 +2,34 @@ import React, { useState } from "react";
 import { Buttons, ButtonsContainer, Container, Message, Parent } from "./Styles";
 import axios from "axios";
 import { useFriend } from "../../../store/friendProvider";
+import { useUserData } from "../../../store/userDataProvider";
 
 const NotFriendAlert = () => {
   const [choice, setChoice] = useState(false);
   const { friend } = useFriend();
-  console.log(friend);
+  const { userData } = useUserData()
 
   const addFriend = () => {
     axios.post(`http://localhost:3001/api/friends/add`, {
       id: friend.user_id,
-      name: friend.user_name,
-      pfp: friend.user_pfp,
-      description: friend.user_desc,
-      friendWith: friend[0].user_id,
+      userId: userData[0].user_id
     });
   };
 
+  console.log(friend)
+
+  const block = () => {
+    axios.put("http://localhost:3001/api/friend/block", {
+      personId: friend.user_id,
+      userId: userData[0].user_id
+    }).then(res => {
+      console.log(res)
+    })
+  }
+
   return (
     <Container>
-      {choice !== "" && choice === true ? (
+      {choice === true ? (
         <Parent>
           <Message>Are you certain?</Message>
           <ButtonsContainer>
@@ -42,7 +51,7 @@ const NotFriendAlert = () => {
               Yes
             </Buttons>
 
-            <Buttons onClick={() => setChoice(false)} color="secondary" variant="contained">
+            <Buttons onClick={() => block()} color="secondary" variant="contained">
               No
             </Buttons>
           </ButtonsContainer>

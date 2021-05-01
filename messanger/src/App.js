@@ -13,7 +13,6 @@ import Configurations from "./pages/UserConfigurations/Configurations";
 
 // Context
 import UserDataProvider from "./store/userDataProvider";
-import CurrentChatProvider from "./store/ActualChatProvider";
 import MessagesProvider from "./store/messagesProvider";
 import FriendProvider from "./store/friendProvider";
 import { SocketProvider } from "./store/socketProvider";
@@ -29,7 +28,6 @@ const App = () => {
         <CookiesProvider>
           <SocketProvider>
             <UserDataProvider>
-              <CurrentChatProvider>
                 <MessagesProvider>
                   <FriendProvider>
                       <Router>
@@ -71,7 +69,6 @@ const App = () => {
                       </Router>
                   </FriendProvider>
                 </MessagesProvider>
-              </CurrentChatProvider>
             </UserDataProvider>
           </SocketProvider>
         </CookiesProvider>

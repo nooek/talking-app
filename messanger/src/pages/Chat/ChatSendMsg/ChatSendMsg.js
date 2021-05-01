@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import { useActualChat } from "../../../store/ActualChatProvider"
 import { useMessages } from "../../../store/messagesProvider"
 import { useSocket } from "../../../store/socketProvider"
 import { useUserData } from "../../../store/userDataProvider"
@@ -10,13 +9,14 @@ import {
     MessageInput
 } from "./Styles"
 import axios from "axios"
+import { useFriend } from "../../../store/friendProvider"
 
 const ChatSendMessage = () => {
     const { socket } = useSocket()
     const [message, setMessage] = useState("")
-    const { currentChat } = useActualChat()
     const { messages, setMessages } = useMessages()
     const { userData } = useUserData()
+    const { friend } = useFriend()
 
     const checkIfEnterPressed = (e, chat) => {
       const code = e.which
@@ -29,7 +29,7 @@ const ChatSendMessage = () => {
       if (message.length > 0) {
         const messageObject = {
           author: userData.length ? userData[0].user_id : "",
-          receiver: currentChat,
+          receiver: friend.user_id,
           message: message,
           date: Date.now()
         };
@@ -55,11 +55,11 @@ const ChatSendMessage = () => {
           <MessageInput
             placeholder="message"
             value={message}
-            onKeyPress={(e) => checkIfEnterPressed(e, currentChat)}
+            onKeyPress={(e) => checkIfEnterPressed(e, friend.user_id)}
             onChange={(e) => setMessage(e.target.value)}
           />
           <SendMessageButton 
-          onClick={() => sendMessage(currentChat)}>
+          onClick={() => sendMessage(friend.user_id)}>
             Send
           </SendMessageButton>
         </MessageTypeContainer>

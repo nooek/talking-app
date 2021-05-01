@@ -84,10 +84,12 @@ app.use("/api/user", UserRoute);
 const findFriendRoute = require("./src/api/routes/friend/FindFriends");
 const searchFriendRoute = require("./src/api/routes/friend/SearchFriend")
 const manageFriendsRoute = require("./src/api/routes/friend/ManageFriends")
+const blockFriendRoute = require("./src/api/routes/friend/BlockFriend")
 
 app.use("/api/search/friends", findFriendRoute)
 app.use("/api/find/friend", searchFriendRoute)
 app.use("/api/friends", manageFriendsRoute)
+app.use("/api/friend/block", blockFriendRoute)
 
 // Messages
 

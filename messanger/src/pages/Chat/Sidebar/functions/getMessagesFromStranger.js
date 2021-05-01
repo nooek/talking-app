@@ -2,7 +2,7 @@ const getMessagesFromStranger = (friends, messages, userId) => {
   let contactList = [];
   if (friends) {
     friends.map((each) => {
-      return contactList.push(each.friend_id);
+      return contactList.push(each.user_id);
     });
   }
   let strangersToAdd = [];
@@ -14,14 +14,15 @@ const getMessagesFromStranger = (friends, messages, userId) => {
         each.receiver === userId
       ) {
         return strangersToAdd.push({
-          friend_id: each.author,
-          friend_name: "Not in friends",
+          user_id: each.author,
+          user_name: "Not in friends",
         });
       } else {
         return null;
       }
     });
   }
+  console.log(strangersToAdd)
   return strangersToAdd;
 };
 

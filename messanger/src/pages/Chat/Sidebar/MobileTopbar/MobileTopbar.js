@@ -19,7 +19,6 @@ import {
 import axios from "axios";
 import { useUserData } from "../../../../store/userDataProvider";
 import { useFriend } from "../../../../store/friendProvider";
-import { useActualChat } from "../../../../store/ActualChatProvider";
 import { Link } from "react-router-dom"
 import { useMessages } from "../../../../store/messagesProvider";
 import getMessagesFromStranger from "../functions/getMessagesFromStranger";
@@ -34,8 +33,7 @@ const MobileTopbar = (props) => {
   const [friendsOnline, setFriendsOnline] = useState([])
   const [showDropdown, setShowDropdown] = useState(false)
   const { userData } = useUserData();
-  const { setFriend } = useFriend();
-  const { currentChat, setCurrentChat } = useActualChat();
+  const { friend, setFriend } = useFriend();
   const { messages } = useMessages()
   const { socket } = useSocket()
 
@@ -62,7 +60,7 @@ const MobileTopbar = (props) => {
   useEffect(() => {
     const newContact = getMessagesFromStranger(friends, messages, userData[0].user_id)
     if (newContact.length){
-      setFriends([...friends, {friend_id: newContact[0].friend_id, friend_name: newContact[0].friend_name}])
+      setFriends([...friends, {user_id: newContact[0].user_id, user_name: newContact[0].user_name, user_add: false}])
     }
   }, [messages, userData, friends])
 
@@ -88,6 +86,8 @@ const MobileTopbar = (props) => {
       setFriendsOnline(onlineList)
     })
   }, [socket])
+
+  console.log(friendsOnline)
 
   return (
     <Container hide={hide} chat={props.chat}>
@@ -119,10 +119,9 @@ const MobileTopbar = (props) => {
             <FriendContainer
               key={index}
               onClick={() => {
-                setCurrentChat(each.user_id);
                 setFriend(each);
               }}             
-              selected={currentChat === each.user_id ? true : false}
+              selected={friend.user_id === each.user_id ? true : false}
             >
               {
                 each.user_pfp ?
