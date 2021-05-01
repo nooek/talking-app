@@ -7,8 +7,9 @@ export const MessageTypeContainer = styled.div`
   flex-direction: row;
   position: absolute;
   bottom: 0;
-  background-color: rgba(221, 221, 221, 0.493);
+  background-color: rgb(167, 167, 167);
   align-items: center;
+  z-index: 5;
 `;
 
 export const SendMessageButton = styled.button`

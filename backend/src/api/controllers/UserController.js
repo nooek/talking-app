@@ -76,5 +76,33 @@ module.exports = {
         res.status(200).json(results)
       }
     })
+  },
+
+  updateUser: (req, res) => {
+    const { name, pfp, desc, email, chat_bg, id } = req.body
+    const query = `UPDATE user 
+    SET user_chat_bg = '${chat_bg}' WHERE user_id = ${id}`
+
+    con.query(query, (error, results) => {
+      if (error){
+        res.json({error: error})
+      }else{
+        res.status(200).json(results)
+      }
+    })
+  },
+
+  getUserById: (req, res) => {
+    const { id } = req.params
+    const query = `SELECT * FROM user WHERE user_id = '${id}'`
+    con.query(query, (error, results) => {
+      if (error){
+        res.json({error: error})
+      }else{
+        if (results.length){
+          res.status(200).json(results)
+        }
+      }
+    })
   }
 };

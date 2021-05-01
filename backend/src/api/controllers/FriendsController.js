@@ -20,8 +20,8 @@ module.exports = {
 
     getFriendsByUser: (req, res) => {
         const { userId } = req.params
-        const query = `SELECT *
-        FROM friend WHERE friend_with = ${userId}`
+        const query = `SELECT user.user_id, user.user_name, user.user_pfp, user.user_desc
+        FROM user JOIN friendss where  user.user_id = friendss.user_id AND friendss.friend_with = ${userId}`
         con.query(query, (error, results) => {
             if (error){
                 res.send({error: error})
@@ -36,10 +36,10 @@ module.exports = {
     },
 
     addFriend: (req, res) => {
-        const { id, name, pfp, description, friendWith } = req.body
+        const { id, userId } = req.body
         const query = `
-            INSERT INTO friend VALUES
-            ('${id}', '${name}', '${pfp}', '${description}', '${friendWith}', DEFAULT)
+            INSERT INTO friendss VALUES
+            (DEFAULT, ${id}, ${userId})
         `
 
         con.query(query, (error, results) => {

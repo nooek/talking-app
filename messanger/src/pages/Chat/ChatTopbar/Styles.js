@@ -9,9 +9,7 @@ export const ChatTopBar = styled.div`
   justify-content: space-between;
   position: absolute;
   top: 0;
-  background-color: black;
-  border-bottom-left-radius: 20px;
-  background-color: rgba(221, 221, 221, 0.493);
+  background-color: rgb(167, 167, 167);
   @media(max-width: 700px){
     margin-bottom: auto;
     position: relative;

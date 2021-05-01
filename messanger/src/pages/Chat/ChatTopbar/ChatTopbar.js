@@ -14,8 +14,8 @@ const ChatTopbar = () => {
   return (
     <ChatTopBar>
       <TopbarUserInfoContainer>
-        <FriendPfp src={friend.friend_pfp} />
-        <FriendName>{friend.friend_name}</FriendName>
+        <FriendPfp src={friend.user_pfp} />
+        <FriendName>{friend.user_name}</FriendName>
       </TopbarUserInfoContainer>
       <TopbarMoreActionsContainer>
         <MoreActions />

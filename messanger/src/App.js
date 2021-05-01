@@ -20,7 +20,6 @@ import { SocketProvider } from "./store/socketProvider";
 import { CookiesProvider, withCookies } from "react-cookie";
 
 // HOCs
-import UpdateUserData from "./HOCs/updateUserData";
 import CheckUserLogged from "./HOCs/checkUserLogged";
 
 const App = () => {
@@ -33,7 +32,6 @@ const App = () => {
               <CurrentChatProvider>
                 <MessagesProvider>
                   <FriendProvider>
-                    <UpdateUserData>
                       <Router>
                         <Switch>
                           <Route
@@ -71,7 +69,6 @@ const App = () => {
                           />
                         </Switch>
                       </Router>
-                    </UpdateUserData>
                   </FriendProvider>
                 </MessagesProvider>
               </CurrentChatProvider>

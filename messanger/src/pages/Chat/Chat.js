@@ -11,17 +11,20 @@ import Sidebar from "./Sidebar/Sidebar";
 import { useActualChat } from "../../store/ActualChatProvider";
 import { useSocket } from "../../store/socketProvider";
 import { useMessages } from "../../store/messagesProvider";
+import { useFriend } from "../../store/friendProvider";
 import ChatTopbar from "./ChatTopbar/ChatTopbar";
 import ChatSendMessage from "./ChatSendMsg/ChatSendMsg";
 import MobileTopbar from "./Sidebar/MobileTopbar/MobileTopbar";
 import DefaultChat from "./DefaultChat/DefaultChat";
 import axios from "axios"
+import NotFriendAlert from "./NotFriendAlert/NotFriendAlert";
 
 const Chat = () => {
   const { userData } = useUserData();
   const { messages, setMessages } = useMessages();
   const { currentChat } = useActualChat();
   const { socket } = useSocket();
+  const { friend } = useFriend()
 
   useEffect(() => {
     axios
@@ -32,8 +35,6 @@ const Chat = () => {
       }
     })
   }, [setMessages, userData])
-
-  console.log(messages)
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -48,9 +49,13 @@ const Chat = () => {
     <Container>
       <Sidebar />
       {currentChat !== undefined ? (
-        <ChatSide background="rgb(53, 53, 53)" >
+        <ChatSide>
           <MobileTopbar chat={true} />
           <ChatTopbar />
+          {friend.friend_add === false ? 
+            <NotFriendAlert />
+            : null
+          }
           <MessagesContainer>
             {messages.map((each, index) => {
               if (

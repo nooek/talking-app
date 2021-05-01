@@ -33,6 +33,7 @@ const Login = (props) => {
         { withCredentials: true }
       )
       .then((res) => {
+        
         if (res.data.message) {
           setMessage(res.data.message);
         } else {
@@ -50,6 +51,7 @@ const Login = (props) => {
         withCredentials: true,
       })
       .then((res) => {
+        console.log(res)
         if (res.data.user) {
           setUserData(res.data.user);
           localStorage.setItem("id", JSON.parse(res.data.user[0].user_id));

@@ -119,21 +119,21 @@ const MobileTopbar = (props) => {
             <FriendContainer
               key={index}
               onClick={() => {
-                setCurrentChat(each.friend_id);
+                setCurrentChat(each.user_id);
                 setFriend(each);
               }}             
-              selected={currentChat === each.friend_id ? true : false}
+              selected={currentChat === each.user_id ? true : false}
             >
               {
-                each.friend_pfp ?
-                <FriendPfp src={each.friend_pfp} />
+                each.user_pfp ?
+                <FriendPfp src={each.user_pfp} />
                 : null
               }
-              <FriendName>{each.friend_name}</FriendName>
+              <FriendName>{each.user_name}</FriendName>
               <LastContactMessage>dsada</LastContactMessage>
               <MessageDate>sad</MessageDate>
               <OnlineBubble online={
-                friendsOnline.includes(each.friend_id.toString()) ? 
+                friendsOnline.includes(each.user_id) ? 
                 true : false
               } />
             </FriendContainer>

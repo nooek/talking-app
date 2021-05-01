@@ -18,7 +18,6 @@ export const ChatSide = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  background: ${props => props.background};
   @media(max-width: 700px){
     width: 100%;
   }
@@ -31,6 +30,7 @@ export const MessagesContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   overflow-x: auto;
+  z-index: 2; 
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
@@ -54,6 +54,7 @@ export const MessageContainer = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
+  z-index: 1;
   text-align: ${(props) => (props.sender === true ? "right" : "left")};
   background-color: ${(props) =>
     props.sender === true ? "rgb(123, 123, 240)" : "rgb(7, 194, 7)"};
@@ -86,4 +87,5 @@ export const MessageContainer = styled.div`
 export const Message = styled.h2`
   margin: 10px;
   font-size: 18px;
+  z-index: 2;
 `;

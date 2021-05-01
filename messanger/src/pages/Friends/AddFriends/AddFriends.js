@@ -39,10 +39,7 @@ const AddFriends = () => {
   const addFriend = (people) => {
     axios.post(`http://localhost:3001/api/friends/add`, {
       id: people.user_id,
-      name: people.user_name,
-      pfp: people.user_pfp,
-      description: people.user_desc,
-      friendWith: userData[0].user_id
+      userId: userData[0].user_id
     })
   }
 

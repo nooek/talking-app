@@ -1,11 +1,9 @@
 import styled from "styled-components"
+import { Button } from "@material-ui/core"
 
 export const Container = styled.div`
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 `
 
 export const Category = styled.h2`
@@ -43,9 +41,31 @@ export const BlocksList = styled.div`
     overflow-x: auto;
 `
 
-export const ChangeChatBackground = styled.button`
+export const InputImage = styled.input`
+    width: 200px;
+    height: 200px;
+    margin-bottom: 0;
+`
+
+export const PreviewImageDiv = styled.div`
     width: 300px;
-    height: 60px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     border: 2px solid white;
-    margin-bottom: 10px;
+    margin-top: 0px;    
+`
+
+export const PreviewImage = styled.img`
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+`
+
+export const UploadImageButton = styled(Button)`
+    width: 200px;
+    height: 50px;
+    text-transform: none;
 `

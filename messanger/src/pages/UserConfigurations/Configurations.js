@@ -5,13 +5,25 @@ import {
     PrivacyOptionsContainer,
     PrivacyOption,
     BlocksList,
-    ChangeChatBackground
 } from "./Styles"
 import Switch from '@material-ui/core/Switch';
+// import axios from "axios";
+// import { useUserData } from "../../store/userDataProvider"
 
 const Configurations = () => {
     const [checked, setChecked] = useState(false)
     const [checked2, setChecked2] = useState(false)
+    // const { userData, setUserData } = useUserData()
+
+    // const updateUser = () => {
+    //     axios
+    //     .get(`http://localhost:3001/api/user/${userData[0].user_id}`)
+    //     .then(res => {
+    //         if (res.data){
+    //             setUserData(res.data)
+    //         }
+    //     })
+    // }
 
     return(
         <Container>
@@ -28,8 +40,7 @@ const Configurations = () => {
             </PrivacyOptionsContainer>
             <Category>Blocks</Category>
             <BlocksList></BlocksList>
-            <Category>Change chat background</Category>
-            <ChangeChatBackground>Change chat background</ChangeChatBackground>
+            
         </Container>
     )
 }

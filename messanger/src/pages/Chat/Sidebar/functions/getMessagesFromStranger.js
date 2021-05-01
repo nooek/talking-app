@@ -16,7 +16,6 @@ const getMessagesFromStranger = (friends, messages, userId) => {
         return strangersToAdd.push({
           friend_id: each.author,
           friend_name: "Not in friends",
-          friend_added: false
         });
       } else {
         return null;
