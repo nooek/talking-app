@@ -20,6 +20,7 @@ import { SocketProvider } from "./store/socketProvider";
 
 // HOCs
 import CheckUserLogged from "./HOCs/checkUserLogged";
+import FriendInfo from "./pages/Friends/FriendInfo/FriendInfo";
 
 const App = () => {
   return (
@@ -61,6 +62,12 @@ const App = () => {
                           path="/config"
                           render={(props) => (
                             <Configurations title="Configurations" />
+                          )}
+                        />
+                        <Route
+                          path="/:name/:id/info"
+                          render={(props) => (
+                            <FriendInfo title="Friend Info" />
                           )}
                         />
                       </Switch>

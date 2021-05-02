@@ -54,7 +54,7 @@ module.exports = {
 
     findFriend: (req, res) => {
         const { name, me } = req.params
-        const query = `SELECT * FROM friend WHERE friend_name LIKE '%${name}%' AND friend_with = ${me}`
+        const query = `SELECT * FROM user JOIN friend WHERE user.user_name LIKE '%${name}%' AND friend.friend_with = ${me}`
         con.query(query, (error, results) => {
             if (error){
                 res.json({error: error})

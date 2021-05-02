@@ -9,42 +9,16 @@ import {
 } from "./Styles";
 import axios from "axios"
 import { useUserData } from "../../../../store/userDataProvider";
+import { useContacts } from "../../../../store/contactsProvider";
+import { Link } from "react-router-dom"
 
 const Dropdown = () => {
   const [showWarning, setShowWarning] = useState(false);
   const [warningMessage, setWarningMessage] = useState("");
   const [action, setAction] = useState("");
-  const { friend } = useFriend();
+  const { friend, setFriend } = useFriend();
   const { userData } = useUserData()
-
-  const blockFriend = () => {
-    console.log("blocking friend");
-    axios
-      .put("http://localhost:3001/api/friend/block", {
-        personId: friend.user_id,
-        userId: userData[0].user_id,
-      })
-      .then((res) => {
-        console.log(res);
-      });
-  };
-
-  const clearChat = () => {
-    console.log("cleaning chat");
-    axios.delete("http://localhost:3001/api/message/clearchat", {
-      data: {
-        author: friend.user_id,
-        receiver: userData[0].user_id
-      }
-    }).then(res => {
-      console.log(res)
-    })
-  };
-
-  const actions = {
-    block: () => blockFriend(),
-    clearChat: () => clearChat(),
-  };
+  const { setContacts } = useContacts()
 
   const openWarning = (message, func) => {
     if (!message) return;
@@ -53,11 +27,49 @@ const Dropdown = () => {
     setAction(func);
   };
 
-  console.log(friend)
+  const updateFriends = () => {
+    axios
+      .get(
+        `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
+      )
+      .then((res) => {
+        setContacts(res.data)
+        setFriend({ ...friend, blocked: 1})
+      });
+  };
 
+  const blockFriend = async () => {
+    await axios
+      .put("http://localhost:3001/api/friend/block", {
+        personId: friend.user_id,
+        userId: userData[0].user_id,
+      })
+    updateFriends()
+  };
+
+  const clearChat = () => {
+    axios.delete("http://localhost:3001/api/message/clearchat", {
+      data: {
+        author: friend.user_id,
+        receiver: userData[0].user_id
+      }
+    })
+  };
+
+  const actions = {
+    block: () => blockFriend(),
+    clearChat: () => clearChat(),
+  };
+  console.log(friend)
   return (
     <Container>
-      <Options>Friend Info</Options>
+      {
+        friend.blocked === 0 ?
+          <Link to={"/" + friend.user_name + "/" + friend.user_id + "/info"}>
+            <Options>Friend Info</Options>
+          </Link>
+        : null
+      }      
       <Options
         onClick={() =>
           openWarning("Do you want to clear the chat?", "clearChat")

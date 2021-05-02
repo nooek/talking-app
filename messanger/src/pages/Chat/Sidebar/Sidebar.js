@@ -84,7 +84,8 @@ const Sidebar = () => {
           `http://localhost:3001/api/find/friend/${userData[0].user_id}/${friendSearchName}`
         )
         .then((res) => {
-          if (res.data) {
+          console.log(res)
+          if (res.data && !res.data.error) {
             setContacts(res.data);
           }
         });
@@ -92,6 +93,8 @@ const Sidebar = () => {
       updateFriends();
     }
   }, [friendSearchName, userData, updateFriends, setContacts]);
+
+  console.log(contacts)
 
   return (
     <SideBar>

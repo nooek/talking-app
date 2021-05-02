@@ -5,11 +5,6 @@ const open = keyframes`
     to{transform: scale(1);}
 `;
 
-const warningMessageOpen = keyframes`
-    from{height: 0;}
-    to{height: 1;}
-`;
-
 export const Container = styled.div`
   width: 200px;
   height: auto;
@@ -44,15 +39,11 @@ export const Options = styled.button`
 
 export const WarningContainer = styled.div`
   width: 200px;
-  height: auto;
+  height: 200px;
   border: 2px solid white;
   position: absolute;
   top: 100%;
   right: -2px;
-  transform-origin: top center;
-  animation-name: ${warningMessageOpen};
-  animation-duration: 600ms;
-  animation-fill-mode: both;
   background: rgb(29, 29, 29);
   display: flex;
   flex-direction: column;

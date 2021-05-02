@@ -20,24 +20,20 @@ import axios from "axios";
 import { useUserData } from "../../../../store/userDataProvider";
 import { useFriend } from "../../../../store/friendProvider";
 import { Link } from "react-router-dom"
-import { useMessages } from "../../../../store/messagesProvider";
-import getMessagesFromStranger from "../functions/getMessagesFromStranger";
 import Dropdown from "../Dropdown/Dropdown";
 import { useSocket } from "../../../../store/socketProvider";
 import { useContacts } from "../../../../store/contactsProvider";
 
 const MobileTopbar = (props) => {
   const [hide, setHide] = useState(true);
-  const [friends, setFriends] = useState([]);
   const [message, setMessage] = useState("");
   const [friendSearchName, setFriendSearchName] = useState("")
   const [friendsOnline, setFriendsOnline] = useState([])
   const [showDropdown, setShowDropdown] = useState(false)
   const { userData } = useUserData();
   const { friend, setFriend } = useFriend();
-  const { messages } = useMessages()
   const { socket } = useSocket()
-  const { contacts } = useContacts()
+  const { contacts, setContacts } = useContacts()
 
   const updateFriends = useCallback( async () => {
     await axios
@@ -47,36 +43,29 @@ const MobileTopbar = (props) => {
       .then((res) => {
         if (res.data.message) {
           setMessage(res.data.message);
-          setFriends([]);
+          setContacts([]);
         } else {
-          setFriends(res.data);
+          setContacts(res.data);
           setMessage("");
         }
       });
-  }, [userData]);
+  }, [userData, setContacts]);
 
   useEffect(() => {
     updateFriends()
   }, [updateFriends]);
 
   useEffect(() => {
-    const newContact = getMessagesFromStranger(friends, messages, userData[0].user_id)
-    if (newContact.length){
-      setFriends([...friends, {user_id: newContact[0].user_id, user_name: newContact[0].user_name, user_add: false}])
-    }
-  }, [messages, userData, friends])
-
-  useEffect(() => {
     if (friendSearchName.length > 1) {
       axios
         .get(`http://localhost:3001/api/find/friend/${userData[0].user_id}/${friendSearchName}`)
         .then((res) => {
-          setFriends(res.data);
+          setContacts(res.data);
         });
     } else {
       updateFriends();
     }
-  }, [friendSearchName, updateFriends, userData]);
+  }, [friendSearchName, updateFriends, userData, setContacts]);
 
   useEffect(() => {
     socket.on("get-user-online", data => {

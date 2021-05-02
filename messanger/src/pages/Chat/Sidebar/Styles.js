@@ -114,7 +114,7 @@ export const FriendContainer = styled.div`
   position: relative;
   background: ${props => props.selected === true ? "rgb(197, 197, 197)" : "none"};
   :hover{
-	background: rgb(197, 197, 197);
+	  background: rgb(150, 150, 150);
   }
 `;
 
