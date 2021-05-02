@@ -17,6 +17,7 @@ const NotFriendAlert = () => {
   };
 
   console.log(friend)
+  console.log(friend)
 
   const block = () => {
     axios.put("http://localhost:3001/api/friend/block", {

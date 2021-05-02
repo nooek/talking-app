@@ -53,10 +53,11 @@ const ChatSendMessage = () => {
     return (
         <MessageTypeContainer>
           <MessageInput
-            placeholder="message"
+            placeholder={friend.blocked === 1 ? "You can't send messages to this chat" : "Type here your message"}
             value={message}
             onKeyPress={(e) => checkIfEnterPressed(e, friend.user_id)}
             onChange={(e) => setMessage(e.target.value)}
+            disabled={friend.blocked === 1 ? true : false}
           />
           <SendMessageButton 
           onClick={() => sendMessage(friend.user_id)}>

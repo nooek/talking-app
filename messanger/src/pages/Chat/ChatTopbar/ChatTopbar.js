@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFriend } from "../../../store/friendProvider";
+import Dropdown from "./Dropdown/Dropdown";
 import {
   ChatTopBar,
   TopbarUserInfoContainer,
@@ -11,6 +12,8 @@ import {
 
 const ChatTopbar = () => {
   const { friend } = useFriend();
+  const [showDropdown, setShowDropdown] = useState()
+
   return (
     <ChatTopBar>
       <TopbarUserInfoContainer>
@@ -18,7 +21,14 @@ const ChatTopbar = () => {
         <FriendName>{friend.user_name}</FriendName>
       </TopbarUserInfoContainer>
       <TopbarMoreActionsContainer>
-        <MoreActions />
+        <MoreActions 
+        onClick={() => setShowDropdown(!showDropdown)}
+        />
+        {
+          showDropdown === true ?
+            <Dropdown />
+          : null
+        }
       </TopbarMoreActionsContainer>
     </ChatTopBar>
   );

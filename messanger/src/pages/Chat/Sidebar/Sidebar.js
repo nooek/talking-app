@@ -91,7 +91,7 @@ const Sidebar = () => {
     }
   }, [friendSearchName, userData, updateFriends]);
 
-  console.log(friendsOnline)
+  console.log(friend)
 
   return (
     <SideBar>

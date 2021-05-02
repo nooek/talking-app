@@ -87,8 +87,6 @@ const MobileTopbar = (props) => {
     })
   }, [socket])
 
-  console.log(friendsOnline)
-
   return (
     <Container hide={hide} chat={props.chat}>
       <ShowButton onClick={() => setHide(!hide)}>Show Contacts</ShowButton>

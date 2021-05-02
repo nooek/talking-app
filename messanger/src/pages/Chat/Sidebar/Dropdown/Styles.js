@@ -24,18 +24,20 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
+    background: rgb(29, 29, 29);
 `
 
 export const Buttons = styled.button`
-    width: 90%;
-    height: 50px;
-    border-bottom: 1px solid black;
-    background: ${props => props.color ? props.color : "white"};
-    border: 2px solid black;
-    font-weight: bold;
-    border-radius: 15px;
+    color: white;
+    border: none;    
+    background: none;
+    width: 100%;
+    height: 60px;
+    font-size: 18px;
+    :hover{
+        background: rgb(0, 0, 0);
+    }
     :focus{
         outline: none;
-        border: none;
     }
 `
