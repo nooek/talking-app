@@ -18,6 +18,10 @@ export const Parent = styled.div`
 export const ContactImage = styled.img`
     width: 250px;
     height: 250px;
+    @media(max-width: 300px){
+        width: 100%;
+        height: auto;
+    }
 `
 
 export const InfoContainer = styled.div`
@@ -28,6 +32,9 @@ export const InfoContainer = styled.div`
     border: 2px solid white;
     margin-top: 20px;
     word-break: break-all;
+    @media(max-width: 500px){
+        width: 100%;
+    }
 `
 
 export const InformationName = styled.h4`
