@@ -24,6 +24,7 @@ import { useMessages } from "../../../../store/messagesProvider";
 import getMessagesFromStranger from "../functions/getMessagesFromStranger";
 import Dropdown from "../Dropdown/Dropdown";
 import { useSocket } from "../../../../store/socketProvider";
+import { useContacts } from "../../../../store/contactsProvider";
 
 const MobileTopbar = (props) => {
   const [hide, setHide] = useState(true);
@@ -36,9 +37,10 @@ const MobileTopbar = (props) => {
   const { friend, setFriend } = useFriend();
   const { messages } = useMessages()
   const { socket } = useSocket()
+  const { contacts } = useContacts()
 
-  const updateFriends = useCallback(() => {
-    axios
+  const updateFriends = useCallback( async () => {
+    await axios
       .get(
         `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
       )
@@ -69,7 +71,6 @@ const MobileTopbar = (props) => {
       axios
         .get(`http://localhost:3001/api/find/friend/${userData[0].user_id}/${friendSearchName}`)
         .then((res) => {
-          console.log(res.data);
           setFriends(res.data);
         });
     } else {
@@ -85,6 +86,10 @@ const MobileTopbar = (props) => {
       })
       setFriendsOnline(onlineList)
     })
+
+    return () => {
+      socket.off("get-user-online");
+    }
   }, [socket])
 
   return (
@@ -112,7 +117,7 @@ const MobileTopbar = (props) => {
       </FindFriendsContainer>
       <FriendsList hide={hide}>
         {message ? <h2>{message}</h2> : null}
-        {friends.map((each, index) => {
+        {contacts.map((each, index) => {
           return (
             <FriendContainer
               key={index}

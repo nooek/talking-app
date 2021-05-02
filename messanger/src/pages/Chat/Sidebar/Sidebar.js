@@ -24,10 +24,10 @@ import { useFriend } from "../../../store/friendProvider";
 import getMessagesFromStranger from "./functions/getMessagesFromStranger";
 import Dropdown from "./Dropdown/Dropdown";
 import { useSocket } from "../../../store/socketProvider";
+import { useContacts } from "../../../store/contactsProvider";
 
 const Sidebar = () => {
   const { userData } = useUserData();
-  const [friends, setFriends] = useState([]);
   const [message, setMessage] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
@@ -35,6 +35,7 @@ const Sidebar = () => {
   const { messages } = useMessages();
   const { friend, setFriend } = useFriend();
   const { socket } = useSocket();
+  const { contacts, setContacts } = useContacts()
 
   const updateFriends = useCallback(() => {
     axios
@@ -42,15 +43,16 @@ const Sidebar = () => {
         `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
       )
       .then((res) => {
+        console.log(res)
         if (res.data.message) {
           setMessage(res.data.message);
-          setFriends([]);
+          setContacts([])
         } else {
-          setFriends(res.data);
+          setContacts(res.data);
           setMessage("");
         }
       });
-  }, [userData]);
+  }, [userData, setContacts]);
 
   useEffect(() => {
     updateFriends();
@@ -67,13 +69,13 @@ const Sidebar = () => {
   }, [socket]);
 
   useEffect(() => {
-    const newContact = getMessagesFromStranger(friends, messages, userData[0].user_id)
+    const newContact = getMessagesFromStranger(contacts, messages, userData[0].user_id)
     if (newContact.length){
-      setFriends([...friends, {user_id: newContact[0].user_id, user_name: newContact[0].user_name, user_add: false}])
+      setContacts([...contacts, {user_id: newContact[0].user_id, user_name: newContact[0].user_name, user_add: false}])
     }else{
       return
     }
-  }, [messages, setFriends, friends,userData])
+  }, [messages, setContacts, contacts,userData])
 
   useEffect(() => {
     if (friendSearchName.length > 0) {
@@ -83,15 +85,13 @@ const Sidebar = () => {
         )
         .then((res) => {
           if (res.data) {
-            setFriends(res.data);
+            setContacts(res.data);
           }
         });
     } else {
       updateFriends();
     }
-  }, [friendSearchName, userData, updateFriends]);
-
-  console.log(friend)
+  }, [friendSearchName, userData, updateFriends, setContacts]);
 
   return (
     <SideBar>
@@ -116,7 +116,7 @@ const Sidebar = () => {
       </SearchBarContainer>
       <FriendsContainer>
         {message ? <h2>{message}</h2> : null}
-        {friends.map((each, index) => {
+        {contacts.map((each, index) => {
           return (
             <FriendContainer
               key={index}

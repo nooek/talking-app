@@ -60,7 +60,7 @@ const Chat = () => {
                 (each.author === userData[0].user_id ||
                   each.author === friend.user_id) &&
                 (each.receiver === userData[0].user_id ||
-                  each.receiver === friend.user_id)
+                  each.receiver === friend.user_id) && each.deleted !== true
               ) {
                 return (
                   <MessageContainer

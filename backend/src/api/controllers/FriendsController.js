@@ -70,7 +70,7 @@ module.exports = {
         console.log(userId)
         const query = `UPDATE friend
         SET blocked = TRUE
-        WHERE user_id = ${userId} AND friend_with = ${personId}`
+        WHERE user_id = ${personId} AND friend_with = ${userId}`
 
         con.query(query, (error, results) => {
             if (error){

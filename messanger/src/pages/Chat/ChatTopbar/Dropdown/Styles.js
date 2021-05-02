@@ -17,8 +17,8 @@ export const Container = styled.div`
   flex-direction: column;
   border: 2px solid white;
   position: absolute;
-  left: 63%;
-  top: 60%;
+  margin-top: 200px;
+  margin-right: 250px;
   z-index: 7;
   background: rgb(29, 29, 29);
   transform-origin: top right;

@@ -8,4 +8,6 @@ route.get('/:id', controller.getMessages)
 
 route.delete('/', controller.deleteMessage)
 
+route.delete('/clearchat', controller.clearChat)
+
 module.exports = route

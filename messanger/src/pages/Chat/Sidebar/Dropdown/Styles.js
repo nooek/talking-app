@@ -8,7 +8,6 @@ const open = keyframes`
 export const Container = styled.div`
     width: 180px;
     height: 250px;
-    border: 1.5px solid purple;
     background: rgb(231, 229, 229);
     position: absolute;
     right: 30%;
@@ -18,8 +17,7 @@ export const Container = styled.div`
     animation-name: ${open};
     animation-duration: 600ms;
     animation-fill-mode: both;
-    border-radius: 25px;
-    border: 2px solid black;
+    border: 2px solid white;
     display: flex;
     flex-direction: column;
     align-items: center;

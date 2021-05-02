@@ -14,7 +14,6 @@ const getMessagesFromStranger = (friends, messages, userId) => {
         !contactList.includes(each.author) &&
         each.receiver === userId
       ) {
-        console.log(each)
         return strangersToAdd.push({
           user_id: each.author,
           user_name: "Not in friends",

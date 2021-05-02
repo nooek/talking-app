@@ -31,7 +31,8 @@ const ChatSendMessage = () => {
           author: userData.length ? userData[0].user_id : "",
           receiver: friend.user_id,
           message: message,
-          date: Date.now()
+          date: Date.now(),
+          blocked: friend.blocked
         };
         socket.emit("send-message", messageObject);
         await setMessages([...messages, messageObject]);
@@ -46,7 +47,8 @@ const ChatSendMessage = () => {
         message: message.message,
         date: message.date,
         receiver: message.receiver,
-        author: message.author
+        author: message.author,
+        blocked: message.blocked
       })
     }
 
