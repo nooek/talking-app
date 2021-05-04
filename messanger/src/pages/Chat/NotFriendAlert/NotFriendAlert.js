@@ -17,37 +17,36 @@ const NotFriendAlert = () => {
   const { userData } = useUserData();
   const { setContacts } = useContacts();
 
+  console.log(friend);
   const updateFriends = async () => {
-    const { data } = await axios
-    .get(
+    const { data } = await axios.get(
       `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
-    )
-    if (data){
+    );
+    if (data) {
       setContacts(data);
-      setFriend([])
+      setFriend([]);
     }
   };
 
   const addFriend = async () => {
-    console.log('foo1')
-    await axios.post(`http://localhost:3001/api/friends/add`, {
-      id: friend.user_id,
-      userId: userData[0].user_id,
-    }).then(res => {
-      updateFriends();
-    })
-  };
-
-  const block = async () => {
+    console.log("foo1");
     await axios
-      .put("http://localhost:3001/api/friend/block", {
-        personId: friend.user_id,
+      .post(`http://localhost:3001/api/friends/add`, {
+        id: friend.user_id,
         userId: userData[0].user_id,
       })
-      .then(res => {
-        setFriend({...friend, blocked: 1, user_add: 1})
-      })
-    updateFriends();
+      .then((res) => {
+        updateFriends();
+      });
+  };
+
+  const block = () => {
+    axios.put("http://localhost:3001/api/friend/block", {
+      personId: userData[0].user_id,
+      userId: friend.user_id,
+    }).then(res => {
+      console.log(friend)
+    })
   };
 
   return (

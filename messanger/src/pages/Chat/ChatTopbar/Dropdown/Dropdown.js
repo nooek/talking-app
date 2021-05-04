@@ -51,7 +51,7 @@ const Dropdown = () => {
     axios.delete("http://localhost:3001/api/message/clearchat", {
       data: {
         author: friend.user_id,
-        receiver: userData[0].user_id
+        receiver: userData[0].user_id,        
       }
     })
   };

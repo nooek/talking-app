@@ -45,6 +45,7 @@ const Sidebar = () => {
         if (res.data.message) {
           setContacts([]);
         } else {
+          console.log(res.data)
           setContacts(res.data);
         }
       });
@@ -72,6 +73,19 @@ const Sidebar = () => {
   useEffect(() => {
     updateOnlineFriends();
   }, [updateOnlineFriends]);
+
+  useEffect(() => {
+    const contactsWithNoBlock = contacts.filter(each => {
+      return each.blocked !== 1
+    })
+
+    const contactsIdsList = []
+    
+    contactsWithNoBlock.map(each => {
+      return contactsIdsList.push(each.user_id)
+    })
+
+  }, [contacts])
 
   useEffect(() => {
     const newContact = getMessagesFromStranger(
