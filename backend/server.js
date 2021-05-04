@@ -25,6 +25,11 @@ io.on("connection", (socket) => {
   users.push({ socketId: socket.id, userId: socket.handshake.query.room });
   io.emit("message", "hello");
   io.emit("get-user-online", users);
+  console.log(users)
+
+  socket.on('get-users-online', () => {
+    io.emit('get-user-online', users)
+  })
 
   socket.on("user-log-out", (userid) => {
     let userInd = 0;

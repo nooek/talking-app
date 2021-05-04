@@ -30,7 +30,7 @@ export const Buttons = styled.button`
     border: none;    
     background: none;
     width: 100%;
-    height: 60px;
+    height: 80px;
     font-size: 18px;
     :hover{
         background: rgb(0, 0, 0);

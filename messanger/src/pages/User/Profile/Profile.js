@@ -2,20 +2,17 @@ import React, { useState } from "react"
 import { 
     Container, 
     NameAndPfpContainer, 
-    UserInfoContainer, 
-    UserInfoField, 
-    UserInfoFieldInfo, 
-    UserInfoFieldSubTitle, 
     UserName,
     UserPfp,
     ButtonsContainer,
     Buttons,
-    GoBackPage
+    GoBackPage,
 } from "./Styles"
 import { useUserData } from "../../../store/userDataProvider"
 import { useSocket } from "../../../store/socketProvider"
 import { Link, Redirect } from "react-router-dom"
 import axios from "axios"
+import UserInfo from "./UserInfo/UserInfo"
 
 const Profile = (props) => {
     document.title = props.title
@@ -48,20 +45,7 @@ const Profile = (props) => {
                 <UserName>{userData[0].user_name}</UserName>
                 <UserPfp src={userData[0].user_pfp} />
             </NameAndPfpContainer>
-            <UserInfoContainer>
-                <UserInfoField>
-                    <UserInfoFieldSubTitle>Name</UserInfoFieldSubTitle>
-                    <UserInfoFieldInfo>{userData[0].user_name}</UserInfoFieldInfo>
-                </UserInfoField>
-                <UserInfoField>
-                    <UserInfoFieldSubTitle>Description</UserInfoFieldSubTitle>
-                    <UserInfoFieldInfo>{userData[0].user_desc}</UserInfoFieldInfo>
-                </UserInfoField>
-                <UserInfoField>
-                    <UserInfoFieldSubTitle>Email</UserInfoFieldSubTitle>
-                    <UserInfoFieldInfo>{userData[0].user_email}</UserInfoFieldInfo>
-                </UserInfoField>
-            </UserInfoContainer>
+            <UserInfo />
             <ButtonsContainer>
                 <Buttons 
                 onClick={() => logOut()}

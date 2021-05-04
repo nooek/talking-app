@@ -60,7 +60,7 @@ const Dropdown = () => {
     block: () => blockFriend(),
     clearChat: () => clearChat(),
   };
-  console.log(friend)
+
   return (
     <Container>
       {

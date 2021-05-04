@@ -24,14 +24,25 @@ const ChatSendMessage = () => {
         sendMessage(chat)
       }
     }
+
+    const formatDate = () => {
+      const today = new Date()
+      const dd = String(today.getDate()).padStart(2, '0')
+      const mm = String(today.getMonth() + 1).padStart(2, '0')
+      const yyyy = String(today.getFullYear())
+
+      return yyyy + '-' + mm + "-" + dd
+    }
   
     const sendMessage = async () => {
       if (message.length > 0) {
+        const dateFormated = formatDate()
+        console.log(dateFormated)
         const messageObject = {
           author: userData.length ? userData[0].user_id : "",
           receiver: friend.user_id,
           message: message,
-          date: Date.now(),
+          date: dateFormated,
           blocked: friend.blocked
         };
         socket.emit("send-message", messageObject);
@@ -55,11 +66,10 @@ const ChatSendMessage = () => {
     return (
         <MessageTypeContainer>
           <MessageInput
-            placeholder={friend.blocked === 1 ? "You can't send messages to this chat" : "Type here your message"}
+            placeholder={friend.blocked === 1 ? "Desblock to send messages" : "Type here your message"}
             value={message}
             onKeyPress={(e) => checkIfEnterPressed(e, friend.user_id)}
             onChange={(e) => setMessage(e.target.value)}
-            disabled={friend.blocked === 1 ? true : false}
           />
           <SendMessageButton 
           onClick={() => sendMessage(friend.user_id)}>

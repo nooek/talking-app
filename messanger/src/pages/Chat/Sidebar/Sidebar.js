@@ -28,14 +28,13 @@ import { useContacts } from "../../../store/contactsProvider";
 
 const Sidebar = () => {
   const { userData } = useUserData();
-  const [message, setMessage] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
   const [friendsOnline, setFriendsOnline] = useState([]);
   const { messages } = useMessages();
   const { friend, setFriend } = useFriend();
   const { socket } = useSocket();
-  const { contacts, setContacts } = useContacts()
+  const { contacts, setContacts } = useContacts();
 
   const updateFriends = useCallback(() => {
     axios
@@ -43,13 +42,10 @@ const Sidebar = () => {
         `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
       )
       .then((res) => {
-        console.log(res)
         if (res.data.message) {
-          setMessage(res.data.message);
-          setContacts([])
+          setContacts([]);
         } else {
           setContacts(res.data);
-          setMessage("");
         }
       });
   }, [userData, setContacts]);
@@ -58,7 +54,8 @@ const Sidebar = () => {
     updateFriends();
   }, [updateFriends]);
 
-  useEffect(() => {
+  const updateOnlineFriends = useCallback(() => {
+    socket.emit("get-users-online");
     socket.on("get-user-online", (data) => {
       let onlineList = [];
       data.map((each) => {
@@ -66,16 +63,35 @@ const Sidebar = () => {
       });
       setFriendsOnline(onlineList);
     });
+
+    return () => {
+      socket.off("get-user-online");
+    };
   }, [socket]);
 
   useEffect(() => {
-    const newContact = getMessagesFromStranger(contacts, messages, userData[0].user_id)
-    if (newContact.length){
-      setContacts([...contacts, {user_id: newContact[0].user_id, user_name: newContact[0].user_name, user_add: false}])
-    }else{
-      return
+    updateOnlineFriends();
+  }, [updateOnlineFriends]);
+
+  useEffect(() => {
+    const newContact = getMessagesFromStranger(
+      contacts,
+      messages,
+      userData[0].user_id
+    );
+    if (newContact.length) {
+      setContacts([
+        ...contacts,
+        {
+          user_id: newContact[0].user_id,
+          user_name: newContact[0].user_name,
+          user_add: false,
+        },
+      ]);
+    } else {
+      return;
     }
-  }, [messages, setContacts, contacts,userData])
+  }, [messages, setContacts, userData]);
 
   useEffect(() => {
     if (friendSearchName.length > 0) {
@@ -84,7 +100,6 @@ const Sidebar = () => {
           `http://localhost:3001/api/find/friend/${userData[0].user_id}/${friendSearchName}`
         )
         .then((res) => {
-          console.log(res)
           if (res.data && !res.data.error) {
             setContacts(res.data);
           }
@@ -93,8 +108,6 @@ const Sidebar = () => {
       updateFriends();
     }
   }, [friendSearchName, userData, updateFriends, setContacts]);
-
-  console.log(contacts)
 
   return (
     <SideBar>
@@ -118,7 +131,6 @@ const Sidebar = () => {
         />
       </SearchBarContainer>
       <FriendsContainer>
-        {message ? <h2>{message}</h2> : null}
         {contacts.map((each, index) => {
           return (
             <FriendContainer
@@ -135,9 +147,7 @@ const Sidebar = () => {
 
               <OnlineBubble
                 online={
-                  friendsOnline.includes(each.user_id.toString())
-                    ? true
-                    : false
+                  friendsOnline.includes(each.user_id.toString()) ? true : false
                 }
               />
             </FriendContainer>

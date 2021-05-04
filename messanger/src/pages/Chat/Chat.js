@@ -34,6 +34,8 @@ const Chat = () => {
     })
   }, [setMessages, userData])
 
+  
+
   useEffect(() => {
     socket.on("receive-message", (message) => {
       setMessages([...messages, message]);
@@ -56,12 +58,7 @@ const Chat = () => {
           }
           <MessagesContainer>
             {messages.map((each, index) => {
-              if (
-                (each.author === userData[0].user_id ||
-                  each.author === friend.user_id) &&
-                (each.receiver === userData[0].user_id ||
-                  each.receiver === friend.user_id) && each.deleted !== true
-              ) {
+              if (each.receiver === friend.user_id || each.author === friend.user_id){
                 return (
                   <MessageContainer
                     key={index}

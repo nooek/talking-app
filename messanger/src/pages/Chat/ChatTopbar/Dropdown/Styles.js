@@ -39,7 +39,7 @@ export const Options = styled.button`
 
 export const WarningContainer = styled.div`
   width: 200px;
-  height: 200px;
+  height: auto;
   border: 2px solid white;
   position: absolute;
   top: 100%;

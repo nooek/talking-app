@@ -72,8 +72,8 @@ export const SearchBarContainer = styled.div`
 
 export const SearchFriends = styled.input`
   width: 100%;
-  height: 100%;
-  background-color: transparent;
+  height: 90%;
+  background: transparent;
   border-radius: 15px;
   border: 1.8px solid black;
   :focus {
@@ -104,12 +104,11 @@ export const FriendsContainer = styled.div`
 
 export const FriendContainer = styled.div`
   width: 100%;
-  height: 70px;
+  height: 60px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  border-top: 1.5px solid grey;
-  border-bottom: 1.5px solid grey;
+  border-bottom: 2px solid black;
   margin-top: 10px;
   position: relative;
   background: ${props => props.selected === true ? "rgb(197, 197, 197)" : "none"};

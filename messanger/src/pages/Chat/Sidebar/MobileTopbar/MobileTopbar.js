@@ -26,7 +26,6 @@ import { useContacts } from "../../../../store/contactsProvider";
 
 const MobileTopbar = (props) => {
   const [hide, setHide] = useState(true);
-  const [message, setMessage] = useState("");
   const [friendSearchName, setFriendSearchName] = useState("")
   const [friendsOnline, setFriendsOnline] = useState([])
   const [showDropdown, setShowDropdown] = useState(false)
@@ -42,11 +41,9 @@ const MobileTopbar = (props) => {
       )
       .then((res) => {
         if (res.data.message) {
-          setMessage(res.data.message);
           setContacts([]);
         } else {
           setContacts(res.data);
-          setMessage("");
         }
       });
   }, [userData, setContacts]);
@@ -67,19 +64,24 @@ const MobileTopbar = (props) => {
     }
   }, [friendSearchName, updateFriends, userData, setContacts]);
 
-  useEffect(() => {
-    socket.on("get-user-online", data => {
-      let onlineList = []
-      data.map(each => {
-        return onlineList.push(each.userId)
-      })
-      setFriendsOnline(onlineList)
-    })
+  const updateOnlineFriends = useCallback(() => {
+    socket.emit("get-users-online");
+    socket.on("get-user-online", (data) => {
+      let onlineList = [];
+      data.map((each) => {
+        return onlineList.push(each.userId);
+      });
+      setFriendsOnline(onlineList);
+    });
 
     return () => {
       socket.off("get-user-online");
-    }
-  }, [socket])
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    updateOnlineFriends();
+  }, [updateOnlineFriends]);
 
   return (
     <Container hide={hide} chat={props.chat}>
@@ -105,7 +107,6 @@ const MobileTopbar = (props) => {
         placeholder="Search for friends" />
       </FindFriendsContainer>
       <FriendsList hide={hide}>
-        {message ? <h2>{message}</h2> : null}
         {contacts.map((each, index) => {
           return (
             <FriendContainer

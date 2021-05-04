@@ -17,25 +17,25 @@ const NotFriendAlert = () => {
   const { userData } = useUserData();
   const { setContacts } = useContacts();
 
-  const updateFriends = () => {
-    axios
-      .get(
-        `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
-      )
-      .then((res) => {
-        if (!res.data.message) {
-          setContacts(res.data);
-        }
-      });
+  const updateFriends = async () => {
+    const { data } = await axios
+    .get(
+      `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
+    )
+    if (data){
+      setContacts(data);
+      setFriend([])
+    }
   };
 
   const addFriend = async () => {
+    console.log('foo1')
     await axios.post(`http://localhost:3001/api/friends/add`, {
       id: friend.user_id,
       userId: userData[0].user_id,
-    });
-    setFriend({...friend, user_add: true})
-    updateFriends();
+    }).then(res => {
+      updateFriends();
+    })
   };
 
   const block = async () => {
@@ -75,8 +75,8 @@ const NotFriendAlert = () => {
         </Parent>
       ) : (
         <Parent>
-          <Message>THIS PERSON IS NOT IN YOUR CONTACTS</Message>
-          <Message>DO YOU WANT TO ADD?</Message>
+          <Message>This person is not your contact</Message>
+          <Message>Do you want to add?</Message>
           <ButtonsContainer>
             <Buttons
               onClick={() => setChoice(true)}

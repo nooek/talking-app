@@ -68,7 +68,7 @@ export const FindFriendsContainer = styled.div`
 export const FindFriendsInput = styled.input`
   height: 100%;
   width: 90%;
-  border: none;
+  border: 2px solid black;
   border-radius: 25px;
   text-align: center;
   :focus {

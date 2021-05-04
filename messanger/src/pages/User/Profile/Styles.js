@@ -8,7 +8,7 @@ export const Container = styled.div`
 `;
 
 export const NameAndPfpContainer = styled.div`
-  width: 100%;
+  width: auto;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -16,7 +16,25 @@ export const NameAndPfpContainer = styled.div`
   text-align: center;
   word-break: break-all;
   margin-top: 40px;
+  position: relative;
+  border: 2px solid white;
 `;
+
+export const Change = styled.button`
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 200px;
+  height: 45px;
+  color: white;
+  font-size: 20px;
+  background-color: transparent;
+  :hover{
+    background-color: black;
+  }
+  :focus{
+    outlined: none;
+  }
+`
 
 export const UserName = styled.h2`
   color: white;
@@ -31,45 +49,6 @@ export const UserPfp = styled.img`
   height: 100%;
   @media (max-width: 300px) {
     width: 80%;
-  }
-`;
-
-export const UserInfoContainer = styled.div`
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-top: 40px;
-`;
-
-export const UserInfoField = styled.div`
-  width: 80%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-  word-break: break-all;
-`;
-
-export const UserInfoFieldSubTitle = styled.h2`
-  color: white;
-  font-size: 20px;
-  margin-bottom: 3px;
-  @media (max-width: 500px) {
-    font-size: 15px;
-  }
-`;
-
-export const UserInfoFieldInfo = styled.h2`
-  color: white;
-  font-size: 30px;
-  margin-top: 0;
-  @media (max-width: 500px) {
-    font-size: 24px;
   }
 `;
 
@@ -102,4 +81,5 @@ export const GoBackPage = styled(BiArrowBack)`
   position: absolute;
   top: 10px;
   left: 10px;
+  z-index: 3;
 `

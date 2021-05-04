@@ -1,4 +1,4 @@
-const { con } = require("../../config/dbConfig");
+const { con, config } = require("../../config/dbConfig");
 
 module.exports = {
   createMessage: (req, res) => {
