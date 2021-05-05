@@ -17,7 +17,6 @@ const NotFriendAlert = () => {
   const { userData } = useUserData();
   const { setContacts } = useContacts();
 
-  console.log(friend);
   const updateFriends = async () => {
     const { data } = await axios.get(
       `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
@@ -46,6 +45,7 @@ const NotFriendAlert = () => {
       userId: friend.user_id,
     }).then(res => {
       console.log(friend)
+      updateFriends()
     })
   };
 

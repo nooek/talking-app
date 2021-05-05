@@ -79,9 +79,11 @@ module.exports = {
   },
 
   updateUser: (req, res) => {
-    const { name, pfp, desc, email, chat_bg, id } = req.body
+    const { name, desc, id } = req.body
     const query = `UPDATE user 
-    SET user_chat_bg = '${chat_bg}' WHERE user_id = ${id}`
+    SET user_name = '${name}',
+    user_desc= '${desc}'
+    WHERE user_id = ${id}`
 
     con.query(query, (error, results) => {
       if (error){
@@ -94,13 +96,17 @@ module.exports = {
 
   getUserById: (req, res) => {
     const { id } = req.params
+    console.log(req.params)
     const query = `SELECT * FROM user WHERE user_id = '${id}'`
     con.query(query, (error, results) => {
       if (error){
         res.json({error: error})
       }else{
+        console.log(results)
         if (results.length){
           res.status(200).json(results)
+        }else{
+          res.status(200).json({message: "This user does not exist"})
         }
       }
     })

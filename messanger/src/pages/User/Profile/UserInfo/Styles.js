@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { VscSaveAs } from "react-icons/vsc"
 
 export const UserInfoContainer = styled.div`
   width: 100%;
@@ -20,6 +21,7 @@ export const UserInfoField = styled.div`
   justify-content: center;
   word-break: break-all;
   border: 2px solid white;
+  margin-top: 10px;
 `;
 
 export const UserInfoFieldSubTitle = styled.h2`
@@ -40,15 +42,46 @@ export const UserInfoFieldInfo = styled.h2`
   }
 `;
 
+export const UserFieldChangeInfoContainer = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+` 
+
 export const UserFieldChangeInfo = styled.input`
   width: 200px;
   height: 30px;
   border: none;
   margin-bottom: 20px;
-  border-radius: 25px;
+  border-radius: 5px;
   margin-top: 20px;
   :focus{
     outline: none;
   }
+`
 
+export const ChangeButton = styled.button`
+  width: 200px;
+  height: 40px;
+  font-size: 20px;
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  margin-bottom: 10px;
+  :hover{
+    background: black;
+  }
+  :focus{
+    outline: none;
+  }
+`
+
+export const Save = styled(VscSaveAs)`
+  width: 35px;
+  height: 33px;
+  color: green;
+  margin-left: 10px;
 `

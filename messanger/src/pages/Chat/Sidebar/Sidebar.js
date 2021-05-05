@@ -19,22 +19,22 @@ import {
 import { useUserData } from "../../../store/userDataProvider";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useMessages } from "../../../store/messagesProvider";
 import { useFriend } from "../../../store/friendProvider";
-import getMessagesFromStranger from "./functions/getMessagesFromStranger";
 import Dropdown from "./Dropdown/Dropdown";
 import { useSocket } from "../../../store/socketProvider";
 import { useContacts } from "../../../store/contactsProvider";
+import { useMessages } from "../../../store/messagesProvider";
 
 const Sidebar = () => {
   const { userData } = useUserData();
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
   const [friendsOnline, setFriendsOnline] = useState([]);
-  const { messages } = useMessages();
+  const [contactsId, setContactsIds] = useState([])
   const { friend, setFriend } = useFriend();
   const { socket } = useSocket();
   const { contacts, setContacts } = useContacts();
+  const { messages } = useMessages();
 
   const updateFriends = useCallback(() => {
     axios
@@ -45,8 +45,10 @@ const Sidebar = () => {
         if (res.data.message) {
           setContacts([]);
         } else {
-          console.log(res.data)
-          setContacts(res.data);
+          const filteredContacts = res.data.filter(each => {
+            return each.blocked !== 1
+          })
+          setContacts(filteredContacts);
         }
       });
   }, [userData, setContacts]);
@@ -73,39 +75,6 @@ const Sidebar = () => {
   useEffect(() => {
     updateOnlineFriends();
   }, [updateOnlineFriends]);
-
-  useEffect(() => {
-    const contactsWithNoBlock = contacts.filter(each => {
-      return each.blocked !== 1
-    })
-
-    const contactsIdsList = []
-    
-    contactsWithNoBlock.map(each => {
-      return contactsIdsList.push(each.user_id)
-    })
-
-  }, [contacts])
-
-  useEffect(() => {
-    const newContact = getMessagesFromStranger(
-      contacts,
-      messages,
-      userData[0].user_id
-    );
-    if (newContact.length) {
-      setContacts([
-        ...contacts,
-        {
-          user_id: newContact[0].user_id,
-          user_name: newContact[0].user_name,
-          user_add: false,
-        },
-      ]);
-    } else {
-      return;
-    }
-  }, [messages, setContacts, userData]);
 
   useEffect(() => {
     if (friendSearchName.length > 0) {
