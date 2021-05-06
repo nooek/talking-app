@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
-import { BiArrowBack } from "react-icons/bi"
+import { BiArrowBack } from "react-icons/bi";
+import { IoIosAddCircle } from "react-icons/io"
 
 export const Container = styled.div`
   width: 100%;
@@ -17,38 +18,57 @@ export const NameAndPfpContainer = styled.div`
   word-break: break-all;
   margin-top: 40px;
   position: relative;
-  border: 2px solid white;
 `;
 
-export const Change = styled.button`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  width: 200px;
-  height: 45px;
-  color: white;
-  font-size: 20px;
-  background-color: transparent;
-  :hover{
-    background-color: black;
-  }
-  :focus{
-    outlined: none;
+export const ChangePfpIcon = styled(IoIosAddCircle)`
+  width: 50px;
+  height: 50px;
+  position: relative;
+  bottom: 25px;
+  color: rgb(15, 199, 15);
+  cursor: pointer;
+  @media(max-width: 300px){
+    width: 35px;
+    height: 35px;
+    bottom: 18px;
   }
 `
+
+export const Change = styled.button`
+  width: 200px;
+  height: 40px;
+  font-size: 20px;
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  margin-bottom: 10px;
+  margin-top: 30px;
+  :hover {
+    background: black;
+  }
+  :focus {
+    outline: none;
+  }
+  @media (max-width: 300px) {
+    width: 95%;
+  }
+`;
 
 export const UserName = styled.h2`
   color: white;
   font-size: 3rem;
-  @media (max-width: 600px) {
-    font-size: 1.5rem
+  @media (max-width: 300px) {
+    font-size: 1.5rem;
   }
 `;
 
 export const UserPfp = styled.img`
-  width: 300px;
-  height: 100%;
+  width: 270px;
+  height: 260px;
+  border-radius: 50%;
   @media (max-width: 300px) {
-    width: 80%;
+    width: 130px;
+    height: 130px;
   }
 `;
 
@@ -69,7 +89,7 @@ export const Buttons = styled(Button)`
   border-radius: 25px;
   text-transform: none;
   font-size: 17px;
-  @media (max-width: 300px) {
+  @media (max-width: 400px) {
     width: 90%;
   }
 `;
@@ -82,4 +102,4 @@ export const GoBackPage = styled(BiArrowBack)`
   top: 10px;
   left: 10px;
   z-index: 3;
-`
+`;

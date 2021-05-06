@@ -4,16 +4,18 @@ const dotenv = require("dotenv");
 const http = require("http");
 const cookieParser = require("cookie-parser");
 const socketIo = require("socket.io");
+const formidable = require("express-formidable")
 
 const app = express();
-app.use(cookieParser());
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
-app.use(express.json());
+
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
+app.use(express.json());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cookieParser());
 dotenv.config();
 
 const server = http.createServer(app);

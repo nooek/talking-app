@@ -42,6 +42,7 @@ const UserInfo = () => {
       .put("http://localhost:3001/api/user", {
         name: newName === undefined ? '' : newName,
         desc: newDescription === undefined ? '' : newDescription,
+        pfp: userData[0].user_pfp,
         id: userData[0].user_id
       })
       .then((res) => {

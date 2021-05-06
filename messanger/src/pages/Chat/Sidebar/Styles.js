@@ -17,7 +17,7 @@ export const SideBar = styled.div`
 
 export const SideTopbar = styled.div`
   width: 100%;
-  height: 60px;
+  height: 75px;
   position: relative;
   display: flex;
   flex-direction: row;
@@ -28,10 +28,13 @@ export const SideTopbar = styled.div`
 `;
 
 export const UserPfp = styled.img`
-  width: auto;
+  width: 50px;
   height: 100%;
   color: black;
-  margin-right: 10px;
+  border-radius: 50%;
+  margin-right: 20px;
+  margin-left: 10px;
+  border: 2px solid black;
   @media (max-width: 1000px) {
     height: 100%;
   }

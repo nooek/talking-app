@@ -79,16 +79,18 @@ module.exports = {
   },
 
   updateUser: (req, res) => {
-    const { name, desc, id } = req.body
+    const { name, desc, pfp, id } = req.body
     const query = `UPDATE user 
     SET user_name = '${name}',
-    user_desc= '${desc}'
+    user_desc = '${desc}',
+    user_pfp = '${pfp}'
     WHERE user_id = ${id}`
 
     con.query(query, (error, results) => {
       if (error){
         res.json({error: error})
       }else{
+        console.log(results)
         res.status(200).json(results)
       }
     })
@@ -96,13 +98,11 @@ module.exports = {
 
   getUserById: (req, res) => {
     const { id } = req.params
-    console.log(req.params)
     const query = `SELECT * FROM user WHERE user_id = '${id}'`
     con.query(query, (error, results) => {
       if (error){
         res.json({error: error})
       }else{
-        console.log(results)
         if (results.length){
           res.status(200).json(results)
         }else{

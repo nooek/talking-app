@@ -20,7 +20,6 @@ export const UserInfoField = styled.div`
   text-align: center;
   justify-content: center;
   word-break: break-all;
-  border: 2px solid white;
   margin-top: 10px;
 `;
 
@@ -76,6 +75,9 @@ export const ChangeButton = styled.button`
   }
   :focus{
     outline: none;
+  }
+  @media(max-width: 300px){
+    width: 100%;
   }
 `
 
