@@ -53,6 +53,7 @@ const ChatSendMessage = () => {
     }
 
     const sendMessageToDb = (message) => {
+      console.log("sda")
       axios
       .post(`http://localhost:3001/api/message`, {
         message: message.message,
@@ -60,6 +61,8 @@ const ChatSendMessage = () => {
         receiver: message.receiver,
         author: message.author,
         blocked: message.blocked
+      }).then(res => {
+        console.log(res)
       })
     }
 
