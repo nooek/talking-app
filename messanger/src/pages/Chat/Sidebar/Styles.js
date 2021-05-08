@@ -28,7 +28,7 @@ export const SideTopbar = styled.div`
 `;
 
 export const UserPfp = styled.img`
-  width: 50px;
+  width: 100%;
   height: 100%;
   color: black;
   border-radius: 50%;
@@ -107,7 +107,7 @@ export const FriendsContainer = styled.div`
 
 export const FriendContainer = styled.div`
   width: 100%;
-  height: 60px;
+  height: 70px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -127,9 +127,10 @@ export const FriendName = styled.h2`
 `;
 
 export const FriendPfp = styled.img`
-  width: auto;
-  height: 95%;
+  width: 70px;
+  height: 65px;
   margin-left: 2px;
+  border-radius: 50%;
 `;
 
 export const OnlineBubble = styled.div`

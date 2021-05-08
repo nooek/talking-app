@@ -27,16 +27,19 @@ const Profile = (props) => {
 
   const logOut = () => {
     localStorage.removeItem("id");
-    socket.emit("user-log-out", userData[0].user_id);
     setGoToLogin(true);
+    socket.disconnect()
   };
 
   const deleteAccount = async () => {
+    console.log("sda")
     await axios.delete("http://localhost:3001/api/user", {
       data: {
         id: userData[0].user_id,
       },
-    });
+    }).then(res => {
+      console.log(res)
+    })
     localStorage.removeItem("id");
     setGoToLogin(true);
   };
@@ -100,7 +103,7 @@ const Profile = (props) => {
         <UserPfp src={profilePic} />
         {uploadLoading === false ? (
           <div>
-            <label for="file-input">
+            <label htmlFor="file-input">
               <ChangePfpIcon />
             </label>
             <input
@@ -121,7 +124,7 @@ const Profile = (props) => {
           type="submit"
           onClick={() => uploadProfilePicToCloud()}
         >
-          Change pfp
+          Update pfp
         </Change>
       </NameAndPfpContainer>
       <UserInfo />

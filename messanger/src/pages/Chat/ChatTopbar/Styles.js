@@ -44,6 +44,7 @@ export const FriendPfp = styled.img`
   height: 95%;
   border-radius: 50%;
   margin-left: 12px;
+  border: 2px solid black;
 `;
 
 export const MoreActions = styled(FiMoreVertical)`

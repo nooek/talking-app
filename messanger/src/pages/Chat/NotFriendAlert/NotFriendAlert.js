@@ -27,22 +27,24 @@ const NotFriendAlert = () => {
     }
   };
 
-  const addFriend = async () => {
+  const acceptRequest = () => {
     console.log("foo1");
-    await axios
-      .post(`http://localhost:3001/api/friends/add`, {
-        id: friend.user_id,
-        userId: userData[0].user_id,
+    axios
+      .put(`http://localhost:3001/api/friends/updatestatus`, {
+        personId: userData[0].user_id,
+        userId: friend.user_id,
+        newStatus: "ACCEPTED"
       })
       .then((res) => {
         updateFriends();
       });
   };
 
-  const block = () => {
-    axios.put("http://localhost:3001/api/friend/block", {
+  const denyRequest = () => {
+    axios.put("http://localhost:3001/api/friends/updatestatus", {
       personId: userData[0].user_id,
       userId: friend.user_id,
+      newStatus: "DENIED"
     }).then(res => {
       console.log(friend)
       updateFriends()
@@ -56,7 +58,7 @@ const NotFriendAlert = () => {
           <Message>Are you certain?</Message>
           <ButtonsContainer>
             <Buttons
-              onClick={() => addFriend()}
+              onClick={() => acceptRequest()}
               color="primary"
               variant="contained"
             >
@@ -86,7 +88,7 @@ const NotFriendAlert = () => {
             </Buttons>
 
             <Buttons
-              onClick={() => block()}
+              onClick={() => denyRequest()}
               color="secondary"
               variant="contained"
             >

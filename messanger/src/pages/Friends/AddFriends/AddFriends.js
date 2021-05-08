@@ -50,7 +50,7 @@ const AddFriends = () => {
   }, [name]);
 
   const addFriend = (people) => {
-    axios.post(`http://localhost:3001/api/friends/add`, {
+    axios.post(`http://localhost:3001/api/friends/sendrequest`, {
       id: people.user_id,
       userId: userData[0].user_id,
     });

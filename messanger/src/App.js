@@ -9,7 +9,7 @@ import Register from "./pages/Register/Register";
 import Chat from "./pages/Chat/Chat";
 import AddFriends from "./pages/Friends/AddFriends/AddFriends";
 import Profile from "./pages/User/Profile/Profile";
-import Configurations from "./pages/UserConfigurations/Configurations";
+import Configurations from "./pages/User/UserConfigurations/Configurations";
 
 // Context
 import UserDataProvider from "./store/userDataProvider";

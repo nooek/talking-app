@@ -30,13 +30,13 @@ const Sidebar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
   const [friendsOnline, setFriendsOnline] = useState([]);
-  const [contactsId, setContactsIds] = useState([])
+  const [contactsId, setContactsIds] = useState([]);
   const { friend, setFriend } = useFriend();
   const { socket } = useSocket();
   const { contacts, setContacts } = useContacts();
   const { messages } = useMessages();
 
-  const updateFriends = useCallback(() => {
+  const updateFriends = useCallback(async () => {
     axios
       .get(
         `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
@@ -45,13 +45,13 @@ const Sidebar = () => {
         if (res.data.message) {
           setContacts([]);
         } else {
-          const filteredContacts = res.data.filter(each => {
-            return each.blocked !== 1
-          })
-          setContacts(filteredContacts);
+          console.log(res.data);
+     
+          setContacts(res.data);
+          setFriend([]);
         }
       });
-  }, [userData, setContacts]);
+  }, [userData, setContacts, setFriend]);
 
   useEffect(() => {
     updateFriends();
@@ -95,10 +95,10 @@ const Sidebar = () => {
   return (
     <SideBar>
       <SideTopbar>
-        <Link to="/profile" style={{ width: "auto", height: "60%" }}>
+        <Link to="/profile" style={{ width: "60px", height: "80%" }}>
           <UserPfp src={userData[0].user_pfp} alt="profile pic" />
         </Link>
-        <h2>{userData[0].user_name}</h2>
+        <h2 style={{ marginLeft: "20px" }}>{userData[0].user_name}</h2>
         <OtherThingsContainer>
           <Link to="/friends/add" style={{ textDecoration: "none" }}>
             <AddFriendIcon />
@@ -115,26 +115,32 @@ const Sidebar = () => {
       </SearchBarContainer>
       <FriendsContainer>
         {contacts.map((each, index) => {
-          return (
-            <FriendContainer
-              key={index}
-              onClick={() => {
-                setFriend(each);
-              }}
-              selected={friend.user_id === each.user_id ? true : false}
-            >
-              {each.user_pfp ? <FriendPfp src={each.user_pfp} /> : null}
-              <FriendName>{each.user_name}</FriendName>
-              <LastContactMessage>sada</LastContactMessage>
-              <MessageDate>sda</MessageDate>
+          if (each.status !== "DENIED") {
+            return (
+              <FriendContainer
+                key={index}
+                onClick={() => {
+                  setFriend(each);
+                }}
+                selected={friend.user_id === each.user_id ? true : false}
+              >
+                {each.user_pfp ? <FriendPfp src={each.user_pfp} /> : null}
+                <FriendName>{each.user_name}</FriendName>
+                <LastContactMessage>sada</LastContactMessage>
+                <MessageDate>sda</MessageDate>
 
-              <OnlineBubble
-                online={
-                  friendsOnline.includes(each.user_id.toString()) ? true : false
-                }
-              />
-            </FriendContainer>
-          );
+                <OnlineBubble
+                  online={
+                    friendsOnline.includes(each.user_id.toString())
+                      ? true
+                      : false
+                  }
+                />
+              </FriendContainer>
+            );
+          } else {
+            return null;
+          }
         })}
       </FriendsContainer>
     </SideBar>

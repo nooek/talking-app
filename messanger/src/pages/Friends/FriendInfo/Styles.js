@@ -13,6 +13,7 @@ export const Parent = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
 `
 
 export const ContactImage = styled.img`
@@ -60,3 +61,7 @@ export const GoBack = styled(BiArrowBack)`
     left: 10px;
 `
 
+export const SubInfo = styled.h2`
+    font-size: 20px;
+    color: white;
+`

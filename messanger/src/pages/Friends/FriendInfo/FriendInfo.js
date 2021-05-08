@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useFriend } from "../../../store/friendProvider"
+import { useMessages } from "../../../store/messagesProvider"
 import {
     ContactImage,
     Container, 
@@ -8,11 +9,22 @@ import {
     Parent,
     InformationName,
     Information,
-    GoBack
+    GoBack,
+    SubInfo
 } from "./Styles"
 
 const FriendInfo = () => {
-    const { friend } = useFriend()
+    const { friend } = useFriend()  
+    const { messages } = useMessages()
+    const [chatMessagesQuantity, setChatMessagesQuantity] = useState(0)
+
+    useEffect(() => {
+        const chatMessages = messages.filter(each => {
+            return friend.user_id === each.receiver || friend.user_id === each.author
+        })
+        setChatMessagesQuantity(chatMessages.length)
+    }, [friend.user_id, messages])
+
     return(
         <Container>
             <Link to="/chat">
@@ -28,6 +40,7 @@ const FriendInfo = () => {
                     <InformationName>Description</InformationName>
                     <Information>{friend.user_desc}</Information>
                 </InfoContainer>
+                <SubInfo>This chat has {chatMessagesQuantity} messages</SubInfo>
             </Parent>
         </Container>
     )

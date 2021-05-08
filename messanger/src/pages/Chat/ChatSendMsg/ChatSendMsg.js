@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { useMessages } from "../../../store/messagesProvider"
 import { useSocket } from "../../../store/socketProvider"
 import { useUserData } from "../../../store/userDataProvider"
-
 import {
     MessageTypeContainer,
     SendMessageButton,
@@ -43,7 +42,6 @@ const ChatSendMessage = () => {
           receiver: friend.user_id,
           message: message,
           date: dateFormated,
-          blocked: friend.blocked
         };
         socket.emit("send-message", messageObject);
         await setMessages([...messages, messageObject]);
@@ -60,7 +58,6 @@ const ChatSendMessage = () => {
         date: message.date,
         receiver: message.receiver,
         author: message.author,
-        blocked: message.blocked
       }).then(res => {
         console.log(res)
       })
@@ -69,7 +66,8 @@ const ChatSendMessage = () => {
     return (
         <MessageTypeContainer>
           <MessageInput
-            placeholder={friend.blocked === 1 ? "Desblock to send messages" : "Type here your message"}
+            placeholder={friend.status === "BLOCKED" ? "Desblock to send messages" : "Type here your message"}
+            disabled={friend.status === "BLOCKED" ? true : false}
             value={message}
             onKeyPress={(e) => checkIfEnterPressed(e, friend.user_id)}
             onChange={(e) => setMessage(e.target.value)}

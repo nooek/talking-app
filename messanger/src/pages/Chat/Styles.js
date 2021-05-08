@@ -51,11 +51,14 @@ export const MessagesContainer = styled.div`
 
 export const MessageContainer = styled.div`
   width: auto;
+  max-width: 300px;
   height: auto;
+  max-height: 350px;
   display: flex;
   flex-direction: column;
   z-index: 1;
-  text-align: ${(props) => (props.sender === true ? "right" : "left")};
+  word-break: break-word;
+  text-align: left;
   background-color: ${(props) =>
     props.sender === true ? "rgb(123, 123, 240)" : "rgb(7, 194, 7)"};
   align-self: ${(props) => (props.sender === true ? "flex-end" : "flex-start")};

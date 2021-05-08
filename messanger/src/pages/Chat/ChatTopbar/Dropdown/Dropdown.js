@@ -20,7 +20,7 @@ const Dropdown = () => {
   const { friend, setFriend } = useFriend();
   const { userData } = useUserData();
   const { setContacts } = useContacts();
-  const { messages, setMessages } = useMessages();
+  const { setMessages } = useMessages();
 
   const openWarning = (message, func) => {
     if (!message) return;
@@ -29,23 +29,34 @@ const Dropdown = () => {
     setAction(func);
   };
 
-  const updateFriends = () => {
-    axios
+  const updateFriends = async (status) => {
+    await axios
       .get(
         `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
       )
       .then((res) => {
+        console.log(res);
         setContacts(res.data);
-        setFriend({ ...friend, blocked: 1 });
+        setFriend({ ...friend, status: status });
       });
   };
 
   const blockFriend = async () => {
-    await axios.put("http://localhost:3001/api/friend/block", {
+    await axios.put("http://localhost:3001/api/friends/updatestatus", {
       personId: friend.user_id,
       userId: userData[0].user_id,
+      newStatus: "BLOCKED",
     });
-    updateFriends();
+    updateFriends("BLOCKED");
+  };
+
+  const unBlock = async () => {
+    await axios.put("http://localhost:3001/api/friends/updatestatus", {
+      personId: friend.user_id,
+      userId: userData[0].user_id,
+      newStatus: "ACCEPTED",
+    });
+    updateFriends("ACCEPTED");
   };
 
   const clearChat = async () => {
@@ -59,11 +70,10 @@ const Dropdown = () => {
         return each.receiver || each.author === friend.user_id;
       });
       console.log(chatMessages);
-      await axios
-        .post("http://localhost:3001/api/message/clearchat", {
-          user: userData[0].user_id,
-          messages: chatMessages,
-        })
+      await axios.post("http://localhost:3001/api/message/clearchat", {
+        user: userData[0].user_id,
+        messages: chatMessages,
+      });
       updateMessages();
     }
   };
@@ -81,12 +91,13 @@ const Dropdown = () => {
 
   const actions = {
     block: () => blockFriend(),
+    unBlock: () => unBlock(),
     clearChat: () => clearChat(),
   };
 
   return (
     <Container>
-      {friend.blocked === 0 ? (
+      {friend.status !== "BLOCKED" ? (
         <Link to={"/" + friend.user_name + "/" + friend.user_id + "/info"}>
           <Options>Friend Info</Options>
         </Link>
@@ -98,13 +109,24 @@ const Dropdown = () => {
       >
         Clear Chat
       </Options>
-      <Options
-        onClick={() =>
-          openWarning("Do you want to block that contact?", "block")
-        }
-      >
-        Block
-      </Options>
+      {friend.status !== "BLOCKED" ? (
+        <Options
+          onClick={() =>
+            openWarning("Do you want to block that contact?", "block")
+          }
+        >
+          Block
+        </Options>
+      ) : (
+        <Options
+          onClick={() =>
+            openWarning("Do you want to disblock that contact?", "unBlock")
+          }
+        >
+          Disblock
+        </Options>
+      )}
+
       {showWarning === true ? (
         <WarningContainer>
           <WarningMessage>{warningMessage}</WarningMessage>

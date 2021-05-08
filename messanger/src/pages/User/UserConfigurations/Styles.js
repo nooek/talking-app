@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import { Button } from "@material-ui/core"
 
 export const Container = styled.div`
     width: 100%;
@@ -9,6 +8,7 @@ export const Container = styled.div`
 export const Category = styled.h2`
     color: white;
     font-size: 23px;
+    margin-left: 10px;
 `
 
 export const PrivacyOptionsContainer = styled.div`
@@ -20,6 +20,7 @@ export const PrivacyOptionsContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    margin-left: 20px;
 `
 
 export const PrivacyOption = styled.h2`
@@ -39,33 +40,5 @@ export const BlocksList = styled.div`
     flex-direction: column;
     align-items: flex-start;
     overflow-x: auto;
-`
-
-export const InputImage = styled.input`
-    width: 200px;
-    height: 200px;
-    margin-bottom: 0;
-`
-
-export const PreviewImageDiv = styled.div`
-    width: 300px;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid white;
-    margin-top: 0px;    
-`
-
-export const PreviewImage = styled.img`
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-`
-
-export const UploadImageButton = styled(Button)`
-    width: 200px;
-    height: 50px;
-    text-transform: none;
+    margin-left: 20px;
 `

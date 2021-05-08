@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   ChatSide,
@@ -17,12 +17,14 @@ import MobileTopbar from "./Sidebar/MobileTopbar/MobileTopbar";
 import DefaultChat from "./DefaultChat/DefaultChat";
 import axios from "axios";
 import NotFriendAlert from "./NotFriendAlert/NotFriendAlert";
+import { useContacts } from "../../store/contactsProvider";
 
 const Chat = () => {
   const { userData } = useUserData();
   const { messages, setMessages } = useMessages();
   const { socket } = useSocket();
   const { friend } = useFriend();
+  const { contacts } = useContacts()
 
   useEffect(() => {
     axios
@@ -36,12 +38,22 @@ const Chat = () => {
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
-      setMessages([...messages, message]);
+      const blockedContactsList = []
+      contacts.map(each => {
+        if (each.status === "BLOCKED"){
+          return blockedContactsList.push(each.user_id)
+        }
+        return null
+      })
+
+      if (!blockedContactsList.includes(message.author)){
+        setMessages([...messages, message]);
+      }
     });
     return () => {
       socket.off("receive-message");
     };
-  }, [socket, messages, setMessages, userData]);
+  }, [socket, messages, setMessages, userData, contacts]);
 
   return (
     <Container>
@@ -50,12 +62,14 @@ const Chat = () => {
         <ChatSide>
           <MobileTopbar chat={true} />
           <ChatTopbar />
-          {friend.user_add === false ? <NotFriendAlert /> : null}
+          {friend.status === "REQUESTED" && friend.friend_with !== userData[0].user_id ? 
+          <NotFriendAlert /> 
+          : null}
           <MessagesContainer>
             {messages.map((each, index) => {
               if (
-                each.receiver === friend.user_id ||
-                each.author === friend.user_id
+                (each.receiver === friend.user_id ||
+                each.author === friend.user_id)
               ) {
                 return (
                   <MessageContainer
