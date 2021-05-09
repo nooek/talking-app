@@ -98,7 +98,7 @@ module.exports = {
     updateFriendStatus: (req, res) => {
         const { personId, userId, newStatus } = req.body
         
-        if (newStatus === "DENIED" || newStatus === "ACCEPTED"){
+        if (newStatus === "DENIED" || newStatus === "ACCEPTED" || newStatus === "REQUESTED"){
             console.log(newStatus)
             const query = `UPDATE friend_status
             SET status = '${newStatus}'

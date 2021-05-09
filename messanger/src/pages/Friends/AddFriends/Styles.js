@@ -40,7 +40,6 @@ export const PeopleList = styled.div`
 export const PersonContainer = styled.div`
     width: 100%;
     height: 60px;
-    border: 1px solid black;
     display: flex;
     flex-direction: row;
     position: relative;
@@ -54,9 +53,11 @@ export const PersonName = styled.h2`
 `
 
 export const PersonPfp = styled.img`
-    width: auto;
+    width: 60px;
     height: 100%;
-    border-right: 1px solid black;
+    border-radius: 50%;
+    border: 2px solid black;
+    margin-left: 10px;
 `
 
 export const AddFriendContainer = styled.div`

@@ -23,8 +23,8 @@ const Chat = () => {
   const { userData } = useUserData();
   const { messages, setMessages } = useMessages();
   const { socket } = useSocket();
-  const { friend } = useFriend();
-  const { contacts } = useContacts()
+  const { friend, setFriend } = useFriend();
+  const { contacts, setContacts } = useContacts()
 
   useEffect(() => {
     axios
@@ -35,6 +35,28 @@ const Chat = () => {
         }
       });
   }, [setMessages, userData]);
+
+  useEffect(() => {
+    socket.on('update-contact', data => {
+      console.log(data)
+      contacts.map(each => {
+        if (parseInt(each.user_id) === data[0]){
+          console.log(each)
+          const newContacts = contacts.filter(each => {
+            return each.user_id !== data[0]
+          })
+          each.status = data[1]
+
+          setContacts([...newContacts, each])
+        }else{
+          console.log("NOT FOUND")
+        }
+      })
+    })
+    return () => {
+      socket.off('update-contact')
+    }
+  }, [socket, contacts, setContacts])
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -55,6 +77,8 @@ const Chat = () => {
     };
   }, [socket, messages, setMessages, userData, contacts]);
 
+  console.log(friend)
+
   return (
     <Container>
       <Sidebar />
@@ -62,7 +86,7 @@ const Chat = () => {
         <ChatSide>
           <MobileTopbar chat={true} />
           <ChatTopbar />
-          {friend.status === "REQUESTED" && friend.friend_with !== userData[0].user_id ? 
+          {friend.status === "REQUESTED" && friend.friend_with !== userData[0].user_name ? 
           <NotFriendAlert /> 
           : null}
           <MessagesContainer>

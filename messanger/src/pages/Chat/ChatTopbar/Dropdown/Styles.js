@@ -20,6 +20,7 @@ export const Container = styled.div`
   animation-name: ${open};
   animation-duration: 600ms;
   animation-fill-mode: both;
+  z-index: 15;
 `;
 
 export const Options = styled.button`

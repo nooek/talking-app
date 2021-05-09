@@ -25,7 +25,10 @@ const AddFriends = () => {
   useEffect(() => {
     let contactId = [];
     contacts.map((each) => {
-      return contactId.push(each.user_id);
+      if (contactId === "ACCEPTED"){
+        return contactId.push(each.user_id);
+      }
+      return null
     });
     setContactsList(contactId);
   }, [contacts]);

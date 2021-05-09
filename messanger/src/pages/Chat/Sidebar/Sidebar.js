@@ -45,13 +45,10 @@ const Sidebar = () => {
         if (res.data.message) {
           setContacts([]);
         } else {
-          console.log(res.data);
-     
           setContacts(res.data);
-          setFriend([]);
         }
       });
-  }, [userData, setContacts, setFriend]);
+  }, [userData, setContacts]);
 
   useEffect(() => {
     updateFriends();
@@ -109,7 +106,7 @@ const Sidebar = () => {
       </SideTopbar>
       <SearchBarContainer>
         <SearchFriends
-          placeholder="name"
+          placeholder="Find Friend"
           onChange={(e) => setFriendSearchName(e.target.value)}
         />
       </SearchBarContainer>

@@ -127,10 +127,11 @@ export const FriendName = styled.h2`
 `;
 
 export const FriendPfp = styled.img`
-  width: 70px;
+  width: 65px;
   height: 65px;
   margin-left: 2px;
   border-radius: 50%;
+  border: 2px solid black;
 `;
 
 export const OnlineBubble = styled.div`

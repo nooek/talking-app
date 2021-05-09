@@ -12,6 +12,7 @@ import { useUserData } from "../../../../store/userDataProvider";
 import { useContacts } from "../../../../store/contactsProvider";
 import { Link } from "react-router-dom";
 import { useMessages } from "../../../../store/messagesProvider";
+import { useSocket } from "../../../../store/socketProvider"
 
 const Dropdown = () => {
   const [showWarning, setShowWarning] = useState(false);
@@ -21,6 +22,7 @@ const Dropdown = () => {
   const { userData } = useUserData();
   const { setContacts } = useContacts();
   const { setMessages } = useMessages();
+  const { socket } = useSocket()
 
   const openWarning = (message, func) => {
     if (!message) return;
@@ -38,7 +40,9 @@ const Dropdown = () => {
         console.log(res);
         setContacts(res.data);
         setFriend({ ...friend, status: status });
+        socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)
       });
+      setShowWarning(false)
   };
 
   const blockFriend = async () => {
@@ -54,9 +58,9 @@ const Dropdown = () => {
     await axios.put("http://localhost:3001/api/friends/updatestatus", {
       personId: friend.user_id,
       userId: userData[0].user_id,
-      newStatus: "ACCEPTED",
+      newStatus: "REQUESTED",
     });
-    updateFriends("ACCEPTED");
+    updateFriends("REQUESTED");
   };
 
   const clearChat = async () => {

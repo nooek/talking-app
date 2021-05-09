@@ -25,24 +25,27 @@ let users = [];
 
 io.on("connection", (socket) => {
   users.push({ socketId: socket.id, userId: socket.handshake.query.room });
-  io.emit("message", "hello");
-  io.emit("get-user-online", users);
   console.log(users)
+  io.emit("get-user-online", users);
 
   socket.on('get-users-online', () => {
     io.emit('get-user-online', users)
   })
 
-  socket.on("user-log-out", (userid) => {
-    let userInd = 0;
-    users.map((each, index) => {
-      if (each.socketId === userid) {
-        userInd = index;
+  socket.on('update-friend-status', (friendId, userId, newStatus) => {
+    let userToUpdateSocket = ''
+    console.log(userId, newStatus)
+    users.map(each => {
+      if (parseInt(each.userId) === parseInt(friendId)){
+        return userToUpdateSocket = each.socketId
       }
-    });
-    users.splice(userInd, 1);
-    io.emit("get-user-online", users);
-  });
+      return null
+    })
+    console.log(userToUpdateSocket)
+    if (userToUpdateSocket.length > 0){
+      socket.broadcast.to(userToUpdateSocket).emit('update-contact', [userId, newStatus])
+    }
+  })
 
   socket.on("send-message", (data) => {
     if ((data.blocked === true) | 1) {
@@ -61,7 +64,6 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
-
     let userInd = 0;
     users.map((each, index) => {
       if (each.socketId === socket.id) {
