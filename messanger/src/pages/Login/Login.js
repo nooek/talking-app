@@ -33,7 +33,6 @@ const Login = (props) => {
         { withCredentials: true }
       )
       .then((res) => {
-        
         if (res.data.message) {
           setMessage(res.data.message);
         } else {
@@ -43,28 +42,26 @@ const Login = (props) => {
   };
 
   const getUserData = async () => {
-    if (localStorage.getItem("id")) {
-      socket.disconnect();
-    }
-    await axios
-      .get("http://localhost:3001/api/user/getuser", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res)
-        if (res.data.user) {
-          setUserData(res.data.user);
-          localStorage.setItem("id", JSON.parse(res.data.user[0].user_id));
-          setRedirect(true);
-        }
-      });
-
-    const newSocket = io("http://localhost:3001/", {
-      transports: ["websocket"],
-      query: `room=${localStorage.getItem("id")}`,
+    socket.disconnect();
+    
+    const { data } = await axios.get("http://localhost:3001/api/user/getuser", {
+      withCredentials: true,
     });
-    setSocket(newSocket);
-    return () => newSocket.close();
+
+    if (data.user) {
+      console.log(data.user[0])
+      setUserData(data.user);
+      localStorage.setItem("id", JSON.parse(data.user[0].user_id));
+      const newSocket = io("http://localhost:3001/", {
+        transports: ["websocket"],
+        query: {
+          room: data.user[0].user_id,
+          showOnline: data.user[0].online_status,
+        },
+      });
+      setSocket(newSocket);
+      setRedirect(true);
+    }
   };
 
   return (

@@ -47,7 +47,6 @@ export const InformationName = styled.h4`
 
 export const Information = styled.h2`
     color: white;
-    margin-left: 15px;
     margin-top: 0;
     font-size: 22px;
 `

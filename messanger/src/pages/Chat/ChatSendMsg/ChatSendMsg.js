@@ -29,38 +29,33 @@ const ChatSendMessage = () => {
       const dd = String(today.getDate()).padStart(2, '0')
       const mm = String(today.getMonth() + 1).padStart(2, '0')
       const yyyy = String(today.getFullYear())
-
       return yyyy + '-' + mm + "-" + dd
     }
   
     const sendMessage = async () => {
       if (message.length > 0) {
         const dateFormated = formatDate()
-        console.log(dateFormated)
-        const messageObject = {
+        const messageData = {
           author: userData.length ? userData[0].user_id : "",
           receiver: friend.user_id,
           message: message,
           date: dateFormated,
         };
-        socket.emit("send-message", messageObject);
-        await setMessages([...messages, messageObject]);
-        sendMessageToDb(messageObject)
+        socket.emit("send-message", messageData);
+        await setMessages([...messages, messageData]);
+        sendMessageToDb(messageData)
         setMessage("")
       }
     }
 
     const sendMessageToDb = (message) => {
-      console.log("sda")
-      axios
-      .post(`http://localhost:3001/api/message`, {
+      const messageData = {
         message: message.message,
         date: message.date,
         receiver: message.receiver,
         author: message.author,
-      }).then(res => {
-        console.log(res)
-      })
+      }
+      axios.post(`http://localhost:3001/api/message`, messageData)
     }
 
     return (

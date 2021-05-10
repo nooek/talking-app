@@ -35,11 +35,10 @@ export const MessagesContainer = styled.div`
     background: #f1f1f1;
   }
   ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: rgb(161, 161, 161);
+    background: rgb(120, 120, 120);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgb(99, 99, 99);
+    background: rgb(0, 0, 0);
   }
   ::-webkit-scrollbar {
     width: 10px;

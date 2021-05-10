@@ -25,7 +25,7 @@ const AddFriends = () => {
   useEffect(() => {
     let contactId = [];
     contacts.map((each) => {
-      if (contactId === "ACCEPTED"){
+      if (contactId !== "DENIED"){
         return contactId.push(each.user_id);
       }
       return null

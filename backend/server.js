@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const http = require("http");
 const cookieParser = require("cookie-parser");
 const socketIo = require("socket.io");
-const formidable = require("express-formidable")
+const formidable = require("express-formidable");
 
 const app = express();
 
@@ -24,28 +24,39 @@ const io = socketIo(server);
 let users = [];
 
 io.on("connection", (socket) => {
-  users.push({ socketId: socket.id, userId: socket.handshake.query.room });
-  console.log(users)
-  io.emit("get-user-online", users);
+  users.push({
+    socketId: socket.id,
+    userId: socket.handshake.query.room,
+    showOnline: socket.handshake.query.showOnline,
+  });
 
-  socket.on('get-users-online', () => {
-    io.emit('get-user-online', users)
-  })
+  usersFiltered = users.filter((each) => {
+    return each.showOnline !== "0";
+  });
+  io.emit("get-user-online", usersFiltered);
+  socket.on("get-users-online", () => {
+    usersFiltered = users.filter((each) => {
+      return each.showOnline !== "0";
+    });
+    io.emit("get-user-online", usersFiltered);
+  });
 
-  socket.on('update-friend-status', (friendId, userId, newStatus) => {
-    let userToUpdateSocket = ''
-    console.log(userId, newStatus)
-    users.map(each => {
-      if (parseInt(each.userId) === parseInt(friendId)){
-        return userToUpdateSocket = each.socketId
+  socket.on("update-friend-status", (friendId, userId, newStatus) => {
+    let userToUpdateSocket = "";
+    console.log(userId, newStatus);
+    users.map((each) => {
+      if (parseInt(each.userId) === parseInt(friendId)) {
+        return (userToUpdateSocket = each.socketId);
       }
-      return null
-    })
-    console.log(userToUpdateSocket)
-    if (userToUpdateSocket.length > 0){
-      socket.broadcast.to(userToUpdateSocket).emit('update-contact', [userId, newStatus])
+      return null;
+    });
+    console.log(userToUpdateSocket);
+    if (userToUpdateSocket.length > 0) {
+      socket.broadcast
+        .to(userToUpdateSocket)
+        .emit("update-contact", [userId, newStatus]);
     }
-  })
+  });
 
   socket.on("send-message", (data) => {
     if ((data.blocked === true) | 1) {

@@ -10,20 +10,23 @@ import axios from "axios";
 import { useFriend } from "../../../store/friendProvider";
 import { useUserData } from "../../../store/userDataProvider";
 import { useContacts } from "../../../store/contactsProvider";
+import { useSocket } from "../../../store/socketProvider"
 
 const NotFriendAlert = () => {
   const [choice, setChoice] = useState(false);
   const { friend, setFriend } = useFriend();
   const { userData } = useUserData();
   const { setContacts } = useContacts();
+  const { socket } = useSocket()
 
-  const updateFriends = async () => {
+  const updateFriends = async (status) => {
     const { data } = await axios.get(
       `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
     );
     if (data) {
       setContacts(data);
       setFriend([]);
+      socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)
     }
   };
 
@@ -36,7 +39,7 @@ const NotFriendAlert = () => {
         newStatus: "ACCEPTED"
       })
       .then((res) => {
-        updateFriends();
+        updateFriends("ACCEPTED");
       });
   };
 
@@ -47,7 +50,7 @@ const NotFriendAlert = () => {
       newStatus: "DENIED"
     }).then(res => {
       console.log(friend)
-      updateFriends()
+      updateFriends("DENIED")
     })
   };
 

@@ -34,8 +34,8 @@ const MobileTopbar = (props) => {
   const { socket } = useSocket()
   const { contacts, setContacts } = useContacts()
 
-  const updateFriends = useCallback( async () => {
-    await axios
+  const updateFriends = useCallback(() => {
+    axios
       .get(
         `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
       )

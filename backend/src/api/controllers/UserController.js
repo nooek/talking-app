@@ -79,11 +79,12 @@ module.exports = {
   },
 
   updateUser: (req, res) => {
-    const { name, desc, pfp, id } = req.body
+    const { name, desc, pfp, id, onlineStatus } = req.body
     const query = `UPDATE user 
     SET user_name = '${name}',
     user_desc = '${desc}',
-    user_pfp = '${pfp}'
+    user_pfp = '${pfp}',
+    online_status = ${onlineStatus}
     WHERE user_id = ${id}`
 
     con.query(query, (error, results) => {

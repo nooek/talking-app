@@ -3,9 +3,6 @@ import { useFriend } from "../../../../store/friendProvider";
 import {
   Container,
   Options,
-  OptionsContainer,
-  WarningContainer,
-  WarningMessage,
 } from "./Styles";
 import axios from "axios";
 import { useUserData } from "../../../../store/userDataProvider";
@@ -13,6 +10,7 @@ import { useContacts } from "../../../../store/contactsProvider";
 import { Link } from "react-router-dom";
 import { useMessages } from "../../../../store/messagesProvider";
 import { useSocket } from "../../../../store/socketProvider"
+import Warning from "./Warning";
 
 const Dropdown = () => {
   const [showWarning, setShowWarning] = useState(false);
@@ -130,16 +128,7 @@ const Dropdown = () => {
           Disblock
         </Options>
       )}
-
-      {showWarning === true ? (
-        <WarningContainer>
-          <WarningMessage>{warningMessage}</WarningMessage>
-          <OptionsContainer>
-            <Options onClick={actions[action]}>Yes</Options>
-            <Options onClick={() => setShowWarning(!showWarning)}>No</Options>
-          </OptionsContainer>
-        </WarningContainer>
-      ) : null}
+      {showWarning === true ? <Warning msg={warningMessage} action={actions[action]} toggle={() => setShowWarning(!showWarning)} /> : null}
     </Container>
   );
 };

@@ -2,12 +2,15 @@ import styled from "styled-components"
 import { MdGroupAdd } from "react-icons/md"
 
 export const Container = styled.div`
-    width: 100%;
+    width: calc(100% - 200px);
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    @media(max-width: 700px){
+        width: 100%;
+    }
 `
 
 export const PresentionalTextContainer = styled.div`

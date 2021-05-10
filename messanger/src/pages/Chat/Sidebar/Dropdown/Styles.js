@@ -7,7 +7,7 @@ const open = keyframes`
 
 export const Container = styled.div`
     width: 180px;
-    height: 250px;
+    height: auto;
     background: rgb(231, 229, 229);
     position: absolute;
     right: 30%;
@@ -21,7 +21,6 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
     background: rgb(29, 29, 29);
 `
 

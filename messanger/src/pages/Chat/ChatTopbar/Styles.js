@@ -51,4 +51,5 @@ export const MoreActions = styled(FiMoreVertical)`
   width: 30px;
   height: 100%;
   color: black;
+  cursor: pointer;
 `;

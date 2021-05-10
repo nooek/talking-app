@@ -46,17 +46,18 @@ const Chat = () => {
             return each.user_id !== data[0]
           })
           each.status = data[1]
-
+          if (each.user_id === friend.user_id && each.status === "DENIED"){
+            setFriend([])
+          }
           setContacts([...newContacts, each])
-        }else{
-          console.log("NOT FOUND")
         }
+        return console.log("NOT FOUND")
       })
     })
     return () => {
       socket.off('update-contact')
     }
-  }, [socket, contacts, setContacts])
+  }, [socket, contacts, setContacts, setFriend, friend.user_id])
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -69,15 +70,23 @@ const Chat = () => {
       })
 
       if (!blockedContactsList.includes(message.author)){
-        setMessages([...messages, message]);
-      }
+        const newContacts = contacts.filter(each => {
+          return each.user_id !== message.author
+        })
+        contacts.map(each => {
+          if (each.user_id === message.author || each.user_id === message.receiver){
+            console.log("sad")
+            each.lastMessage = message.message
+            setContacts([...newContacts, each])
+          }
+          return console.log("NOT FOUND")
+        }
+      )}
     });
     return () => {
       socket.off("receive-message");
     };
-  }, [socket, messages, setMessages, userData, contacts]);
-
-  console.log(friend)
+  }, [socket, messages, setMessages, userData, contacts, setContacts]);
 
   return (
     <Container>

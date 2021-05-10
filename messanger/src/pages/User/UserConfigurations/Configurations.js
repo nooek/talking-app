@@ -7,23 +7,24 @@ import {
     BlocksList,
 } from "./Styles"
 import Switch from '@material-ui/core/Switch';
-// import axios from "axios";
-// import { useUserData } from "../../store/userDataProvider"
+import axios from "axios";
+import { useUserData } from "../../../store/userDataProvider"
 
 const Configurations = () => {
-    const [checked, setChecked] = useState(false)
+    const { userData, setUserData } = useUserData()
+    const [checked, setChecked] = useState(userData[0].online_status)
     const [checked2, setChecked2] = useState(false)
-    // const { userData, setUserData } = useUserData()
-
-    // const updateUser = () => {
-    //     axios
-    //     .get(`http://localhost:3001/api/user/${userData[0].user_id}`)
-    //     .then(res => {
-    //         if (res.data){
-    //             setUserData(res.data)
-    //         }
-    //     })
-    // }
+    
+    const updateUser = async () => {
+        await axios
+      .put("http://localhost:3001/api/user", {
+        name: userData[0].user_name,
+        desc: userData[0].user_desc,
+        pfp: userData[0].user_pfp,
+        onlineStatus: checked === true ? true : false,
+        id: userData[0].user_id
+      })
+    }
 
     return(
         <Container>
@@ -31,7 +32,7 @@ const Configurations = () => {
             <PrivacyOptionsContainer>
                 <div>
                     <PrivacyOption>Show read tick</PrivacyOption>
-                    <Switch checked={checked} onChange={() => setChecked(!checked)} />
+                    <Switch checked={checked} onChange={() => setChecked(!checked)} onClick={() => updateUser()} />
                 </div>
                 <div>
                     <PrivacyOption>Show online status</PrivacyOption>

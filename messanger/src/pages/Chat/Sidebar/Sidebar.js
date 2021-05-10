@@ -30,12 +30,10 @@ const Sidebar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
   const [friendsOnline, setFriendsOnline] = useState([]);
-  const [contactsId, setContactsIds] = useState([]);
   const { friend, setFriend } = useFriend();
   const { socket } = useSocket();
   const { contacts, setContacts } = useContacts();
-  const { messages } = useMessages();
-
+  
   const updateFriends = useCallback(async () => {
     axios
       .get(
@@ -123,7 +121,7 @@ const Sidebar = () => {
               >
                 {each.user_pfp ? <FriendPfp src={each.user_pfp} /> : null}
                 <FriendName>{each.user_name}</FriendName>
-                <LastContactMessage>sada</LastContactMessage>
+                <LastContactMessage>{each.lastMessage}</LastContactMessage>
                 <MessageDate>sda</MessageDate>
 
                 <OnlineBubble
