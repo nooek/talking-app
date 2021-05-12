@@ -10,6 +10,7 @@ import { useContacts } from "../../../../store/contactsProvider";
 import { Link } from "react-router-dom";
 import { useMessages } from "../../../../store/messagesProvider";
 import { useSocket } from "../../../../store/socketProvider"
+import { getFriendsData } from "../../../../services/API/tasks/APItasks"
 import Warning from "./Warning";
 
 const Dropdown = () => {
@@ -24,23 +25,18 @@ const Dropdown = () => {
 
   const openWarning = (message, func) => {
     if (!message) return;
+    if (!func) return
     setShowWarning(true);
     setWarningMessage(message);
     setAction(func);
   };
 
   const updateFriends = async (status) => {
-    await axios
-      .get(
-        `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
-      )
-      .then((res) => {
-        console.log(res);
-        setContacts(res.data);
-        setFriend({ ...friend, status: status });
-        socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)
-      });
-      setShowWarning(false)
+    const response = await getFriendsData(userData[0].user_id)
+    setContacts(response.data)
+    setFriend({...friend, status: status})
+    socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)
+    setShowWarning(false)
   };
 
   const blockFriend = async () => {
@@ -134,3 +130,13 @@ const Dropdown = () => {
 };
 
 export default Dropdown;
+// await axios
+    //   .get(
+    //     `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
+    //   )
+    //   .then((res) => {
+    //     console.log(res);
+    //     setContacts(res.data);
+    //     setFriend({ ...friend, status: status });
+    //     socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)
+    //   });

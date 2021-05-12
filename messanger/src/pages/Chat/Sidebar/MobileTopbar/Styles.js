@@ -18,7 +18,7 @@ export const Container = styled.div`
     animation-duration: 800ms;
     background: rgb(230, 230, 230);
     position: ${props => props.hide && props.chat === true ? "" : "absolute"};
-    z-index: 5;
+    z-index: 15;
     top: 0;
   }
 `;

@@ -11,6 +11,7 @@ import { useFriend } from "../../../store/friendProvider";
 import { useUserData } from "../../../store/userDataProvider";
 import { useContacts } from "../../../store/contactsProvider";
 import { useSocket } from "../../../store/socketProvider"
+import { getFriendsData } from "../../../services/API/tasks/APItasks";
 
 const NotFriendAlert = () => {
   const [choice, setChoice] = useState(false);
@@ -20,18 +21,13 @@ const NotFriendAlert = () => {
   const { socket } = useSocket()
 
   const updateFriends = async (status) => {
-    const { data } = await axios.get(
-      `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
-    );
-    if (data) {
-      setContacts(data);
-      setFriend([]);
-      socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)
-    }
+    const response = await getFriendsData()
+    setContacts(response.data)
+    setFriend([])
+    socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)
   };
 
   const acceptRequest = () => {
-    console.log("foo1");
     axios
       .put(`http://localhost:3001/api/friends/updatestatus`, {
         personId: userData[0].user_id,
@@ -49,7 +45,6 @@ const NotFriendAlert = () => {
       userId: friend.user_id,
       newStatus: "DENIED"
     }).then(res => {
-      console.log(friend)
       updateFriends("DENIED")
     })
   };
@@ -105,3 +100,12 @@ const NotFriendAlert = () => {
 };
 
 export default NotFriendAlert;
+
+// const { data } = await axios.get(
+    //   `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
+    // );
+    // if (data) {
+    //   setContacts(data);
+    //   setFriend([]);
+    //   socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)
+    // }

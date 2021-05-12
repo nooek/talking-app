@@ -18,12 +18,12 @@ import {
 } from "./Styles";
 import { useUserData } from "../../../store/userDataProvider";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useFriend } from "../../../store/friendProvider";
 import Dropdown from "./Dropdown/Dropdown";
 import { useSocket } from "../../../store/socketProvider";
 import { useContacts } from "../../../store/contactsProvider";
-import { useMessages } from "../../../store/messagesProvider";
+import { getFriendsData } from "../../../services/API/tasks/APItasks";
+import { searchFriend } from "../../../services/API/tasks/FriendsTasks";
 
 const Sidebar = () => {
   const { userData } = useUserData();
@@ -33,19 +33,11 @@ const Sidebar = () => {
   const { friend, setFriend } = useFriend();
   const { socket } = useSocket();
   const { contacts, setContacts } = useContacts();
-  
+
   const updateFriends = useCallback(async () => {
-    axios
-      .get(
-        `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
-      )
-      .then((res) => {
-        if (res.data.message) {
-          setContacts([]);
-        } else {
-          setContacts(res.data);
-        }
-      });
+    const data = await getFriendsData(userData[0].user_id);
+    console.log(data);
+    setContacts(data.data);
   }, [userData, setContacts]);
 
   useEffect(() => {
@@ -73,15 +65,9 @@ const Sidebar = () => {
 
   useEffect(() => {
     if (friendSearchName.length > 0) {
-      axios
-        .get(
-          `http://localhost:3001/api/find/friend/${userData[0].user_id}/${friendSearchName}`
-        )
-        .then((res) => {
-          if (res.data && !res.data.error) {
-            setContacts(res.data);
-          }
-        });
+      searchFriend(userData[0].user_id, friendSearchName).then((res) => {
+        setContacts(res.data);
+      });
     } else {
       updateFriends();
     }
@@ -143,3 +129,29 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
+// if (friendSearchName.length > 0) {
+    //   axios
+    //     .get(
+    //       `http://localhost:3001/api/find/friend/${userData[0].user_id}/${friendSearchName}`
+    //     )
+    //     .then((res) => {
+    //       if (res.data && !res.data.error) {
+    //         setContacts(res.data);
+    //       }
+    //     });
+    // } else {
+    //   updateFriends();
+    // }
+
+// axios
+//   .get(
+//     `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
+//   )
+//   .then((res) => {
+//     if (res.data.message) {
+//       setContacts([]);
+//     } else {
+//       setContacts(res.data);
+//     }
+//   });

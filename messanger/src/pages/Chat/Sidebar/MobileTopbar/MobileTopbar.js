@@ -16,13 +16,14 @@ import {
   LastContactMessage,
   MessageDate
 } from "./Styles";
-import axios from "axios";
 import { useUserData } from "../../../../store/userDataProvider";
 import { useFriend } from "../../../../store/friendProvider";
 import { Link } from "react-router-dom"
 import Dropdown from "../Dropdown/Dropdown";
 import { useSocket } from "../../../../store/socketProvider";
 import { useContacts } from "../../../../store/contactsProvider";
+import { getFriendsData } from "../../../../services/API/tasks/APItasks"
+import { searchFriend } from "../../../../services/API/tasks/FriendsTasks";
 
 const MobileTopbar = (props) => {
   const [hide, setHide] = useState(true);
@@ -34,18 +35,9 @@ const MobileTopbar = (props) => {
   const { socket } = useSocket()
   const { contacts, setContacts } = useContacts()
 
-  const updateFriends = useCallback(() => {
-    axios
-      .get(
-        `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
-      )
-      .then((res) => {
-        if (res.data.message) {
-          setContacts([]);
-        } else {
-          setContacts(res.data);
-        }
-      });
+  const updateFriends = useCallback(async() => {
+    const data = await getFriendsData(userData[0].user_id)
+    setContacts(data.data)
   }, [userData, setContacts]);
 
   useEffect(() => {
@@ -53,12 +45,10 @@ const MobileTopbar = (props) => {
   }, [updateFriends]);
 
   useEffect(() => {
-    if (friendSearchName.length > 1) {
-      axios
-        .get(`http://localhost:3001/api/find/friend/${userData[0].user_id}/${friendSearchName}`)
-        .then((res) => {
-          setContacts(res.data);
-        });
+    if (friendSearchName.length > 0) {
+      searchFriend(userData[0].user_id, friendSearchName).then((res) => {
+        setContacts(res.data);
+      });
     } else {
       updateFriends();
     }
@@ -113,6 +103,7 @@ const MobileTopbar = (props) => {
               key={index}
               onClick={() => {
                 setFriend(each);
+                setHide(!hide)
               }}             
               selected={friend.user_id === each.user_id ? true : false}
             >
@@ -137,3 +128,25 @@ const MobileTopbar = (props) => {
 };
 
 export default MobileTopbar;
+
+    // if (friendSearchName.length > 1) {
+    //   axios
+    //     .get(`http://localhost:3001/api/find/friend/${userData[0].user_id}/${friendSearchName}`)
+    //     .then((res) => {
+    //       setContacts(res.data);
+    //     });
+    // } else {
+    //   updateFriends();
+    // }
+
+// axios
+    //   .get(
+    //     `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
+    //   )
+    //   .then((res) => {
+    //     if (res.data.message) {
+    //       setContacts([]);
+    //     } else {
+    //       setContacts(res.data);
+    //     }
+    //   });

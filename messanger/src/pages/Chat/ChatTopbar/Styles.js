@@ -40,8 +40,8 @@ export const FriendName = styled.h2`
 `;
 
 export const FriendPfp = styled.img`
-  width: 60px;
-  height: 95%;
+  width: 57px;
+  height: 57px;
   border-radius: 50%;
   margin-left: 12px;
   border: 2px solid black;

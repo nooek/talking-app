@@ -15,6 +15,7 @@ import { useSocket } from "../../../store/socketProvider";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import UserInfo from "./UserInfo/UserInfo";
+import { getUserData } from "../../../services/API/tasks/APItasks"
 
 const Profile = (props) => {
   document.title = props.title;
@@ -46,7 +47,6 @@ const Profile = (props) => {
 
   const uploadProfilePicToCloud = async () => {
     const data = new FormData();
-    console.log(imageFile);
     data.append("file", imageFile);
     data.append("upload_preset", "User Profile Pic");
     setUploadLoading(true);
@@ -71,27 +71,22 @@ const Profile = (props) => {
         name: userData[0].user_name,
         desc: userData[0].user_desc,
         pfp: url,
+        onlineStatus: userData[0].online_status,
         id: userData[0].user_id
       })
       .then((res) => {
         console.log(res);
         if (!res.data.error){
-            updateUserData()
+          updateUser()
         }
       });
   };
 
-  const updateUserData = async () => {
-    console.log(userData[0].user_id)
-    await axios
-    .get(`http://localhost:3001/api/user/${userData[0].user_id}`)
-    .then(res => {
-      console.log(res)
-        if (!res.data.message){
-          setUserData(res.data)
-        }
-    })
-}
+  const updateUser = async () => {
+    const response = await getUserData(userData[0].user_id)
+    if (response) setUserData(response)
+    console.log(response)
+  }
 
   return (
     <Container>
@@ -146,3 +141,15 @@ const Profile = (props) => {
 };
 
 export default Profile;
+
+//   const updateUserData = async () => {
+//     console.log(userData[0].user_id)
+//     await axios
+//     .get(`http://localhost:3001/api/user/${userData[0].user_id}`)
+//     .then(res => {
+//       console.log(res)
+//         if (!res.data.message){
+//           setUserData(res.data)
+//         }
+//     })
+// }

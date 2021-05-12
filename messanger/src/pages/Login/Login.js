@@ -49,7 +49,6 @@ const Login = (props) => {
     });
 
     if (data.user) {
-      console.log(data.user[0])
       setUserData(data.user);
       localStorage.setItem("id", JSON.parse(data.user[0].user_id));
       const newSocket = io("http://localhost:3001/", {

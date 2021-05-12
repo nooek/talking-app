@@ -29,6 +29,7 @@ io.on("connection", (socket) => {
     userId: socket.handshake.query.room,
     showOnline: socket.handshake.query.showOnline,
   });
+  console.log(users)
 
   usersFiltered = users.filter((each) => {
     return each.showOnline !== "0";
@@ -87,11 +88,12 @@ io.on("connection", (socket) => {
   });
 });
 
+// Routes
+
 app.get("/", (req, res) => {
-  res.send("Working!");
+  res.status(200).send("Working!");
 });
 
-// Routes
 // User
 const registerUserRoute = require("./src/api/routes/user/Register");
 const loginUserRoute = require("./src/api/routes/user/Login");

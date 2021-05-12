@@ -88,7 +88,7 @@ module.exports = {
         AND (friend_status.friend_with = ${me} OR isnull(friend_status.friend_with));`
         con.query(query, (error, results) => {
             if (error){
-                res.json({error: error})
+                res.status(400).json({error: error})
             }else{
                 res.status(200).json(results)
             }

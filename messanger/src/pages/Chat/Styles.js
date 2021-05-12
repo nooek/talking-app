@@ -48,6 +48,19 @@ export const MessagesContainer = styled.div`
   }
 `;
 
+export const GoToLastMessageButton = styled.button`
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  bottom: 80px;
+  right: 35px;
+  background: rgb(99, 240, 99);
+  border-radius: 50%;
+  border: 2px solid white;
+  z-index: 15;
+  cursor: pointer;
+`
+
 export const MessageContainer = styled.div`
   width: auto;
   max-width: 300px;

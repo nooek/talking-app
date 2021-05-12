@@ -28,8 +28,8 @@ export const SideTopbar = styled.div`
 `;
 
 export const UserPfp = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 57px;
+  height: 57px;
   color: black;
   border-radius: 50%;
   margin-right: 20px;
@@ -74,7 +74,7 @@ export const SearchBarContainer = styled.div`
 `;
 
 export const SearchFriends = styled.input`
-  width: 100%;
+  width: 95%;
   height: 90%;
   background: transparent;
   border-radius: 15px;

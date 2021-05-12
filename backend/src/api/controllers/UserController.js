@@ -25,7 +25,7 @@ module.exports = {
     if (!userExists){
       con.query(query, (error, results) => {
         if (error) {
-          res.json({
+          res.status(400).json({
             error: error,
             message: "An error ocurred, please try again later",
           });
@@ -42,25 +42,29 @@ module.exports = {
   login: async (req, res) => {
       const { userEmail, password } = req.body
       const query = `SELECT * FROM user WHERE user_email = ?`
-      con.query(query, [userEmail], async (error, results) => {
-          if (error){
-            console.log(error)
-              res.json({error: error})
-          }else{
-            if (results.length > 0){
-              const passwordsMatch = await bcrypt.compare(password, results[0].user_password)
-              if (passwordsMatch){
-                const token = await jwt.sign({user: results}, process.env.JWT_KEY)
-                res.cookie('jwt', token, { httpOnly: true, secure: false })
-                res.json({ token })
+      if (userEmail && password !== undefined){
+        con.query(query, [userEmail], async (error, results) => {
+            if (error){
+              console.log(error)
+                res.status(400).json({error: error})
+            }else{
+              if (results.length > 0){
+                const passwordsMatch = await bcrypt.compare(password, results[0].user_password)
+                if (passwordsMatch){
+                  const token = await jwt.sign({user: results}, process.env.JWT_KEY)
+                  res.cookie('jwt', token, { httpOnly: true, secure: false })
+                  res.status(200).json({ token })
+                }else{
+                  res.status(200).json({message: "Email or password incorrect"})
+                }
               }else{
                 res.status(200).json({message: "Email or password incorrect"})
               }
-            }else{
-              res.status(200).json({message: "Email or password incorrect"})
             }
-          }
-      })
+        })
+      }else{
+        res.status(400).json({error: "Provide an email and password"})
+      }
   },
 
   getUser: (req, res) => {},
@@ -102,7 +106,7 @@ module.exports = {
     const query = `SELECT * FROM user WHERE user_id = '${id}'`
     con.query(query, (error, results) => {
       if (error){
-        res.json({error: error})
+        res.status(400).json({error: error})
       }else{
         if (results.length){
           res.status(200).json(results)

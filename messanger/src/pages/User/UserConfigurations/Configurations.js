@@ -11,11 +11,11 @@ import axios from "axios";
 import { useUserData } from "../../../store/userDataProvider"
 
 const Configurations = () => {
-    const { userData, setUserData } = useUserData()
+    const { userData } = useUserData()
     const [checked, setChecked] = useState(userData[0].online_status)
     const [checked2, setChecked2] = useState(false)
     
-    const updateUser = async () => {
+    const changeOnlineStatus = async () => {
         await axios
       .put("http://localhost:3001/api/user", {
         name: userData[0].user_name,
@@ -32,7 +32,7 @@ const Configurations = () => {
             <PrivacyOptionsContainer>
                 <div>
                     <PrivacyOption>Show read tick</PrivacyOption>
-                    <Switch checked={checked} onChange={() => setChecked(!checked)} onClick={() => updateUser()} />
+                    <Switch checked={checked} onChange={() => setChecked(!checked)} onClick={() => changeOnlineStatus()} />
                 </div>
                 <div>
                     <PrivacyOption>Show online status</PrivacyOption>

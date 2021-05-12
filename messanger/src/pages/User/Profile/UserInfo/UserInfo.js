@@ -9,6 +9,7 @@ import {
 } from "./Styles";
 import axios from "axios";
 import UserFieldInfo from "./UserInfoField/UserInfoField";
+import { getUserData } from "../../../../services/API/tasks/APItasks" 
 
 const UserInfo = () => {
   const { userData, setUserData } = useUserData();
@@ -24,18 +25,14 @@ const UserInfo = () => {
     }
   };
 
-  const updateUserData = () => {
-      console.log(userData[0].user_id)
-      axios
-      .get(`http://localhost:3001/api/user/${userData[0].user_id}`)
-      .then(res => {
-        console.log(res)
-          if (!res.data.message){
-            setUserData(res.data)
-            
-          }
-      })
+  const getUser = () => {
+    getUserData(userData[0].user_id).then(res => {
+      setUserData(res)
+      console.log(userData)
+    })
   }
+
+  console.log(userData)
 
   const saveUserInfo = () => {
     axios
@@ -43,12 +40,13 @@ const UserInfo = () => {
         name: newName === undefined ? '' : newName,
         desc: newDescription === undefined ? '' : newDescription,
         pfp: userData[0].user_pfp,
+        onlineStatus: userData[0].online_status,
         id: userData[0].user_id
       })
       .then((res) => {
         console.log(res);
         if (!res.data.error){
-            updateUserData()
+          getUser()
         }
       });
   };
@@ -58,9 +56,6 @@ const UserInfo = () => {
     setShowField(!showField);
     setFieldSelected(field);
   };
-
-  console.log(newName);
-  console.log(newDescription);
 
   return (
     <UserInfoContainer>
