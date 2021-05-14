@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { FiMoreVertical } from "react-icons/fi";
+import { GoSearch } from "react-icons/go"
 
 export const ChatTopBar = styled.div`
   width: 100%;
@@ -47,9 +48,17 @@ export const FriendPfp = styled.img`
   border: 2px solid black;
 `;
 
-export const MoreActions = styled(FiMoreVertical)`
+export const DropdownOpen = styled(FiMoreVertical)`
   width: 30px;
   height: 100%;
   color: black;
   cursor: pointer;
 `;
+
+export const SearchIcon = styled(GoSearch)`
+  width: 25px;
+  height: 80%;
+  color: black;
+  margin-right: 20px;
+  cursor: pointer;
+`

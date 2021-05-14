@@ -102,15 +102,14 @@ export const FriendsList = styled.div`
 export const FriendContainer = styled.div`
   width: 100%;
   height: 60px;
-  border-top: 1.5px solid grey;
-  border-bottom: 1.5px solid grey;
+  border-bottom: 2px solid white;
   display: flex;
   flex-direction: row;
   margin-bottom: 10px;
   position: relative;
   background: ${props => props.selected === true ? "rgb(197, 197, 197)" : "none"};
   :hover{
-	background: rgb(197, 197, 197);
+	  background: rgb(197, 197, 197);
   }
 `;
 

@@ -19,6 +19,7 @@ import DefaultChat from "./DefaultChat/DefaultChat";
 import NotFriendAlert from "./NotFriendAlert/NotFriendAlert";
 import { useContacts } from "../../store/contactsProvider";
 import { getMessagesData } from "../../services/API/tasks/APItasks"
+import FindMessage from "../../components/FindMessage/FindMessage"
 
 const Chat = () => {
   const { userData } = useUserData();
@@ -27,6 +28,7 @@ const Chat = () => {
   const { friend, setFriend } = useFriend();
   const { contacts, setContacts } = useContacts();
   const [showGoToLastMsg, setShowGoToLastMsg] = useState(false)
+  const [showFindMessage, setShowFindMessage] = useState(false)
   const chatScrollbarPos = useRef(null);
 
   useEffect(() => {
@@ -114,10 +116,12 @@ const Chat = () => {
   return (
     <Container>
       <Sidebar />
+      {showFindMessage === true ? <FindMessage click={() => setShowFindMessage(!showFindMessage)} /> : null}
       {friend.user_id !== undefined ? (
         <ChatSide id="chat-side">
-          <MobileTopbar chat={true} />
-          <ChatTopbar />
+          
+          <MobileTopbar chat={true}  />
+          <ChatTopbar clickSearch={() => setShowFindMessage(!showFindMessage)} />
           {friend.status === "REQUESTED" &&
           friend.friend_with !== userData[0].user_name ? (
             <NotFriendAlert />

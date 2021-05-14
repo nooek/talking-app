@@ -51,9 +51,9 @@ module.exports = {
         con.query(query, (error, results) => {
             if (error){
                 console.log(error)
-                res.json({error: error})
+                res.status(400).json({error: error})
             }else{
-                res.json(results)
+                res.status(200).json(results)
                 const searchFriendAddedQuery = `
                     SELECT * FROM friend
                     WHERE user_id = ${id}
@@ -128,23 +128,5 @@ module.exports = {
                 }
             })
         }
-
-        // console.log("personId: " + personId)
-        // console.log("userId: " + userId)
-        // const query = `UPDATE friend SET blocked = 1
-        // WHERE user_id = '${personId}' AND friend_with = '${userId}'`
-
-        // console.log(userId)
-        // console.log(personId)
-
-        // con.query(query, (error, results) => {
-        //     if (error){
-        //         console.log(error)
-        //         res.json({error: error})
-        //     }else{
-        //         console.log(results)
-        //         res.status(200).json(results)
-        //     }
-        // })
     }
 }

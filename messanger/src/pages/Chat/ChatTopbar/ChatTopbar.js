@@ -7,13 +7,13 @@ import {
   FriendPfp,
   FriendName,
   TopbarMoreActionsContainer,
-  MoreActions,
+  DropdownOpen,
+  SearchIcon,
 } from "./Styles";
 
-const ChatTopbar = () => {
+const ChatTopbar = (props) => {
   const { friend } = useFriend();
-  const [showDropdown, setShowDropdown] = useState()
-
+  const [showDropdown, setShowDropdown] = useState(false);
   return (
     <ChatTopBar>
       <TopbarUserInfoContainer>
@@ -21,14 +21,9 @@ const ChatTopbar = () => {
         <FriendName>{friend.user_name}</FriendName>
       </TopbarUserInfoContainer>
       <TopbarMoreActionsContainer>
-        <MoreActions 
-        onClick={() => setShowDropdown(!showDropdown)}
-        />
-        {
-          showDropdown === true ?
-            <Dropdown />
-          : null
-        }
+        <SearchIcon onClick={props.clickSearch} />
+        <DropdownOpen onClick={() => setShowDropdown(!showDropdown)} />
+        {showDropdown === true ? <Dropdown /> : null}
       </TopbarMoreActionsContainer>
     </ChatTopBar>
   );

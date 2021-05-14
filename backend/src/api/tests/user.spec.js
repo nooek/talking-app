@@ -1,16 +1,18 @@
 const request = require("supertest")
 const app = require("../../../server")
 
+const BASE_URL = "/api/user"
+
 describe('Test getUserById', () => {
     it('should get user by id', async (done) => {
-        const res = await request(app).get('/api/user/35')
+        const res = await request(app).get(`${BASE_URL}/35`)
         expect(res.statusCode).toEqual(200)
         expect(res.body).toBeDefined()
         done()
     })
 
     it ('should not get user by id', async (done) => {
-        const res = await request(app).get('/api/user/sada')
+        const res = await request(app).get(`${BASE_URL}/sada`)
         expect(res.statusCode).toEqual(200)
         done()
     })
@@ -25,7 +27,7 @@ describe('Test update user', () => {
             onlineStatus: false,
             id: 8
         }
-        const res = await request(app).put('/api/user').send(body)
+        const res = await request(app).put(BASE_URL).send(body)
         expect(res.statusCode).toEqual(200)
         expect(typeof(res.body)).toBe('object')
         done()

@@ -10,4 +10,6 @@ route.delete('/', controller.deleteMessage)
 
 route.post('/clearchat', controller.clearChat)
 
+route.get('/find/:id/:searchKey', controller.findMessage)
+
 module.exports = route

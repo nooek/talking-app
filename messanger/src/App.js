@@ -10,6 +10,7 @@ import Chat from "./pages/Chat/Chat";
 import AddFriends from "./pages/Friends/AddFriends/AddFriends";
 import Profile from "./pages/User/Profile/Profile";
 import Configurations from "./pages/User/UserConfigurations/Configurations";
+import PageNotFound from "./pages/PageNotFound/PageNotFound"
 
 // Context
 import UserDataProvider from "./store/userDataProvider";
@@ -70,6 +71,9 @@ const App = () => {
                             <FriendInfo title="Friend Info" />
                           )}
                         />
+                        <Route render={(props) => (
+                          <PageNotFound title="Not Found" />
+                        )} />
                       </Switch>
                     </Router>
                   </FriendProvider>

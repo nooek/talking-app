@@ -11,8 +11,7 @@ export const Container = styled.div`
 `;
 
 export const ChatSide = styled.div`
-  width: calc(100% - 200px);
-  height: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;

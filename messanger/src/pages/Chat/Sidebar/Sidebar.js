@@ -16,12 +16,12 @@ import {
   MessageDate,
   LastContactMessage,
 } from "./Styles";
-import { useUserData } from "../../../store/userDataProvider";
-import { Link } from "react-router-dom";
-import { useFriend } from "../../../store/friendProvider";
 import Dropdown from "./Dropdown/Dropdown";
+import { useUserData } from "../../../store/userDataProvider";
 import { useSocket } from "../../../store/socketProvider";
 import { useContacts } from "../../../store/contactsProvider";
+import { useFriend } from "../../../store/friendProvider";
+import { Link } from "react-router-dom";
 import { getFriendsData } from "../../../services/API/tasks/APItasks";
 import { searchFriend } from "../../../services/API/tasks/FriendsTasks";
 
