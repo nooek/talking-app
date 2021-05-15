@@ -5,7 +5,7 @@ import {
   MessagesContainer,
   MessageContainer,
   Message,
-  GoToLastMessageButton
+  GoToLastMessageButton,
 } from "./Styles";
 import { useUserData } from "../../store/userDataProvider";
 import Sidebar from "./Sidebar/Sidebar";
@@ -13,57 +13,61 @@ import { useSocket } from "../../store/socketProvider";
 import { useMessages } from "../../store/messagesProvider";
 import { useFriend } from "../../store/friendProvider";
 import ChatTopbar from "./ChatTopbar/ChatTopbar";
-import ChatSendMessage from "./ChatSendMsg/ChatSendMsg";
+import ChatSendMessage from "../../components/ChatSendMsg/ChatSendMsg";
 import MobileTopbar from "./Sidebar/MobileTopbar/MobileTopbar";
-import DefaultChat from "./DefaultChat/DefaultChat";
-import NotFriendAlert from "./NotFriendAlert/NotFriendAlert";
+import DefaultChat from "../../components/DefaultChat/DefaultChat";
+import NotFriendAlert from "../../components/NotFriendAlert/NotFriendAlert";
 import { useContacts } from "../../store/contactsProvider";
-import { getMessagesData } from "../../services/API/tasks/APItasks"
-import FindMessage from "../../components/FindMessage/FindMessage"
+import { getMessagesData } from "../../services/API/tasks/APItasks";
+import FindMessage from "../../components/FindMessage/FindMessage";
+import updateContactStatus from "./functions/updateContactStatus";
 
-const Chat = () => {
+const Chat = (props) => {
   const { userData } = useUserData();
   const { messages, setMessages } = useMessages();
   const { socket } = useSocket();
   const { friend, setFriend } = useFriend();
   const { contacts, setContacts } = useContacts();
-  const [showGoToLastMsg, setShowGoToLastMsg] = useState(false)
-  const [showFindMessage, setShowFindMessage] = useState(false)
+  const [showGoToLastMsg, setShowGoToLastMsg] = useState(false);
+  const [showFindMessage, setShowFindMessage] = useState(false);
   const chatScrollbarPos = useRef(null);
 
   useEffect(() => {
-    getMessagesData(userData[0].user_id).then(res => {
-      setMessages(res.data)
-    })
+    getMessagesData(userData[0].user_id).then((res) => {
+      if (!res.data.message) {
+        setMessages(res.data);
+      }
+    });
   }, [setMessages, userData, setContacts]);
 
   useEffect(() => {
     socket.on("update-contact", (data) => {
-      contacts.map((each) => {
-        if (each.user_id === data[0]) {
-          const newContacts = contacts.filter((each) => {
-            return each.user_id !== data[0];
-          });
-          each.status = data[1];
-          if (each.user_id === friend.user_id && each.status === "DENIED") {
-            setFriend([]);
-          }
-          if (data[1] !== "BLOCKED" && data[1] !== "REQUESTED"){
-            setContacts([...newContacts, each]);
-            setFriend({...friend, status: data[1]})
-          }
+      const res = updateContactStatus(data, contacts, friend);
+      console.log(res);
+      if (res && res.length > 0) {
+        if (res[0].status === "DENIED") {
+          setFriend([]);
         }
-        return 0;
-      });
+        const newContacts = contacts.filter((each) => {
+          return each.user_id !== res[0].id;
+        });
+        if (res[0].status !== "DENIED") {
+          setContacts([...newContacts, res[0].newContact]);
+          setFriend({ ...friend, status: res[0].status });
+        }
+      }
     });
     return () => {
       socket.off("update-contact");
     };
-  }, [socket, contacts, setContacts, setFriend, friend])
+  }, [contacts, socket, friend, setContacts, setFriend]);
 
   useEffect(() => {
-    chatScrollbarPos.current?.scrollTo(0, chatScrollbarPos.current?.scrollHeight)
-  }, [friend])
+    chatScrollbarPos.current?.scrollTo(
+      0,
+      chatScrollbarPos.current?.scrollHeight
+    );
+  }, [friend]);
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -79,7 +83,7 @@ const Chat = () => {
         const newContacts = contacts.filter((each) => {
           return each.user_id !== message.author;
         });
-        setMessages([...messages, message])
+        setMessages([...messages, message]);
         contacts.map((each) => {
           if (
             each.user_id === message.author ||
@@ -98,10 +102,13 @@ const Chat = () => {
   }, [socket, messages, setMessages, userData, contacts, setContacts]);
 
   const checkPosition = () => {
-    if (chatScrollbarPos.current?.scrollTop <= chatScrollbarPos.current?.scrollHeight - 2208){
-      setShowGoToLastMsg(true)
-    }else{
-      setShowGoToLastMsg(false)
+    if (
+      chatScrollbarPos.current?.scrollTop <=
+      chatScrollbarPos.current?.scrollHeight - 2208
+    ) {
+      setShowGoToLastMsg(true);
+    } else {
+      setShowGoToLastMsg(false);
     }
   };
 
@@ -109,21 +116,26 @@ const Chat = () => {
     chatScrollbarPos.current?.scrollTo({
       bottom: 0,
       top: chatScrollbarPos.current?.scrollHeight,
-      behavior: 'smooth'
-    })
-  }
+      behavior: "smooth",
+    });
+  };
+
+  console.log(props.friendsOnline)
 
   return (
     <Container>
-      <Sidebar />
-      {showFindMessage === true ? <FindMessage click={() => setShowFindMessage(!showFindMessage)} /> : null}
+      <Sidebar onlineFriend={props.friendsOnline} />
+      {showFindMessage === true ? (
+        <FindMessage click={() => setShowFindMessage(!showFindMessage)} />
+      ) : null}
       {friend.user_id !== undefined ? (
         <ChatSide id="chat-side">
-          
-          <MobileTopbar chat={true}  />
-          <ChatTopbar clickSearch={() => setShowFindMessage(!showFindMessage)} />
+          <MobileTopbar chat={true} onlineFriend={props.friendsOnline.length ? props.friendsOnline : []} />
+          <ChatTopbar
+            clickSearch={() => setShowFindMessage(!showFindMessage)}
+          />
           {friend.status === "REQUESTED" &&
-          friend.friend_with !== userData[0].user_name ? (
+          friend.user_id !== userData[0].user_id ? (
             <NotFriendAlert />
           ) : null}
           <MessagesContainer
@@ -131,7 +143,11 @@ const Chat = () => {
             ref={chatScrollbarPos}
             onScroll={() => checkPosition()}
           >
-            {showGoToLastMsg === true ? <GoToLastMessageButton onClick={() => goToLastMessage()}>Go back</GoToLastMessageButton> : null}
+            {showGoToLastMsg === true ? (
+              <GoToLastMessageButton onClick={() => goToLastMessage()}>
+                Go back
+              </GoToLastMessageButton>
+            ) : null}
             {messages.map((each, index) => {
               if (
                 each.receiver === friend.user_id ||
@@ -162,9 +178,9 @@ const Chat = () => {
 export default Chat;
 
 // axios
-    //   .get(`http://localhost:3001/api/message/${userData[0].user_id}`)
-    //   .then((res) => {
-    //     if (res.data) {
-    //       setMessages(res.data);
-    //     }
-    //   });
+//   .get(`http://localhost:3001/api/message/${userData[0].user_id}`)
+//   .then((res) => {
+//     if (res.data) {
+//       setMessages(res.data);
+//     }
+//   });

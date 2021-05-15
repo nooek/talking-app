@@ -22,6 +22,7 @@ import { SocketProvider } from "./store/socketProvider";
 // HOCs
 import CheckUserLogged from "./HOCs/checkUserLogged";
 import FriendInfo from "./pages/Friends/FriendInfo/FriendInfo";
+import GetFriendRealTimeInfo from "./HOCs/updateFriend";
 
 const App = () => {
   return (
@@ -49,7 +50,9 @@ const App = () => {
                         />
                         <Route
                           path="/chat"
-                          render={(props) => <Chat title="Chat" />}
+                          render={(props) => 
+                            <GetFriendRealTimeInfo>
+                          <Chat title="Chat" /></GetFriendRealTimeInfo>}
                         />
                         <Route
                           path="/friends/add"

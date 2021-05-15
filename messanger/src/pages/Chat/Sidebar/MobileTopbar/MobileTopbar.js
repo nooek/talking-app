@@ -20,7 +20,7 @@ import { useUserData } from "../../../../store/userDataProvider";
 import { useFriend } from "../../../../store/friendProvider";
 import { Link } from "react-router-dom"
 import Dropdown from "../Dropdown/Dropdown";
-import { useSocket } from "../../../../store/socketProvider";
+// import { useSocket } from "../../../../store/socketProvider";
 import { useContacts } from "../../../../store/contactsProvider";
 import { getFriendsData } from "../../../../services/API/tasks/APItasks"
 import { searchFriend } from "../../../../services/API/tasks/FriendsTasks";
@@ -28,11 +28,10 @@ import { searchFriend } from "../../../../services/API/tasks/FriendsTasks";
 const MobileTopbar = (props) => {
   const [hide, setHide] = useState(true);
   const [friendSearchName, setFriendSearchName] = useState("")
-  const [friendsOnline, setFriendsOnline] = useState([])
   const [showDropdown, setShowDropdown] = useState(false)
   const { userData } = useUserData();
   const { friend, setFriend } = useFriend();
-  const { socket } = useSocket()
+  // const { socket } = useSocket()
   const { contacts, setContacts } = useContacts()
 
   const updateFriends = useCallback(async() => {
@@ -54,24 +53,7 @@ const MobileTopbar = (props) => {
     }
   }, [friendSearchName, updateFriends, userData, setContacts]);
 
-  const updateOnlineFriends = useCallback(() => {
-    socket.emit("get-users-online");
-    socket.on("get-user-online", (data) => {
-      let onlineList = [];
-      data.map((each) => {
-        return onlineList.push(each.userId);
-      });
-      setFriendsOnline(onlineList);
-    });
-
-    return () => {
-      socket.off("get-user-online");
-    };
-  }, [socket]);
-
-  useEffect(() => {
-    updateOnlineFriends();
-  }, [updateOnlineFriends]);
+  console.log(props)
 
   return (
     <Container hide={hide} chat={props.chat}>
@@ -97,7 +79,7 @@ const MobileTopbar = (props) => {
         placeholder="Search for friends" />
       </FindFriendsContainer>
       <FriendsList hide={hide}>
-        {contacts.map((each, index) => {
+        {!contacts.message ? contacts.map((each, index) => {
           return (
             <FriendContainer
               key={index}
@@ -115,13 +97,10 @@ const MobileTopbar = (props) => {
               <FriendName>{each.user_name}</FriendName>
               <LastContactMessage>dsada</LastContactMessage>
               <MessageDate>sad</MessageDate>
-              <OnlineBubble online={
-                friendsOnline.includes(each.user_id) ? 
-                true : false
-              } />
+              
             </FriendContainer>
           );
-        })}
+        }) : null}
       </FriendsList>
     </Container>
   );

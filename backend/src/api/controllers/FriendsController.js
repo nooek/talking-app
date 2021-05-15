@@ -35,7 +35,7 @@ module.exports = {
                 if (results.length > 0){
                     res.status(200).json(results)
                 }else{
-                    res.status(200).json({message: "You don't have friends"})
+                    res.status(200).json([{message: "You don't have friends"}])
                 }
             }
         })
@@ -98,7 +98,7 @@ module.exports = {
     updateFriendStatus: (req, res) => {
         const { personId, userId, newStatus } = req.body
         
-        if (newStatus === "DENIED" || newStatus === "ACCEPTED" || newStatus === "REQUESTED"){
+        if (newStatus === "DENIED" || newStatus === "ACCEPTED"){
             console.log(newStatus)
             const query = `UPDATE friend_status
             SET status = '${newStatus}'
@@ -115,7 +115,7 @@ module.exports = {
             })
         }
 
-        if (newStatus === "BLOCKED"){
+        if (newStatus === "BLOCKED" || newStatus === "REQUESTED"){
             const query = `UPDATE friend_status
             SET status = '${newStatus}'
             WHERE (friend_id = '${personId}' AND friend_with = '${userId}')`

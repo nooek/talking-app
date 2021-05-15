@@ -23,14 +23,16 @@ const AddFriends = () => {
   const { contacts } = useContacts();
 
   useEffect(() => {
-    let contactId = [];
-    contacts.map((each) => {
-      if (contactId !== "DENIED"){
-        return contactId.push(each.user_id);
-      }
-      return null
-    });
-    setContactsList(contactId);
+    if (!contacts.message) {
+      let contactId = [];
+      contacts.map((each) => {
+        if (contactId !== "DENIED") {
+          return contactId.push(each.user_id);
+        }
+        return null;
+      });
+      setContactsList(contactId);
+    }
   }, [contacts]);
 
   useEffect(() => {

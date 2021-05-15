@@ -9,59 +9,33 @@ import {
   AddFriendIcon,
   MoreIcons,
   SearchFriends,
-  FriendContainer,
-  FriendName,
-  FriendPfp,
-  OnlineBubble,
-  MessageDate,
-  LastContactMessage,
 } from "./Styles";
 import Dropdown from "./Dropdown/Dropdown";
 import { useUserData } from "../../../store/userDataProvider";
-import { useSocket } from "../../../store/socketProvider";
+// import { useSocket } from "../../../store/socketProvider";
 import { useContacts } from "../../../store/contactsProvider";
-import { useFriend } from "../../../store/friendProvider";
 import { Link } from "react-router-dom";
 import { getFriendsData } from "../../../services/API/tasks/APItasks";
 import { searchFriend } from "../../../services/API/tasks/FriendsTasks";
+import Friends from "../../../components/SidebarFriends/Friends";
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   const { userData } = useUserData();
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
-  const [friendsOnline, setFriendsOnline] = useState([]);
-  const { friend, setFriend } = useFriend();
-  const { socket } = useSocket();
-  const { contacts, setContacts } = useContacts();
+  // const { socket } = useSocket();
+  const { setContacts } = useContacts();
 
   const updateFriends = useCallback(async () => {
-    const data = await getFriendsData(userData[0].user_id);
-    console.log(data);
-    setContacts(data.data);
+    const res = await getFriendsData(userData[0].user_id);
+    if (!res.data[0].message) {
+      setContacts(res.data);
+    }
   }, [userData, setContacts]);
 
   useEffect(() => {
     updateFriends();
   }, [updateFriends]);
-
-  const updateOnlineFriends = useCallback(() => {
-    socket.emit("get-users-online");
-    socket.on("get-user-online", (data) => {
-      let onlineList = [];
-      data.map((each) => {
-        return onlineList.push(each.userId);
-      });
-      setFriendsOnline(onlineList);
-    });
-
-    return () => {
-      socket.off("get-user-online");
-    };
-  }, [socket]);
-
-  useEffect(() => {
-    updateOnlineFriends();
-  }, [updateOnlineFriends]);
 
   useEffect(() => {
     if (friendSearchName.length > 0) {
@@ -95,34 +69,7 @@ const Sidebar = () => {
         />
       </SearchBarContainer>
       <FriendsContainer>
-        {contacts.map((each, index) => {
-          if (each.status !== "DENIED") {
-            return (
-              <FriendContainer
-                key={index}
-                onClick={() => {
-                  setFriend(each);
-                }}
-                selected={friend.user_id === each.user_id ? true : false}
-              >
-                {each.user_pfp ? <FriendPfp src={each.user_pfp} /> : null}
-                <FriendName>{each.user_name}</FriendName>
-                <LastContactMessage>{each.lastMessage}</LastContactMessage>
-                <MessageDate>sda</MessageDate>
-
-                <OnlineBubble
-                  online={
-                    friendsOnline.includes(each.user_id.toString())
-                      ? true
-                      : false
-                  }
-                />
-              </FriendContainer>
-            );
-          } else {
-            return null;
-          }
-        })}
+        <Friends onlineFriends={props.onlineFriend} />
       </FriendsContainer>
     </SideBar>
   );
@@ -131,18 +78,18 @@ const Sidebar = () => {
 export default Sidebar;
 
 // if (friendSearchName.length > 0) {
-    //   axios
-    //     .get(
-    //       `http://localhost:3001/api/find/friend/${userData[0].user_id}/${friendSearchName}`
-    //     )
-    //     .then((res) => {
-    //       if (res.data && !res.data.error) {
-    //         setContacts(res.data);
-    //       }
-    //     });
-    // } else {
-    //   updateFriends();
-    // }
+//   axios
+//     .get(
+//       `http://localhost:3001/api/find/friend/${userData[0].user_id}/${friendSearchName}`
+//     )
+//     .then((res) => {
+//       if (res.data && !res.data.error) {
+//         setContacts(res.data);
+//       }
+//     });
+// } else {
+//   updateFriends();
+// }
 
 // axios
 //   .get(
@@ -155,3 +102,38 @@ export default Sidebar;
 //       setContacts(res.data);
 //     }
 //   });
+
+/* {!contacts.message ? (
+          contacts.map((each, index) => {
+            if (each.status !== "DENIED") {
+              return (
+                <FriendContainer
+                  key={index}
+                  onClick={() => {
+                    setFriend(each);
+                  }}
+                  selected={friend.user_id === each.user_id ? true : false}
+                >
+                  {each.user_pfp ? <FriendPfp src={each.user_pfp} /> : null}
+                  <FriendName>{each.user_name}</FriendName>
+                  <LastContactMessage>{each.lastMessage}</LastContactMessage>
+                  <MessageDate>sda</MessageDate>
+
+                  {each.user_id ? (
+                    <OnlineBubble
+                      online={
+                        props.onlineFriend.includes(each.user_id.toString())
+                          ? true
+                          : false
+                      }
+                    />
+                  ) : null}
+                </FriendContainer>
+              );
+            } else {
+              return null;
+            }
+          })
+        ) : (
+          <h2>{contacts.message}</h2>
+        )} */

@@ -1,14 +1,14 @@
 import React, { useState } from "react"
-import { useMessages } from "../../../store/messagesProvider"
-import { useSocket } from "../../../store/socketProvider"
-import { useUserData } from "../../../store/userDataProvider"
-import {
-    MessageTypeContainer,
-    SendMessageButton,
-    MessageInput
-} from "./Styles"
 import axios from "axios"
-import { useFriend } from "../../../store/friendProvider"
+import {
+  MessageTypeContainer,
+  SendMessageButton,
+  MessageInput
+} from "./Styles"
+import { useFriend } from "../../store/friendProvider"
+import { useMessages } from "../../store/messagesProvider"
+import { useSocket } from "../../store/socketProvider"
+import { useUserData } from "../../store/userDataProvider"
 
 const ChatSendMessage = () => {
     const { socket } = useSocket()

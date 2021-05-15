@@ -6,15 +6,21 @@ const fade = keyframes`
 `
 
 export const Container = styled.div`
+    animation: 1s ease-out 0s 1 ${fade};
+    background: rgb(34, 34, 34);
     width: 400px;
     height: 100%;   
     position: absolute;
     right: 0;
     top: 0;
-    animation-name: ${fade};
-    animation-duration: 800ms;
-    background: rgb(34, 34, 34);
-    z-index: 72;
+    z-index: 17;
+    text-align: center;
+    @media(max-width: 400px){
+        width: 100%;
+        height: 96.8%;
+        bottom: 0;
+        top: 30px;
+    }
 `
 
 export const Parent = styled.div`
@@ -23,6 +29,7 @@ export const Parent = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
+    
 `
 
 export const Title = styled.h2`
@@ -55,4 +62,60 @@ export const MessagesList = styled.div`
     margin-top: 50px;
     border-radius: 12px;
     overflow-x: auto;
+    ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(120, 120, 120);
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+  :first-child {
+    margin-top: 20px;
+  }
+`
+
+export const CloseButton = styled.button`
+    width: 80%;
+    height: 35px;
+    border: 0;
+    position: absolute;
+    bottom: 130px;
+    font-size: 20px;
+    cursor: pointer;
+    border: 2px solid black;
+    :focus{
+        outline: none;
+    }
+`
+
+export const MessageContainer = styled.div`
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid white;
+`
+
+export const MessageContent = styled.h2`
+    color: white;
+`
+
+export const MessageDate = styled.h3`
+    font-size: 15px;
+    color: white;
+`
+
+export const PersonThatSend = styled.h2`
+    color: white;
+    font-style: italic;
 `

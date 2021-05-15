@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const API_ADDRESS = "http://localhost:3001/api";
 
 export const getUserData = async (userId) => {
@@ -15,7 +14,8 @@ export const getUserData = async (userId) => {
     }
     return;
   }
-  return console.error("You must provide a user id")
+  console.error("You must provide a user id")
+  return 0
 };
 
 export const getFriendsData = async (userId) => {
@@ -24,27 +24,29 @@ export const getFriendsData = async (userId) => {
       `${API_ADDRESS}/friends/getfriendsbyuser/${userId}`
     );
     console.log(response);
-    if (response.data.message || response.data.error) {
-      console.error(response.data);
+    if (response.data.error) {
+      console.error("An error ocurred: " + response.data.error)
     }
-
-    if (response.data && response.data.length > 0) {
+  
+    if (response.data) {
       return response;
     }
   }
-  return console.error("You must provide a user id")
+  console.error("You must provide a user id")
+  return 0
 };
 
 export const getMessagesData = async (userId) => {
   if (userId) {
     const response = await axios.get(`${API_ADDRESS}/message/${userId}`);
-    if (response.error || response.data.message) {
-      console.log(response.data);
+    if (response.data.error) {
+      console.log(response.data.error);
       return;
     }
-    if (response.data && response.data.length > 0) {
+    if (response.data) {
       return response;
     }
   }
-  return console.error("You must provide a user id")
+  console.error("You must provide a user id")
+  return 0
 };

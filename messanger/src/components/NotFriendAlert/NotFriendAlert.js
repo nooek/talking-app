@@ -7,11 +7,11 @@ import {
   Parent,
 } from "./Styles";
 import axios from "axios";
-import { useFriend } from "../../../store/friendProvider";
-import { useUserData } from "../../../store/userDataProvider";
-import { useContacts } from "../../../store/contactsProvider";
-import { useSocket } from "../../../store/socketProvider"
-import { getFriendsData } from "../../../services/API/tasks/APItasks";
+import { useFriend } from "../../store/friendProvider";
+import { useUserData } from "../../store/userDataProvider";
+import { useContacts } from "../../store/contactsProvider";
+import { useSocket } from "../../store/socketProvider"
+import { getFriendsData } from "../../services/API/tasks/APItasks";
 
 const NotFriendAlert = () => {
   const [choice, setChoice] = useState(false);
@@ -21,7 +21,7 @@ const NotFriendAlert = () => {
   const { socket } = useSocket()
 
   const updateFriends = async (status) => {
-    const response = await getFriendsData()
+    const response = await getFriendsData(userData[0].user_id)
     setContacts(response.data)
     setFriend([])
     socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)

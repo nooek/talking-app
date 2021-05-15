@@ -1,5 +1,5 @@
 import React from "react";
-import MobileTopbar from "../Sidebar/MobileTopbar/MobileTopbar";
+import MobileTopbar from "../../pages/Chat/Sidebar/MobileTopbar/MobileTopbar";
 import { 
     AddFriendIcon,
     Container,

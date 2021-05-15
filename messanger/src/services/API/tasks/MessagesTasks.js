@@ -2,9 +2,9 @@ import axios from "axios"
 
 const API_ADDRESS = "http://localhost:3001/api/message";
 
-export const findMessage = async (userId, searchKey) => {
+export const findMessage = async (userId, searchKey, friendId) => {
     const res = await axios
-    .get(`${API_ADDRESS}/find/${userId}/${searchKey}`)
+    .get(`${API_ADDRESS}/find/${userId}/${searchKey}/${friendId}`)
 
     if (res.data.error){
         console.error(res.data.error)

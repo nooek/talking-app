@@ -19,6 +19,7 @@ export const ChatSide = styled.div`
   position: relative;
   @media(max-width: 700px){
     width: 100%;
+    height: 100%;
   }
 `;
 
