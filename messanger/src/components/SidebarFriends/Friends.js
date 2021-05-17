@@ -13,6 +13,14 @@ import {
 const SidebarFriends = (props) => {
     const { contacts } = useContacts()
     const { friend, setFriend } = useFriend()
+    
+    const getFriend = (friend) => {
+      console.log(friend)
+      contacts.filter(each => {
+        return each.friend_with === friend.user_id
+      })
+    }
+
     return(
         !contacts.message ? (
             contacts.map((each, index) => {
@@ -22,6 +30,7 @@ const SidebarFriends = (props) => {
                     key={index}
                     onClick={() => {
                       setFriend(each);
+                      getFriend(each)
                     }}
                     selected={friend.user_id === each.user_id ? true : false}
                   >

@@ -19,7 +19,7 @@ const Dropdown = () => {
   const [action, setAction] = useState("");
   const { friend, setFriend } = useFriend();
   const { userData } = useUserData();
-  const { setContacts } = useContacts();
+  const { contacts, setContacts } = useContacts();
   const { setMessages } = useMessages();
   const { socket } = useSocket()
 
@@ -35,26 +35,31 @@ const Dropdown = () => {
     const response = await getFriendsData(userData[0].user_id)
     setContacts(response.data)
     setFriend({...friend, status: status})
+    console.log(status)
     socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)
     setShowWarning(false)
   };
 
   const blockFriend = async () => {
-    await axios.put("http://localhost:3001/api/friends/updatestatus", {
+    console.log("asdada")
+    axios.put("http://localhost:3001/api/friends/updatestatus", {
       personId: friend.user_id,
       userId: userData[0].user_id,
       newStatus: "BLOCKED",
-    });
-    updateFriends("BLOCKED");
+    }).then(() => {
+      updateFriends("BLOCKED");
+    })
+    
   };
 
   const unBlock = async () => {
-    await axios.put("http://localhost:3001/api/friends/updatestatus", {
+    axios.put("http://localhost:3001/api/friends/updatestatus", {
       personId: friend.user_id,
       userId: userData[0].user_id,
-      newStatus: "REQUESTED",
-    });
-    updateFriends("REQUESTED");
+      newStatus: "ACCEPTED",
+    }).then(() => {
+      updateFriends("ACCEPTED");
+    })
   };
 
   const clearChat = async () => {

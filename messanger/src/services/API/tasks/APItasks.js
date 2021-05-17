@@ -23,7 +23,6 @@ export const getFriendsData = async (userId) => {
     const response = await axios.get(
       `${API_ADDRESS}/friends/getfriendsbyuser/${userId}`
     );
-    console.log(response);
     if (response.data.error) {
       console.error("An error ocurred: " + response.data.error)
     }

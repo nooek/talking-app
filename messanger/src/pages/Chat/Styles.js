@@ -64,8 +64,6 @@ export const GoToLastMessageButton = styled.button`
 export const MessageContainer = styled.div`
   width: auto;
   max-width: 300px;
-  height: auto;
-  max-height: 350px;
   display: flex;
   flex-direction: column;
   z-index: 1;

@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
     userId: socket.handshake.query.room,
     showOnline: socket.handshake.query.showOnline,
   });
-  console.log(users)
+  console.log(users);
 
   usersFiltered = users.filter((each) => {
     return each.showOnline !== "0";
@@ -43,20 +43,22 @@ io.on("connection", (socket) => {
   });
 
   socket.on("update-friend-status", (friendId, userId, newStatus) => {
-    let userToUpdateSocket = "";
-    console.log(userId, newStatus);
-    users.map((each) => {
-      if (parseInt(each.userId) === parseInt(friendId)) {
-        return (userToUpdateSocket = each.socketId);
+    console.log("sdada")
+      let userToUpdateSocket = "";
+      console.log(userId, newStatus);
+      users.map((each) => {
+        if (parseInt(each.userId) === parseInt(friendId)) {
+          return (userToUpdateSocket = each.socketId);
+        }
+        return null;
+      });
+      console.log(userToUpdateSocket);
+      if (userToUpdateSocket.length > 0) {
+        socket.broadcast
+          .to(userToUpdateSocket)
+          .emit("update-contact", [userId, newStatus]);
       }
-      return null;
-    });
-    console.log(userToUpdateSocket);
-    if (userToUpdateSocket.length > 0) {
-      socket.broadcast
-        .to(userToUpdateSocket)
-        .emit("update-contact", [userId, newStatus]);
-    }
+    
   });
 
   socket.on("send-message", (data) => {

@@ -2,9 +2,9 @@ const { con, config } = require("../../config/dbConfig");
 
 module.exports = {
   createMessage: (req, res) => {
-    const { message, date, receiver, author } = req.body;
+    const { message, date, receiver, author, time } = req.body;
     const addMessageQuery = `INSERT INTO message VALUES 
-        (DEFAULT, '${message}', '${date}', '${receiver}', '${author}')`;
+        (DEFAULT, '${message}', '${date}', '${receiver}', '${author}', '${time}')`;
     con.query(addMessageQuery, (error, results) => {
       if (error) {
         res.json({ error: error });

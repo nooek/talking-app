@@ -9,6 +9,7 @@ import { useFriend } from "../../store/friendProvider"
 import { useMessages } from "../../store/messagesProvider"
 import { useSocket } from "../../store/socketProvider"
 import { useUserData } from "../../store/userDataProvider"
+import getDate from "../../functions/formatDate"
 
 const ChatSendMessage = () => {
     const { socket } = useSocket()
@@ -29,18 +30,21 @@ const ChatSendMessage = () => {
       const dd = String(today.getDate()).padStart(2, '0')
       const mm = String(today.getMonth() + 1).padStart(2, '0')
       const yyyy = String(today.getFullYear())
-      return yyyy + '-' + mm + "-" + dd
+      return yyyy + '-' + mm + "-" + dd 
     }
   
     const sendMessage = async () => {
+      const today = getDate() 
+      console.log(today)
       if (message.length > 0) {
-        const dateFormated = formatDate()
         const messageData = {
           author: userData.length ? userData[0].user_id : "",
           receiver: friend.user_id,
           message: message,
-          date: dateFormated,
+          date: today.date,
+          message_time: today.time
         };
+        console.log(messageData.message_time.split(':')[0] + ':' + messageData.message_time.split(':')[1])
         socket.emit("send-message", messageData);
         await setMessages([...messages, messageData]);
         sendMessageToDb(messageData)
@@ -48,14 +52,10 @@ const ChatSendMessage = () => {
       }
     }
 
-    const sendMessageToDb = (message) => {
-      const messageData = {
-        message: message.message,
-        date: message.date,
-        receiver: message.receiver,
-        author: message.author,
-      }
-      axios.post(`http://localhost:3001/api/message`, messageData)
+    const sendMessageToDb = (messageData) => {
+      axios.post(`http://localhost:3001/api/message`, messageData).then(res => {
+        console.log(res)
+      })
     }
 
     return (

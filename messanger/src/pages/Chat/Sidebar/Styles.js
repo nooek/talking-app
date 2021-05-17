@@ -131,7 +131,7 @@ export const FriendPfp = styled.img`
   height: 65px;
   margin-left: 2px;
   border-radius: 50%;
-  border: 2px solid black;
+  border: 1px solid black;
 `;
 
 export const OnlineBubble = styled.div`

@@ -20,13 +20,12 @@ import NotFriendAlert from "../../components/NotFriendAlert/NotFriendAlert";
 import { useContacts } from "../../store/contactsProvider";
 import { getMessagesData } from "../../services/API/tasks/APItasks";
 import FindMessage from "../../components/FindMessage/FindMessage";
-import updateContactStatus from "./functions/updateContactStatus";
 
 const Chat = (props) => {
   const { userData } = useUserData();
   const { messages, setMessages } = useMessages();
   const { socket } = useSocket();
-  const { friend, setFriend } = useFriend();
+  const { friend } = useFriend();
   const { contacts, setContacts } = useContacts();
   const [showGoToLastMsg, setShowGoToLastMsg] = useState(false);
   const [showFindMessage, setShowFindMessage] = useState(false);
@@ -39,28 +38,6 @@ const Chat = (props) => {
       }
     });
   }, [setMessages, userData, setContacts]);
-
-  useEffect(() => {
-    socket.on("update-contact", (data) => {
-      const res = updateContactStatus(data, contacts, friend);
-      console.log(res);
-      if (res && res.length > 0) {
-        if (res[0].status === "DENIED") {
-          setFriend([]);
-        }
-        const newContacts = contacts.filter((each) => {
-          return each.user_id !== res[0].id;
-        });
-        if (res[0].status !== "DENIED") {
-          setContacts([...newContacts, res[0].newContact]);
-          setFriend({ ...friend, status: res[0].status });
-        }
-      }
-    });
-    return () => {
-      socket.off("update-contact");
-    };
-  }, [contacts, socket, friend, setContacts, setFriend]);
 
   useEffect(() => {
     chatScrollbarPos.current?.scrollTo(
@@ -120,8 +97,6 @@ const Chat = (props) => {
     });
   };
 
-  console.log(props.friendsOnline)
-
   return (
     <Container>
       <Sidebar onlineFriend={props.friendsOnline} />
@@ -130,12 +105,12 @@ const Chat = (props) => {
       ) : null}
       {friend.user_id !== undefined ? (
         <ChatSide id="chat-side">
-          <MobileTopbar chat={true} onlineFriend={props.friendsOnline.length ? props.friendsOnline : []} />
+          <MobileTopbar chat={true} onlineFriends={props.friendsOnline} />
           <ChatTopbar
             clickSearch={() => setShowFindMessage(!showFindMessage)}
           />
           {friend.status === "REQUESTED" &&
-          friend.user_id !== userData[0].user_id ? (
+          friend.friend_with !== userData[0].user_id ? (
             <NotFriendAlert />
           ) : null}
           <MessagesContainer
@@ -159,6 +134,11 @@ const Chat = (props) => {
                     sender={each.author === userData[0].user_id ? true : false}
                   >
                     <Message>{each.message}</Message>
+                    {
+                      each.message_time ?
+                        <p>{each.message_time.split(':')[0] + ':' + each.message_time.split(':')[1]}</p>
+                      : null
+                    }
                   </MessageContainer>
                 );
               } else {
