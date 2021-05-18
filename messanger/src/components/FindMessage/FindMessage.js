@@ -4,7 +4,6 @@ import { useUserData } from "../../store/userDataProvider";
 import { useFriend } from "../../store/friendProvider"
 import { Container, Parent, Title, SearchField, MessagesList, CloseButton, MessageContainer, MessageContent, MessageDate, PersonThatSend } from "./Styles";
 
-
 const FindMessage = (props) => {
   const [messageSearchName, setMessageSearchName] = useState("");
   const [foundMessages, setFoundMessages] = useState([]);
@@ -33,12 +32,14 @@ const FindMessage = (props) => {
         <MessagesList>
           {foundMessages.message ? <h2 style={{ color: "white" }}>{foundMessages.message}</h2> : null}
           {foundMessages.length > 0 ? (
+            
             foundMessages.map((each) => {
+              const formatedMessageDate = each.message_date.split("T")[0]
               return (
                 <MessageContainer key={each.message_id}>
-                  <MessageDate>{each.message_date}</MessageDate>
-                  <MessageContent>{each.message}</MessageContent>
                   <PersonThatSend>{each.author === userData[0].user_id ? "You" : friend.user_name}</PersonThatSend>
+                  <MessageContent>{each.message}</MessageContent>
+                  <MessageDate> {formatedMessageDate} - {each.message_time} </MessageDate>
                 </MessageContainer>
               );
             })

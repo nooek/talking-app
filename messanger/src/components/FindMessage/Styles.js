@@ -96,6 +96,9 @@ export const CloseButton = styled.button`
     :focus{
         outline: none;
     }
+    @media(max-width: 500px){
+        bottom: 10px;
+    }
 `
 
 export const MessageContainer = styled.div`
@@ -104,10 +107,19 @@ export const MessageContainer = styled.div`
     display: flex;
     align-items: center;
     border-bottom: 2px solid white;
+    justify-content: space-around;
+    @media(max-width: 500px){
+        flex-direction: column;
+        height: auto;
+        justify-content: initial;
+        text-align: center;
+    }
 `
 
 export const MessageContent = styled.h2`
     color: white;
+    position: relative;
+    right: 15px;
 `
 
 export const MessageDate = styled.h3`
