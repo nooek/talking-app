@@ -103,12 +103,3 @@ const NotFriendAlert = () => {
 };
 
 export default NotFriendAlert;
-
-// const { data } = await axios.get(
-    //   `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
-    // );
-    // if (data) {
-    //   setContacts(data);
-    //   setFriend([]);
-    //   socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)
-    // }

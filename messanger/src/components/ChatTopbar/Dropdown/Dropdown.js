@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { useFriend } from "../../../../store/friendProvider";
+import { useFriend } from "../../../store/friendProvider";
 import {
   Container,
   Options,
 } from "./Styles";
 import axios from "axios";
-import { useUserData } from "../../../../store/userDataProvider";
-import { useContacts } from "../../../../store/contactsProvider";
+import { useUserData } from "../../../store/userDataProvider";
+import { useContacts } from "../../../store/contactsProvider";
 import { Link } from "react-router-dom";
-import { useMessages } from "../../../../store/messagesProvider";
-import { useSocket } from "../../../../store/socketProvider"
-import { getFriendsData } from "../../../../services/API/tasks/APItasks"
+import { useMessages } from "../../../store/messagesProvider";
+import { useSocket } from "../../../store/socketProvider"
+import { getFriendsData } from "../../../services/API/tasks/APItasks"
 import Warning from "./Warning";
 
 const Dropdown = () => {
@@ -19,7 +19,7 @@ const Dropdown = () => {
   const [action, setAction] = useState("");
   const { friend, setFriend } = useFriend();
   const { userData } = useUserData();
-  const { contacts, setContacts } = useContacts();
+  const { setContacts } = useContacts();
   const { setMessages } = useMessages();
   const { socket } = useSocket()
 
@@ -135,13 +135,3 @@ const Dropdown = () => {
 };
 
 export default Dropdown;
-// await axios
-    //   .get(
-    //     `http://localhost:3001/api/friends/getfriendsbyuser/${userData[0].user_id}`
-    //   )
-    //   .then((res) => {
-    //     console.log(res);
-    //     setContacts(res.data);
-    //     setFriend({ ...friend, status: status });
-    //     socket.emit("update-friend-status", friend.user_id, userData[0].user_id, status)
-    //   });

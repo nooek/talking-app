@@ -74,7 +74,7 @@ const App = () => {
                             <FriendInfo title="Friend Info" />
                           )}
                         />
-                        <Route render={(props) => (
+                        <Route path="*" exact render={(props) => (
                           <PageNotFound title="Not Found" />
                         )} />
                       </Switch>

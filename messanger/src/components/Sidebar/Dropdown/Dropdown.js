@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Link, Redirect } from "react-router-dom"
-import { useSocket } from "../../../../store/socketProvider"
+import { useSocket } from "../../../store/socketProvider"
 import { Buttons, Container } from "./Styles"
 
 const Dropdown = () => {

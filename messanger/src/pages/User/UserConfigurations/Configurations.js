@@ -37,8 +37,6 @@ const Configurations = () => {
     getBlockedFriends();
   }, [getBlockedFriends]);
 
-  console.log(blockList);
-
   const unblock = async (friendId) => {
     await axios.put("http://localhost:3001/api/friends/updatestatus", {
       personId: friendId,

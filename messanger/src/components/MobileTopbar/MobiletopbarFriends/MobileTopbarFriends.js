@@ -1,6 +1,5 @@
 import React from "react";
-import { useContacts } from "../../store/contactsProvider";
-import { useFriend } from "../../store/friendProvider";
+import { useFriend } from "../../../store/friendProvider";
 import {
   FriendsList,
   FriendContainer,
@@ -12,11 +11,10 @@ import {
 } from "./Styles";
 
 const Friends = (props) => {
-  const { contacts } = useContacts();
   const { friend, setFriend } = useFriend();
   return (
     <FriendsList hide={props.hide}>
-      {contacts.map((each, index) => {
+      {props.contactList.map((each, index) => {
         if (each.status !== "DENIED") {
           return (
             <FriendContainer

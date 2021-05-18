@@ -27,7 +27,7 @@ const UserInfo = () => {
 
   const getUser = () => {
     getUserData(userData[0].user_id).then(res => {
-      setUserData(res)
+      setUserData(res.data)
       console.log(userData)
     })
   }

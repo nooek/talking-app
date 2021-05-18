@@ -41,11 +41,11 @@ export const FriendName = styled.h2`
 `;
 
 export const FriendPfp = styled.img`
-  width: 57px;
-  height: 57px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   margin-left: 12px;
-  border: 2px solid black;
+  border: 1px solid black;
 `;
 
 export const DropdownOpen = styled(FiMoreVertical)`

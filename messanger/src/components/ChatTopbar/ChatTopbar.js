@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFriend } from "../../../store/friendProvider";
+import { useFriend } from "../../store/friendProvider";
 import Dropdown from "./Dropdown/Dropdown";
 import {
   ChatTopBar,

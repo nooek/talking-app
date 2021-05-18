@@ -8,13 +8,13 @@ import {
   GoToLastMessageButton,
 } from "./Styles";
 import { useUserData } from "../../store/userDataProvider";
-import Sidebar from "./Sidebar/Sidebar";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import { useSocket } from "../../store/socketProvider";
 import { useMessages } from "../../store/messagesProvider";
 import { useFriend } from "../../store/friendProvider";
-import ChatTopbar from "./ChatTopbar/ChatTopbar";
+import ChatTopbar from "../../components/ChatTopbar/ChatTopbar";
 import ChatSendMessage from "../../components/ChatSendMsg/ChatSendMsg";
-import MobileTopbar from "./Sidebar/MobileTopbar/MobileTopbar";
+import MobileTopbar from "../../components/MobileTopbar/MobileTopbar";
 import DefaultChat from "../../components/DefaultChat/DefaultChat";
 import NotFriendAlert from "../../components/NotFriendAlert/NotFriendAlert";
 import { useContacts } from "../../store/contactsProvider";
@@ -156,11 +156,3 @@ const Chat = (props) => {
 };
 
 export default Chat;
-
-// axios
-//   .get(`http://localhost:3001/api/message/${userData[0].user_id}`)
-//   .then((res) => {
-//     if (res.data) {
-//       setMessages(res.data);
-//     }
-//   });

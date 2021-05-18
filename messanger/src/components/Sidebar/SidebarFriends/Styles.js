@@ -1,10 +1,8 @@
 import styled from "styled-components"
 
-export const FriendsList = styled.div`
-  width: 100%;
-  height: 100%;
+export const FriendsContainer = styled.div`
+  flex: 1;
   overflow-x: auto;
-  display: ${(props) => (props.hide === true ? "none" : "")};
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
@@ -25,28 +23,42 @@ export const FriendsList = styled.div`
 
 export const FriendContainer = styled.div`
   width: 100%;
-  height: 60px;
-  border-bottom: 2px solid black;
+  height: 70px;
   display: flex;
   flex-direction: row;
-  margin-bottom: 10px;
+  align-items: center;
+  border-bottom: 2px solid black;
+  margin-top: 10px;
   position: relative;
   background: ${props => props.selected === true ? "rgb(197, 197, 197)" : "none"};
   :hover{
-	  background: rgb(197, 197, 197);
+	  background: rgb(150, 150, 150);
   }
 `;
-
-export const FriendPfp = styled.img`
-  width: 60px;
-  height: 100%;
-  margin-left: 10px;
-`
 
 export const FriendName = styled.h2`
   color: black;
   font-size: 18px;
   margin-left: 5px;
+`;
+
+export const FriendPfp = styled.img`
+  width: 65px;
+  height: 65px;
+  margin-left: 2px;
+  border-radius: 50%;
+  border: 1px solid black;
+`;
+
+export const OnlineBubble = styled.div`
+  width: 18px;
+  height: 18px;
+  border: 2px solid black;
+  background: ${props => props.online === true ? "rgb(3, 207, 3)" : "rgba(87, 87, 87, 0.829)"};
+  position: absolute;
+  border-radius: 50%;
+  bottom: 5px;
+  right: 10px;
 `
 
 export const MessageDate = styled.h4`
@@ -60,15 +72,4 @@ export const LastContactMessage = styled.h3`
   position: relative;  
   top: 30%;
   font-size: 16px;
-`
-
-export const OnlineBubble = styled.div`
-  width: 18px;
-  height: 18px;
-  border: 2px solid black;
-  background: ${props => props.online === true ? "rgb(3, 207, 3)" : "rgba(87, 87, 87, 0.829)"};
-  position: absolute;
-  border-radius: 50%;
-  bottom: 5px;
-  right: 10px;
 `

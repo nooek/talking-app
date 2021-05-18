@@ -1,6 +1,6 @@
 import React from "react"
-import { useContacts } from "../../store/contactsProvider"
-import { useFriend } from "../../store/friendProvider"
+import { useContacts } from "../../../store/contactsProvider"
+import { useFriend } from "../../../store/friendProvider"
 import {
     FriendContainer,
     FriendName,
@@ -15,15 +15,14 @@ const SidebarFriends = (props) => {
     const { friend, setFriend } = useFriend()
     
     const getFriend = (friend) => {
-      console.log(friend)
       contacts.filter(each => {
         return each.friend_with === friend.user_id
       })
     }
 
     return(
-        !contacts.message ? (
-            contacts.map((each, index) => {
+        !props.contactList.message && props.contactList.length > 0 ? (
+            props.contactList.map((each, index) => {
               if (each.status !== "DENIED") {
                 return (
                   <FriendContainer

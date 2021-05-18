@@ -33,13 +33,10 @@ const Profile = (props) => {
   };
 
   const deleteAccount = async () => {
-    console.log("sda")
     await axios.delete("http://localhost:3001/api/user", {
       data: {
         id: userData[0].user_id,
       },
-    }).then(res => {
-      console.log(res)
     })
     localStorage.removeItem("id");
     setGoToLogin(true);
@@ -50,6 +47,7 @@ const Profile = (props) => {
     data.append("file", imageFile);
     data.append("upload_preset", "User Profile Pic");
     setUploadLoading(true);
+
     const res = await fetch(
       "https://api.cloudinary.com/v1_1/dl6nr4es9/image/upload",
       {
@@ -57,7 +55,6 @@ const Profile = (props) => {
         body: data,
       }
     );
-
     const file = await res.json();
 
     await setProfilePic(file.secure_url);
@@ -84,7 +81,7 @@ const Profile = (props) => {
 
   const updateUser = async () => {
     const response = await getUserData(userData[0].user_id)
-    if (response) setUserData(response)
+    if (response) setUserData(response.data)
     console.log(response)
   }
 
@@ -141,15 +138,3 @@ const Profile = (props) => {
 };
 
 export default Profile;
-
-//   const updateUserData = async () => {
-//     console.log(userData[0].user_id)
-//     await axios
-//     .get(`http://localhost:3001/api/user/${userData[0].user_id}`)
-//     .then(res => {
-//       console.log(res)
-//         if (!res.data.message){
-//           setUserData(res.data)
-//         }
-//     })
-// }
