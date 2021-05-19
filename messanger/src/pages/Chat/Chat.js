@@ -40,11 +40,8 @@ const Chat = (props) => {
   }, [setMessages, userData, setContacts]);
 
   useEffect(() => {
-    chatScrollbarPos.current?.scrollTo(
-      0,
-      chatScrollbarPos.current?.scrollHeight
-    );
-  }, [friend]);
+    goToLastMessage()
+  }, [friend, messages]);
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -58,7 +55,6 @@ const Chat = (props) => {
 
       if (!blockedContactsList.includes(message.author)) {
         setMessages([...messages, message]);
-        console.log(messages)
       }
     });
     return () => {

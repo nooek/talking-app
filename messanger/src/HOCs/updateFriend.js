@@ -106,10 +106,6 @@ const GetFriendRealTimeInfo = ({ children }) => {
         }
       }
     })
-
-    console.log(reversedMessagesIds)
-    console.log(reversedMessages)
-    console.log(messages)
     reversedMessagesIds.forEach(id => {
       contacts.map(contact => {
         if (contact.user_id === id || contact.friend_with === id){
@@ -119,16 +115,7 @@ const GetFriendRealTimeInfo = ({ children }) => {
       })
       return 0;
     })
-    console.log(sortedContacts)
     setContacts(sortedContacts)
-    
-    // reversedMessages.forEach((message, index) => {
-    //   contacts.map(contact => {
-    //     if (message.author === contact.user_id || message.author === contact.friend_with){
-    //       console.log(contact)
-    //     }
-    //   }) 
-    // })
   }, [messages])
 
   return cloneElement(children, { friendsOnline: friendsOnline });
