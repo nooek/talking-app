@@ -25,17 +25,20 @@ const MobileTopbar = (props) => {
   const [showDropdown, setShowDropdown] = useState(false)
   const [contactsList, setContactsList] = useState([])
   const { userData } = useUserData();
-  const { setContacts } = useContacts()
+  const { contacts, setContacts } = useContacts()
 
   const updateFriends = useCallback(async() => {
     const res = await getFriendsData(userData[0].user_id)
     setContacts(res.data)
-    setContactsList(res.data)
   }, [userData, setContacts]);
 
   useEffect(() => {
     updateFriends()
   }, [updateFriends]);
+
+  useEffect(() => {
+    setContactsList(contacts)
+  }, [contacts])
 
   useEffect(() => {
     if (friendSearchName.length > 0) {
@@ -52,7 +55,9 @@ const MobileTopbar = (props) => {
       <ShowButton onClick={() => setHide(!hide)}>Show Contacts</ShowButton>
       <UserPropertiesContainer hide={hide}>
         <UserPfp src={userData[0].user_pfp} />
-        <UserName>{userData[0].user_name}</UserName>
+        <div style={{width: "190px", textAlign: "left"}}>
+          <UserName>{userData[0].user_name}</UserName>
+        </div>
         <MoreActionsContainer hide={hide}>
         <Link to="/friends/add" style={{ textDecoration: "none" }}>
             <AddFriendIcon />

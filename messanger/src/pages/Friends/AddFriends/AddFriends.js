@@ -64,10 +64,12 @@ const AddFriends = () => {
   return (
     <Container>
       <FindFriend>Find friend</FindFriend>
-      <SearchBar
-        placeholder="Friend Name"
-        onChange={(e) => setName(e.target.value)}
-      />
+      <div style={{height: "70px", width: "100%"}}>
+        <SearchBar
+          placeholder="Friend Name"
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
       <PeopleList>
         {message ? <h2 style={{ color: "white" }}>{message}</h2> : null}
         {people.length > 0
@@ -82,7 +84,7 @@ const AddFriends = () => {
                     <PersonName>{each.user_name}</PersonName>
                     <AddFriendContainer>
                       <AddFriendButton onClick={() => addFriend(each)}>
-                        Add
+                        Send request
                       </AddFriendButton>
                     </AddFriendContainer>
                   </PersonContainer>

@@ -3,6 +3,7 @@ const { con, config } = require("../../config/dbConfig");
 module.exports = {
   createMessage: (req, res) => {
     const { message, date, receiver, author, time } = req.body;
+    console.log(time)
     const addMessageQuery = `INSERT INTO message VALUES 
         (DEFAULT, '${message}', '${date}', '${receiver}', '${author}', '${time}')`;
     con.query(addMessageQuery, (error, results) => {

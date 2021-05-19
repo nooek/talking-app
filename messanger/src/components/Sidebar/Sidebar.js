@@ -22,16 +22,19 @@ const Sidebar = (props) => {
   const { userData } = useUserData();
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
-  const { setContacts } = useContacts();
+  const { contacts, setContacts } = useContacts();
   const [contactsList, setContactsList] = useState([])
 
   const updateFriends = useCallback(async () => {
     const res = await getFriendsData(userData[0].user_id);
     if (!res.data[0].message) {
-      setContactsList(res.data)
       setContacts(res.data);
     }
   }, [userData, setContacts]);
+
+  useEffect(() => {
+    setContactsList(contacts)
+  }, [contacts])
 
   useEffect(() => {
     updateFriends();
@@ -54,7 +57,9 @@ const Sidebar = (props) => {
         <Link to="/profile" style={{ width: "60px", height: "80%" }}>
           <UserPfp src={userData[0].user_pfp} alt="profile pic" />
         </Link>
-        <h2 style={{ marginLeft: "20px" }}>{userData[0].user_name}</h2>
+        <div style={{width: "190px", textAlign: "left", marginLeft: "20px"}}>
+          <h2 style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{userData[0].user_name}</h2>
+        </div>
         <OtherThingsContainer>
           <Link to="/friends/add" style={{ textDecoration: "none" }}>
             <AddFriendIcon />

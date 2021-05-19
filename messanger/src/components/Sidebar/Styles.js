@@ -54,13 +54,15 @@ export const AddFriendIcon = styled(MdGroupAdd)`
   width: 35px;
   height: 35px;
   color: black;
-  margin-right: 10px;
+  margin-right: 10px;  
+  cursor: pointer;
 `;
 
 export const MoreIcons = styled(FiMoreVertical)`
   width: 30px;
   height: 30px;
   color: black;
+  cursor: pointer;
 `;
 
 export const SearchBarContainer = styled.div`

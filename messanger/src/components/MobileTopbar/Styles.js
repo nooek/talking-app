@@ -88,6 +88,9 @@ export const UserName = styled.h2`
   color: black;
   font-size: 18px;
   margin-left: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `
 
 export const AddFriendIcon = styled(MdGroupAdd)`

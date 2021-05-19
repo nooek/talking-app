@@ -1,10 +1,9 @@
-import React, { useState, useCallback, useEffect, cloneElement } from "react";
+import { useState, useCallback, useEffect, cloneElement } from "react";
 import { useSocket } from "../store/socketProvider";
 import { useContacts } from "../store/contactsProvider";
 import { useFriend } from "../store/friendProvider";
 import { useMessages } from "../store/messagesProvider"
 import { useUserData } from "../store/userDataProvider"
-// import updateContactStatus from "../pages/Chat/functions/updateContactStatus";
 import defaultPfp from "../assets/default_pfp.png"
 
 const GetFriendRealTimeInfo = ({ children }) => {
@@ -75,7 +74,6 @@ const GetFriendRealTimeInfo = ({ children }) => {
     let strangersMessageToSee = []
     messages.map(each => {
       if (each.author !== userData[0].user_id && !inContacts.includes(each.author)){
-        console.log(each)
         inContacts.push(each.author)
         return strangersMessageToSee.push({
           user_pfp: defaultPfp,
@@ -93,6 +91,45 @@ const GetFriendRealTimeInfo = ({ children }) => {
       setContacts([...contacts, ...strangersMessageToSee])
     }
   }, [messages, userData, setContacts, contacts])
+
+  useEffect(() => {
+    let sortedContacts = []
+    const reversedMessages = messages.slice().reverse()
+    let reversedMessagesIds =[]
+    reversedMessages.forEach(message => {
+      if (!reversedMessagesIds.includes(message.author) && !reversedMessagesIds.includes(message.receiver)){
+        if (message.author !== userData[0].user_id){
+          reversedMessagesIds.push(message.author)
+        }
+        if (message.receiver !== userData[0].user_id){
+          reversedMessagesIds.push(message.receiver)
+        }
+      }
+    })
+
+    console.log(reversedMessagesIds)
+    console.log(reversedMessages)
+    console.log(messages)
+    reversedMessagesIds.forEach(id => {
+      contacts.map(contact => {
+        if (contact.user_id === id || contact.friend_with === id){
+          sortedContacts.push(contact)
+        }
+        return 0;
+      })
+      return 0;
+    })
+    console.log(sortedContacts)
+    setContacts(sortedContacts)
+    
+    // reversedMessages.forEach((message, index) => {
+    //   contacts.map(contact => {
+    //     if (message.author === contact.user_id || message.author === contact.friend_with){
+    //       console.log(contact)
+    //     }
+    //   }) 
+    // })
+  }, [messages])
 
   return cloneElement(children, { friendsOnline: friendsOnline });
 };

@@ -34,11 +34,11 @@ const ChatSendMessage = () => {
           receiver: friend.user_id,
           message: message,
           date: today.date,
-          message_time: today.time
+          time: today.time
         };
-        console.log(messageData.message_time.split(':')[0] + ':' + messageData.message_time.split(':')[1])
         socket.emit("send-message", messageData);
         await setMessages([...messages, messageData]);
+        console.log(messages)
         sendMessageToDb(messageData)
         setMessage("")
       }

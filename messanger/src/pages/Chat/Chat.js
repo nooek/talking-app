@@ -57,20 +57,8 @@ const Chat = (props) => {
       });
 
       if (!blockedContactsList.includes(message.author)) {
-        const newContacts = contacts.filter((each) => {
-          return each.user_id !== message.author;
-        });
         setMessages([...messages, message]);
-        contacts.map((each) => {
-          if (
-            each.user_id === message.author ||
-            each.user_id === message.receiver
-          ) {
-            each.lastMessage = message.message;
-            setContacts([...newContacts, each]);
-          }
-          return 0;
-        });
+        console.log(messages)
       }
     });
     return () => {

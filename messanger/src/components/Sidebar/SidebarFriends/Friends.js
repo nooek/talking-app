@@ -6,7 +6,6 @@ import {
     FriendName,
     FriendPfp,
     OnlineBubble,
-    MessageDate,
     LastContactMessage
 } from "./Styles"
 
@@ -34,9 +33,10 @@ const SidebarFriends = (props) => {
                     selected={friend.user_id === each.user_id ? true : false}
                   >
                     {each.user_pfp ? <FriendPfp src={each.user_pfp} /> : null}
-                    <FriendName>{each.user_name}</FriendName>
+                    <div style={{width: "225px"}}>
+                      <FriendName>{each.user_name}</FriendName>
+                    </div>
                     <LastContactMessage>{each.lastMessage}</LastContactMessage>
-                    <MessageDate>sda</MessageDate>
   
                     {each.user_id ? (
                       <OnlineBubble

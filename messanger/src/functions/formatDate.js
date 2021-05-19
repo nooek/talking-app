@@ -5,6 +5,7 @@ const getDate = () => {
     const yyyy = String(today.getFullYear())
     let hour = String(today.getHours())
     let minute = String(today.getMinutes())
+    let seconds = String(today.getSeconds())
 
     if (hour.length === 1){
         hour = "0" + hour
@@ -14,9 +15,13 @@ const getDate = () => {
         minute = "0" + minute
     }
 
+    if (seconds.length === 1){
+        seconds = "0" + seconds
+    }
+
     return {
         date: yyyy + '-' + mm + "-" + dd,
-        time: hour + ":" + minute + ":00"
+        time: hour + ":" + minute + ":" + seconds
     }
 }
 

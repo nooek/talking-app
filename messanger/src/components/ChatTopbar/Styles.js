@@ -24,6 +24,9 @@ export const TopbarUserInfoContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  @media(max-width: 700px){
+    width: 60%;
+  }
 `;
 
 export const TopbarMoreActionsContainer = styled.div`
@@ -33,11 +36,17 @@ export const TopbarMoreActionsContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  @media(max-width: 700px){
+    width: 30%;
+  }
 `;
 
 export const FriendName = styled.h2`
   font-size: 18px;
   margin-left: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 export const FriendPfp = styled.img`

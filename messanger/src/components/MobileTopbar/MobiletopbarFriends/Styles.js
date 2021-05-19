@@ -42,12 +42,16 @@ export const FriendPfp = styled.img`
   height: 60px;
   margin-left: 10px;
   border: 1px solid black;
+  border-radius: 50%;
 `
 
 export const FriendName = styled.h2`
   color: black;
   font-size: 18px;
   margin-left: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `
 
 export const MessageDate = styled.h4`
@@ -55,12 +59,6 @@ export const MessageDate = styled.h4`
   top: 2px;
   margin-top: 0;
   right: 7px;
-`
-
-export const LastContactMessage = styled.h3`
-  position: relative;  
-  top: 30%;
-  font-size: 16px;
 `
 
 export const OnlineBubble = styled.div`

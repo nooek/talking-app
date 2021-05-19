@@ -30,7 +30,9 @@ export const FriendContainer = styled.div`
   border-bottom: 2px solid black;
   margin-top: 10px;
   position: relative;
+  cursor: pointer;
   background: ${props => props.selected === true ? "rgb(197, 197, 197)" : "none"};
+  overflow: hidden;
   :hover{
 	  background: rgb(150, 150, 150);
   }
@@ -40,6 +42,9 @@ export const FriendName = styled.h2`
   color: black;
   font-size: 18px;
   margin-left: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 export const FriendPfp = styled.img`
@@ -59,13 +64,6 @@ export const OnlineBubble = styled.div`
   border-radius: 50%;
   bottom: 5px;
   right: 10px;
-`
-
-export const MessageDate = styled.h4`
-  position: absolute;
-  top: 2px;
-  margin-top: 0;
-  right: 7px;
 `
 
 export const LastContactMessage = styled.h3`
