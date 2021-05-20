@@ -10,13 +10,13 @@ import {
   MoreIcons,
   SearchFriends,
 } from "./Styles";
-import Dropdown from "./Dropdown/Dropdown";
+import Dropdown from "./Dropdown/Dropdown.jsx";
 import { useUserData } from "../../store/userDataProvider";
 import { useContacts } from "../../store/contactsProvider";
 import { Link } from "react-router-dom";
 import { getFriendsData } from "../../services/API/tasks/APItasks";
 import { searchFriend } from "../../services/API/tasks/FriendsTasks";
-import Friends from "./SidebarFriends/Friends";
+import Friends from "./SidebarFriends/Friends.jsx";
 
 const Sidebar = (props) => {
   const { userData } = useUserData();

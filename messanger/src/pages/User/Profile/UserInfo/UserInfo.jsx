@@ -8,7 +8,7 @@ import {
   ChangeButton,
 } from "./Styles";
 import axios from "axios";
-import UserFieldInfo from "./UserInfoField/UserInfoField";
+import UserFieldInfo from "./UserInfoField/UserInfoField.jsx";
 import { getUserData } from "../../../../services/API/tasks/APItasks" 
 
 const UserInfo = () => {

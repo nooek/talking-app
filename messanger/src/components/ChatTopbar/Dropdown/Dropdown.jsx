@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { useMessages } from "../../../store/messagesProvider";
 import { useSocket } from "../../../store/socketProvider"
 import { getFriendsData } from "../../../services/API/tasks/APItasks"
-import Warning from "./Warning";
+import Warning from "./Warning.jsx";
 
 const Dropdown = () => {
   const [showWarning, setShowWarning] = useState(false);

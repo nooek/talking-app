@@ -17,7 +17,7 @@ import Dropdown from "../Sidebar/Dropdown/Dropdown";
 import { useContacts } from "../../store/contactsProvider";
 import { getFriendsData } from "../../services/API/tasks/APItasks"
 import { searchFriend } from "../../services/API/tasks/FriendsTasks";
-import Friends from "./MobiletopbarFriends/MobileTopbarFriends";
+import Friends from "./MobiletopbarFriends/MobileTopbarFriends.jsx";
 
 const MobileTopbar = (props) => {
   const [hide, setHide] = useState(true);

@@ -8,18 +8,18 @@ import {
   GoToLastMessageButton,
 } from "./Styles";
 import { useUserData } from "../../store/userDataProvider";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 import { useSocket } from "../../store/socketProvider";
 import { useMessages } from "../../store/messagesProvider";
 import { useFriend } from "../../store/friendProvider";
-import ChatTopbar from "../../components/ChatTopbar/ChatTopbar";
-import ChatSendMessage from "../../components/ChatSendMsg/ChatSendMsg";
-import MobileTopbar from "../../components/MobileTopbar/MobileTopbar";
-import DefaultChat from "../../components/DefaultChat/DefaultChat";
-import NotFriendAlert from "../../components/NotFriendAlert/NotFriendAlert";
+import ChatTopbar from "../../components/ChatTopbar/ChatTopbar.jsx";
+import ChatSendMessage from "../../components/ChatSendMsg/ChatSendMsg.jsx";
+import MobileTopbar from "../../components/MobileTopbar/MobileTopbar.jsx";
+import DefaultChat from "../../components/DefaultChat/DefaultChat.jsx";
+import NotFriendAlert from "../../components/NotFriendAlert/NotFriendAlert.jsx";
 import { useContacts } from "../../store/contactsProvider";
 import { getMessagesData } from "../../services/API/tasks/APItasks";
-import FindMessage from "../../components/FindMessage/FindMessage";
+import FindMessage from "../../components/FindMessage/FindMessage.jsx";
 
 const Chat = (props) => {
   const { userData } = useUserData();

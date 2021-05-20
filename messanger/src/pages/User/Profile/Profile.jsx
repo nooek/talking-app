@@ -14,7 +14,7 @@ import { useUserData } from "../../../store/userDataProvider";
 import { useSocket } from "../../../store/socketProvider";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
-import UserInfo from "./UserInfo/UserInfo";
+import UserInfo from "./UserInfo/UserInfo.jsx";
 import { getUserData } from "../../../services/API/tasks/APItasks"
 
 const Profile = (props) => {
