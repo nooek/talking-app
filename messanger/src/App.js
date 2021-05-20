@@ -3,14 +3,15 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { StylesProvider } from "@material-ui/core/styles";
 
 // Routes
-import Home from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
-import Chat from "./pages/Chat/Chat";
-import AddFriends from "./pages/Friends/AddFriends/AddFriends";
-import Profile from "./pages/User/Profile/Profile";
-import Configurations from "./pages/User/UserConfigurations/Configurations";
-import PageNotFound from "./pages/PageNotFound/PageNotFound"
+import { Home } from "./pages/index";
+import { Login } from "./pages/index";
+import { Register } from "./pages/index";
+import { AddFriends } from "./pages/index";
+import { Profile } from "./pages/index";
+import { UserConfig } from "./pages/index";
+import { PageNotFound } from "./pages/index"
+import { FriendInfo } from "./pages/index";
+import { Chat } from "./pages/index"
 
 // Context
 import UserDataProvider from "./store/userDataProvider";
@@ -21,7 +22,6 @@ import { SocketProvider } from "./store/socketProvider";
 
 // HOCs
 import CheckUserLogged from "./HOCs/checkUserLogged";
-import FriendInfo from "./pages/Friends/FriendInfo/FriendInfo";
 import GetFriendRealTimeInfo from "./HOCs/updateFriend";
 
 const App = () => {
@@ -65,7 +65,7 @@ const App = () => {
                         <Route
                           path="/config"
                           render={(props) => (
-                            <Configurations title="Configurations" />
+                            <UserConfig title="Configurations" />
                           )}
                         />
                         <Route

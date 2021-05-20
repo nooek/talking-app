@@ -21,7 +21,6 @@ const Configurations = () => {
   const { userData } = useUserData();
   const { friend, setFriend } = useFriend();
   const [checked, setChecked] = useState(userData[0].online_status);
-  const [checked2, setChecked2] = useState(false);
   const [blockList, setBlockList] = useState([]);
 
   const getBlockedFriends = useCallback(() => {
@@ -70,17 +69,10 @@ const Configurations = () => {
               onClick={() => changeOnlineStatus()}
             />
           </div>
-          <div>
-            <PrivacyOption>Show online status</PrivacyOption>
-            <Switch
-              checked={checked2}
-              onChange={() => setChecked2(!checked2)}
-            />
-          </div>
         </PrivacyOptionsContainer>
         <Category>Blocks</Category>
         <BlocksList>
-          {blockList.map((each, index) => {
+          {blockList.length > 0 ? blockList.map((each, index) => {
             return (
               <FriendContainer key={index}>
                 <FriendPfp src={each.user_pfp} />
@@ -90,7 +82,8 @@ const Configurations = () => {
                 </UnblockButton>
               </FriendContainer>
             );
-          })}
+          })
+        : <h2>You didn't block anyone... yet</h2>}
         </BlocksList>
       </Parent>
     </Container>

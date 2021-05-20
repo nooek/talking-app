@@ -43,6 +43,14 @@ const Chat = (props) => {
     goToLastMessage()
   }, [friend, messages]);
 
+  const goToLastMessage = () => {
+    chatScrollbarPos.current?.scrollTo({
+      bottom: 0,
+      top: chatScrollbarPos.current?.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
   useEffect(() => {
     socket.on("receive-message", (message) => {
       const blockedContactsList = [];
@@ -73,14 +81,6 @@ const Chat = (props) => {
     }
   };
 
-  const goToLastMessage = () => {
-    chatScrollbarPos.current?.scrollTo({
-      bottom: 0,
-      top: chatScrollbarPos.current?.scrollHeight,
-      behavior: "smooth",
-    });
-  };
-
   return (
     <Container>
       <Sidebar onlineFriend={props.friendsOnline} />
@@ -107,7 +107,7 @@ const Chat = (props) => {
                 Go back
               </GoToLastMessageButton>
             ) : null}
-            {messages.map((each, index) => {
+            {messages.map((each, index) => {              
               if (
                 each.receiver === friend.user_id ||
                 each.author === friend.user_id

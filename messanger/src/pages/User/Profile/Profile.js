@@ -23,6 +23,7 @@ const Profile = (props) => {
   const [goToLoginPage, setGoToLogin] = useState();
   const { socket } = useSocket();
   const [profilePic, setProfilePic] = useState(userData[0].user_pfp);
+  const [pfpPreview, setPfpPreview] = useState("")
   const [imageFile, setImageFile] = useState([]);
   const [uploadLoading, setUploadLoading] = useState(false);
 
@@ -84,6 +85,7 @@ const Profile = (props) => {
     if (response) setUserData(response.data)
     console.log(response)
   }
+  console.log(pfpPreview)
 
   return (
     <Container>
@@ -92,7 +94,7 @@ const Profile = (props) => {
       </Link>
       <NameAndPfpContainer>
         <UserName>{userData[0].user_name}</UserName>
-        <UserPfp src={profilePic} />
+        <UserPfp src={pfpPreview ? URL.createObjectURL(imageFile) : profilePic} />
         {uploadLoading === false ? (
           <div>
             <label htmlFor="file-input">
@@ -103,7 +105,10 @@ const Profile = (props) => {
               name="file"
               id="file-input"
               accept="image/*"
-              onChange={(e) => setImageFile(e.target.files[0])}
+              onChange={(e) => {
+                setImageFile(e.target.files[0])
+                setPfpPreview(e.target.files[0])
+              }}
               style={{display: "none"}}
             />
             

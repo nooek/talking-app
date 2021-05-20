@@ -93,7 +93,7 @@ const AddFriends = () => {
                 return null;
               }
             })
-          : null}
+          : <h2 style={{ color: "white" }}>Start Typing</h2>}
       </PeopleList>
     </Container>
   );
