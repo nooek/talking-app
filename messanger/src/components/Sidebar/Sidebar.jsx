@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { getFriendsData } from "../../services/API/tasks/APItasks";
 import { searchFriend } from "../../services/API/tasks/FriendsTasks";
 import Friends from "./SidebarFriends/Friends.jsx";
+import { useMessages } from "../../store/messagesProvider";
 
 const Sidebar = (props) => {
   const { userData } = useUserData();
@@ -24,6 +25,7 @@ const Sidebar = (props) => {
   const [friendSearchName, setFriendSearchName] = useState("");
   const { contacts, setContacts } = useContacts();
   const [contactsList, setContactsList] = useState([])
+  const { messages } = useMessages()
 
   const updateFriends = useCallback(async () => {
     const res = await getFriendsData(userData[0].user_id);
@@ -31,10 +33,6 @@ const Sidebar = (props) => {
       setContacts(res.data);
     }
   }, [userData, setContacts]);
-
-  useEffect(() => {
-    setContactsList(contacts)
-  }, [contacts])
 
   useEffect(() => {
     updateFriends();
@@ -50,6 +48,56 @@ const Sidebar = (props) => {
       updateFriends();
     }
   }, [friendSearchName, userData, updateFriends, setContacts]);
+
+  useEffect(() => {
+    let sortedContacts = []
+    const reversedMessages = messages.slice().reverse()
+    let reversedMessagesIds = []
+    let matata = false
+    reversedMessages.forEach(message => {
+      if (!reversedMessagesIds.includes(message.author) && !reversedMessagesIds.includes(message.receiver)){
+        if (message.author !== userData[0].user_id){
+          reversedMessagesIds.push(message.author)
+        }
+        if (message.receiver !== userData[0].user_id){
+          reversedMessagesIds.push(message.receiver)
+        }
+      }
+    })
+
+    console.log("ds")
+
+    console.log(reversedMessagesIds)
+    let match = 0
+
+    reversedMessagesIds.forEach(id => {
+      contacts.map(contact => {
+        if (contact.user_id === id || contact.friend_with === id){
+          sortedContacts.push(contact)
+        }
+        return 0;
+      })
+      return 0;
+    })
+
+    for (let i = 0; i < sortedContacts.length; i++){
+      if (contacts[i].user_id === reversedMessagesIds[i] || contacts[i].friend_with === reversedMessagesIds[i]){
+        match++
+      }
+    }
+    console.log("dsa")
+    if (match !== sortedContacts.length){
+      console.log("123")
+      setContacts(sortedContacts)
+    }else{
+      console.log(contacts)
+      console.log(reversedMessagesIds)
+    }
+  }, [messages, userData, contacts, setContacts])
+
+  useEffect(() => {
+    setContactsList(contacts)
+  }, [contacts])
 
   return (
     <SideBar>

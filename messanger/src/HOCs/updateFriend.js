@@ -4,15 +4,15 @@ import { useContacts } from "../store/contactsProvider";
 import { useFriend } from "../store/friendProvider";
 import { useMessages } from "../store/messagesProvider"
 import { useUserData } from "../store/userDataProvider"
-import defaultPfp from "../assets/default_pfp.png"
+import defaultPfp from "../assets/images/default_pfp.png"
 
 const GetFriendRealTimeInfo = ({ children }) => {
   const { socket } = useSocket();
   const { contacts, setContacts } = useContacts();
   const { friend, setFriend } = useFriend();
-  const { messages } = useMessages()
   const { userData } = useUserData()
   const [friendsOnline, setFriendsOnline] = useState([]);
+  const { messages } = useMessages()
 
   const updateOnlineFriends = useCallback(() => {
     socket.emit("get-users-online");
@@ -35,17 +35,19 @@ const GetFriendRealTimeInfo = ({ children }) => {
 
   useEffect(() => {
     socket.on("update-contact", (data) => {
-      console.log(data)
-      const friends = contacts.filter(each => {
-        return each.user_id !== data[0]
-      })
-
-      const friend = contacts.filter(each => {
-        return each.user_id === data[0]
-      })
-      console.log(friend[0])
+      
 
       if (data[1] !== "BLOCKED"){
+        const friends = contacts.filter(each => {
+          return each.user_id !== data[0]
+        })
+  
+        const friend = contacts.filter(each => {
+          return each.user_id === data[0]
+        })
+        console.log(data)
+      
+      console.log(friend[0])
         if (data[1] === "ACCEPTED" && friend[0].status !== "BLOCKED"){
           friend[0].status = data[1]
           if (friend.user_id === friend[0].user_id){
@@ -88,35 +90,9 @@ const GetFriendRealTimeInfo = ({ children }) => {
     })
 
     if (strangersMessageToSee.length > 0){
-      setContacts([...contacts, ...strangersMessageToSee])
+      setContacts([...strangersMessageToSee, ...contacts])
     }
   }, [messages, userData, setContacts, contacts])
-
-  useEffect(() => {
-    let sortedContacts = []
-    const reversedMessages = messages.slice().reverse()
-    let reversedMessagesIds =[]
-    reversedMessages.forEach(message => {
-      if (!reversedMessagesIds.includes(message.author) && !reversedMessagesIds.includes(message.receiver)){
-        if (message.author !== userData[0].user_id){
-          reversedMessagesIds.push(message.author)
-        }
-        if (message.receiver !== userData[0].user_id){
-          reversedMessagesIds.push(message.receiver)
-        }
-      }
-    })
-    reversedMessagesIds.forEach(id => {
-      contacts.map(contact => {
-        if (contact.user_id === id || contact.friend_with === id){
-          sortedContacts.push(contact)
-        }
-        return 0;
-      })
-      return 0;
-    })
-    setContacts(sortedContacts)
-  }, [messages])
 
   return cloneElement(children, { friendsOnline: friendsOnline });
 };

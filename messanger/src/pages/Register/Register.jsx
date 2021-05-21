@@ -8,7 +8,7 @@ import {
   SubmitButton,
 } from "../../styles/RegisterAndLoginForm/Styles";
 import axios from "axios";
-import defaultPfp from "../../assets/default_pfp.png"
+import defaultPfp from "../../assets/images/default_pfp.png"
 
 const Login = (props) => {
   const [name, setName] = useState("");

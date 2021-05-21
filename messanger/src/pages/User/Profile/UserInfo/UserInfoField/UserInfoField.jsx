@@ -14,6 +14,7 @@ const UserFieldInfo = (props) => {
           placeholder={"New " + props.subtitle}
           onChange={props.change}
           onKeyPress={props.keypress}
+          maxLength={props.maxchars}
         />
         <Save onClick={props.save} />
       </UserFieldChangeInfoContainer>

@@ -70,6 +70,7 @@ const UserInfo = () => {
           change={(e) => setNewName(e.target.value)}
           save={() => saveUserInfo()}
           keypress={(e) => checkIfEnterPressed(e)}
+          maxchars={30}
         />
 
         <ChangeButton onClick={() => openField("name")}>change</ChangeButton>
@@ -84,6 +85,7 @@ const UserInfo = () => {
           fieldselected={fieldSelected}
           change={(e) => setNewDescription(e.target.value)}
           save={() => saveUserInfo()}
+          maxchars={60}
         />
         <ChangeButton onClick={() => openField("description")}>
           change
