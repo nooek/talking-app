@@ -8,8 +8,6 @@ export const ChatTopBar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  position: absolute;
-  top: 0;
   background-color: rgb(167, 167, 167);
   @media(max-width: 700px){
     margin-bottom: auto;
@@ -24,9 +22,6 @@ export const TopbarUserInfoContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  @media(max-width: 700px){
-    width: 60%;
-  }
 `;
 
 export const TopbarMoreActionsContainer = styled.div`

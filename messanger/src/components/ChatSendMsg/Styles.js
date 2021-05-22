@@ -5,8 +5,7 @@ export const MessageTypeContainer = styled.div`
   height: 60px;
   display: flex;
   flex-direction: row;
-  position: absolute;
-  bottom: 0;
+  position: relative;
   background-color: rgb(167, 167, 167);
   align-items: center;
   border-top: 2px solid black;

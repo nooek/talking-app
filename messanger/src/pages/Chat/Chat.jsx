@@ -40,16 +40,15 @@ const Chat = (props) => {
   }, [setMessages, userData, setContacts]);
 
   useEffect(() => {
-    goToLastMessage()
-  }, [friend, messages]);
+    chatScrollbarPos.current?.scrollTo(
+      0,
+      chatScrollbarPos.current?.scrollHeight
+    );
+  }, [friend]);
 
-  const goToLastMessage = () => {
-    chatScrollbarPos.current?.scrollTo({
-      bottom: 0,
-      top: chatScrollbarPos.current?.scrollHeight,
-      behavior: "smooth",
-    });
-  };
+  useEffect(() => {
+    goToLastMessage()
+  }, [messages])
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -81,6 +80,14 @@ const Chat = (props) => {
     }
   };
 
+  const goToLastMessage = () => {
+    chatScrollbarPos.current?.scrollTo({
+      bottom: 0,
+      top: chatScrollbarPos.current?.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <Container>
       <Sidebar onlineFriend={props.friendsOnline} />
@@ -107,7 +114,7 @@ const Chat = (props) => {
                 Go back
               </GoToLastMessageButton>
             ) : null}
-            {messages.map((each, index) => {              
+            {messages.map((each, index) => {
               if (
                 each.receiver === friend.user_id ||
                 each.author === friend.user_id
@@ -118,11 +125,13 @@ const Chat = (props) => {
                     sender={each.author === userData[0].user_id ? true : false}
                   >
                     <Message>{each.message}</Message>
-                    {
-                      each.message_time ?
-                        <p>{each.message_time.split(':')[0] + ':' + each.message_time.split(':')[1]}</p>
-                      : null
-                    }
+                    {each.message_time ? (
+                      <p>
+                        {each.message_time.split(":")[0] +
+                          ":" +
+                          each.message_time.split(":")[1]}
+                      </p>
+                    ) : null}
                   </MessageContainer>
                 );
               } else {

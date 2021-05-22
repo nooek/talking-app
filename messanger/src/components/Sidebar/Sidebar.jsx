@@ -41,7 +41,6 @@ const Sidebar = (props) => {
   useEffect(() => {
     if (friendSearchName.length > 0) {
       searchFriend(userData[0].user_id, friendSearchName).then((res) => {
-        console.log(res);
         setContactsList(res.data);
       });
     } else {
@@ -86,15 +85,14 @@ const Sidebar = (props) => {
 
       if (contacts[i].friend_with === reversedMessagesIds[i]) {
         match++;
-      } 
+      }
     }
 
-    contacts.map(each => {
-      if (!reversedMessagesIds.includes(parseInt(each.user_id))){
-        contactsWithNoMessages.push(each)
+    contacts.map((each) => {
+      if (!reversedMessagesIds.includes(parseInt(each.user_id))) {
+        contactsWithNoMessages.push(each);
       }
-    })
-
+    });
     if (match !== reversedMessagesIds.length) {
       setContacts([...sortedContacts, ...contactsWithNoMessages]);
     }

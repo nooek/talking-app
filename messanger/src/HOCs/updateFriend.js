@@ -92,7 +92,7 @@ const GetFriendRealTimeInfo = ({ children }) => {
     if (strangersMessageToSee.length > 0){
       setContacts([...strangersMessageToSee, ...contacts])
     }
-  }, [messages, userData, setContacts, contacts])
+  }, [messages, userData, setContacts, contacts]);
 
   return cloneElement(children, { friendsOnline: friendsOnline });
 };

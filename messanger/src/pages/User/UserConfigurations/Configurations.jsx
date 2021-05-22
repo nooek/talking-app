@@ -20,7 +20,7 @@ import { useFriend } from "../../../store/friendProvider";
 const Configurations = () => {
   const { userData } = useUserData();
   const { friend, setFriend } = useFriend();
-  const [checked, setChecked] = useState(userData[0].online_status);
+  const [checked, setChecked] = useState(Boolean(userData[0].online_status));
   const [blockList, setBlockList] = useState([]);
 
   const getBlockedFriends = useCallback(() => {
@@ -62,7 +62,7 @@ const Configurations = () => {
         <Category>Privacy</Category>
         <PrivacyOptionsContainer>
           <div>
-            <PrivacyOption>Show read tick</PrivacyOption>
+            <PrivacyOption>Show online status</PrivacyOption>
             <Switch
               checked={checked}
               onChange={() => setChecked(!checked)}

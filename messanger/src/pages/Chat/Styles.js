@@ -46,6 +46,9 @@ export const MessagesContainer = styled.div`
   :first-child {
     margin-top: 20px;
   }
+  @media(max-width: 700px){
+    height: 100%;
+  }
 `;
 
 export const GoToLastMessageButton = styled.button`
