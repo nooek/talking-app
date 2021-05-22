@@ -4,6 +4,10 @@ const validatePassword = (password) => {
       return { message: "Your password must have more than 7 characters " };
     }
 
+    if (password.length >= 50) {
+      return { message: "Your password must have less than 51 characters "};
+    }
+
     const hasNumber = /\d/;
     if (!hasNumber.test(password)) {
       return { message: "Your password must have at least one number " };

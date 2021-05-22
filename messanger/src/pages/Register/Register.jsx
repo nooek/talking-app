@@ -30,9 +30,8 @@ const Login = (props) => {
   }, [name, email, password]);
 
   const register = () => {
-    const valid = validatePassword(password);
-    console.log("sada");
-    if (valid === true) {
+    const validPassword = validatePassword(password);
+    if (validPassword === true) {
       axios
         .post("http://localhost:3001/api/user/register", {
           name: name,
@@ -45,7 +44,7 @@ const Login = (props) => {
           setMessage(res.data.message);
         });
     } else {
-      setMessage(valid.message)
+      setMessage(validPassword.message)
     }
   };
 

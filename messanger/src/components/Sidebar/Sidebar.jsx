@@ -24,8 +24,8 @@ const Sidebar = (props) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
   const { contacts, setContacts } = useContacts();
-  const [contactsList, setContactsList] = useState([])
-  const { messages } = useMessages()
+  const [contactsList, setContactsList] = useState([]);
+  const { messages } = useMessages();
 
   const updateFriends = useCallback(async () => {
     const res = await getFriendsData(userData[0].user_id);
@@ -41,7 +41,7 @@ const Sidebar = (props) => {
   useEffect(() => {
     if (friendSearchName.length > 0) {
       searchFriend(userData[0].user_id, friendSearchName).then((res) => {
-        console.log(res)
+        console.log(res);
         setContactsList(res.data);
       });
     } else {
@@ -50,54 +50,59 @@ const Sidebar = (props) => {
   }, [friendSearchName, userData, updateFriends, setContacts]);
 
   useEffect(() => {
-    let sortedContacts = []
-    const reversedMessages = messages.slice().reverse()
-    let reversedMessagesIds = []
-    let matata = false
-    reversedMessages.forEach(message => {
-      if (!reversedMessagesIds.includes(message.author) && !reversedMessagesIds.includes(message.receiver)){
-        if (message.author !== userData[0].user_id){
-          reversedMessagesIds.push(message.author)
+    let sortedContacts = [];
+    const reversedMessages = messages.slice().reverse();
+    let reversedMessagesIds = [];
+    let contactsWithNoMessages = [];
+    reversedMessages.forEach((message) => {
+      if (
+        !reversedMessagesIds.includes(message.author) &&
+        !reversedMessagesIds.includes(message.receiver)
+      ) {
+        if (message.author !== userData[0].user_id) {
+          reversedMessagesIds.push(message.author);
         }
-        if (message.receiver !== userData[0].user_id){
-          reversedMessagesIds.push(message.receiver)
+        if (message.receiver !== userData[0].user_id) {
+          reversedMessagesIds.push(message.receiver);
         }
       }
-    })
+    });
+    let match = 0;
 
-    console.log("ds")
-
-    console.log(reversedMessagesIds)
-    let match = 0
-
-    reversedMessagesIds.forEach(id => {
-      contacts.map(contact => {
-        if (contact.user_id === id || contact.friend_with === id){
-          sortedContacts.push(contact)
+    reversedMessagesIds.forEach((id) => {
+      contacts.map((contact) => {
+        if (contact.user_id === id || contact.friend_with === id) {
+          sortedContacts.push(contact);
         }
         return 0;
-      })
+      });
       return 0;
+    });
+
+    for (let i = 0; i < sortedContacts.length; i++) {
+      if (contacts[i].user_id === reversedMessagesIds[i]) {
+        match++;
+      }
+
+      if (contacts[i].friend_with === reversedMessagesIds[i]) {
+        match++;
+      } 
+    }
+
+    contacts.map(each => {
+      if (!reversedMessagesIds.includes(parseInt(each.user_id))){
+        contactsWithNoMessages.push(each)
+      }
     })
 
-    for (let i = 0; i < sortedContacts.length; i++){
-      if (contacts[i].user_id === reversedMessagesIds[i] || contacts[i].friend_with === reversedMessagesIds[i]){
-        match++
-      }
+    if (match !== reversedMessagesIds.length) {
+      setContacts([...sortedContacts, ...contactsWithNoMessages]);
     }
-    console.log("dsa")
-    if (match !== sortedContacts.length){
-      console.log("123")
-      setContacts(sortedContacts)
-    }else{
-      console.log(contacts)
-      console.log(reversedMessagesIds)
-    }
-  }, [messages, userData, contacts, setContacts])
+  }, [messages, userData, contacts, setContacts]);
 
   useEffect(() => {
-    setContactsList(contacts)
-  }, [contacts])
+    setContactsList(contacts);
+  }, [contacts]);
 
   return (
     <SideBar>
@@ -105,8 +110,16 @@ const Sidebar = (props) => {
         <Link to="/profile" style={{ width: "60px", height: "80%" }}>
           <UserPfp src={userData[0].user_pfp} alt="profile pic" />
         </Link>
-        <div style={{width: "190px", textAlign: "left", marginLeft: "20px"}}>
-          <h2 style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{userData[0].user_name}</h2>
+        <div style={{ width: "190px", textAlign: "left", marginLeft: "20px" }}>
+          <h2
+            style={{
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {userData[0].user_name}
+          </h2>
         </div>
         <OtherThingsContainer>
           <Link to="/friends/add" style={{ textDecoration: "none" }}>
@@ -123,7 +136,10 @@ const Sidebar = (props) => {
         />
       </SearchBarContainer>
       <FriendsContainer>
-        <Friends onlineFriends={props.onlineFriend} contactList={contactsList} />
+        <Friends
+          onlineFriends={props.onlineFriend}
+          contactList={contactsList}
+        />
       </FriendsContainer>
     </SideBar>
   );
