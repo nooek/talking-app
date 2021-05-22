@@ -71,6 +71,7 @@ const Login = (props) => {
           <Fields
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
+            maxLength={120}
           />
           <Fields
             placeholder="Password"
