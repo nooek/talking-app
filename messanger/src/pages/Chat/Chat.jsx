@@ -53,12 +53,23 @@ const Chat = (props) => {
   useEffect(() => {
     socket.on("receive-message", (message) => {
       const blockedContactsList = [];
+      console.log(message)
       contacts.map((each) => {
         if (each.status === "BLOCKED") {
           return blockedContactsList.push(each.user_id);
         }
         return null;
       });
+
+      if (message.author !== friend.user_id){
+        message.seen = true  
+        contacts.map((each, index) => {
+          if (each.user_id === message.author){
+            contacts[index].newMessage = true
+          }
+          return 0;
+        })
+      }
 
       if (!blockedContactsList.includes(message.author)) {
         setMessages([...messages, message]);
@@ -67,7 +78,7 @@ const Chat = (props) => {
     return () => {
       socket.off("receive-message");
     };
-  }, [socket, messages, setMessages, userData, contacts, setContacts]);
+  }, [socket, messages, setMessages, userData, contacts, setContacts, friend]);
 
   const checkPosition = () => {
     if (

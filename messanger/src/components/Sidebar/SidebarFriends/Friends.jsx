@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useContacts } from "../../../store/contactsProvider"
 import { useFriend } from "../../../store/friendProvider"
+import { useSocket } from "../../../store/socketProvider"
 import {
     FriendContainer,
     FriendName,
@@ -12,12 +13,17 @@ import {
 const SidebarFriends = (props) => {
     const { contacts } = useContacts()
     const { friend, setFriend } = useFriend()
+    const { socket } = useSocket()
     
     const getFriend = (friend) => {
       contacts.filter(each => {
         return each.friend_with === friend.user_id
       })
     }
+
+    useEffect(() => {
+      socket.emit('join-friend', friend.user_id)
+    }, [friend, socket])
 
     return(
         !props.contactList.message && props.contactList.length > 0 ? (
@@ -37,7 +43,10 @@ const SidebarFriends = (props) => {
                       <FriendName>{each.user_name}</FriendName>
                     </div>
                     <LastContactMessage>{each.lastMessage}</LastContactMessage>
-  
+                    {
+                      each.newMessage ?
+                      <p style={{position: "absolute", top: "0px", right: "10px"}}>mensagem!</p>
+                     : null}
                     {each.user_id ? (
                       <OnlineBubble
                         online={

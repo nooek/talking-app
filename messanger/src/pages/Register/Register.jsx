@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import defaultPfp from "../../assets/images/default_pfp.png";
 import validatePassword from "../../validators/PasswordValidator";
+import validateEmail from "../../validators/EmailValidator";
 
 const Login = (props) => {
   const [name, setName] = useState("");
@@ -31,7 +32,8 @@ const Login = (props) => {
 
   const register = () => {
     const validPassword = validatePassword(password);
-    if (validPassword === true) {
+    const validEmail = validateEmail(email)
+    if (validPassword === true && validEmail === true) {
       axios
         .post("http://localhost:3001/api/user/register", {
           name: name,
@@ -44,7 +46,8 @@ const Login = (props) => {
           setMessage(res.data.message);
         });
     } else {
-      setMessage(validPassword.message)
+      if (validPassword.message) setMessage(validPassword.message)
+      if (validEmail.message) setMessage(validEmail.message)
     }
   };
 

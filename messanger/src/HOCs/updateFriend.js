@@ -159,6 +159,15 @@ const GetFriendRealTimeInfo = ({ children }) => {
     }
   }, [messages, userData, setContacts, contacts]);
 
+  useEffect(() => {
+    contacts.map((each, index) => {
+      if (each.user_id === friend.user_id){
+        console.log('asda')
+        contacts[index].newMessage = false
+      }
+    })
+  }, [contacts, friend, setContacts])
+
   return cloneElement(children, { friendsOnline: friendsOnline });
 };
 

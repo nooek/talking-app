@@ -28,13 +28,24 @@ io.on("connection", (socket) => {
     socketId: socket.id,
     userId: socket.handshake.query.room,
     showOnline: socket.handshake.query.showOnline,
+    room: ''
   });
-  console.log(users);
 
   usersFiltered = users.filter((each) => {
     return each.showOnline !== "0";
   });
   io.emit("get-user-online", usersFiltered);
+
+  socket.on('join-friend', (friendRoom) => {
+    users.map((each, index) => {
+      console.log(each)
+      if (parseInt(each.userId) === friendRoom){
+        console.log("fsdf")
+        users[index].room = friendRoom
+      }
+    })
+  })
+
   socket.on("get-users-online", () => {
     usersFiltered = users.filter((each) => {
       return each.showOnline !== "0";
@@ -64,14 +75,11 @@ io.on("connection", (socket) => {
   socket.on("send-message", (data) => {
     if ((data.blocked === true) | 1) {
       let messageReceiver = "";
-      console.log(data);
-      console.log(users);
-      users.map((each) => {
+      users.map((each, index) => {
         if (parseInt(data.receiver) === parseInt(each.userId)) {
           return (messageReceiver = each.socketId);
         }
       });
-      console.log(messageReceiver);
       socket.broadcast.to(messageReceiver).emit("receive-message", data);
     }
   });

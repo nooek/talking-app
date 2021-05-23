@@ -34,7 +34,8 @@ const ChatSendMessage = () => {
           receiver: friend.user_id,
           message: message,
           date: today.date,
-          time: today.time
+          time: today.time,
+          seen: false
         };
         socket.emit("send-message", messageData);
         await setMessages([...messages, messageData]);

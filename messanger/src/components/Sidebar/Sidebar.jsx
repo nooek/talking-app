@@ -17,15 +17,15 @@ import { Link } from "react-router-dom";
 import { getFriendsData } from "../../services/API/tasks/APItasks";
 import { searchFriend } from "../../services/API/tasks/FriendsTasks";
 import Friends from "./SidebarFriends/Friends.jsx";
-import { useMessages } from "../../store/messagesProvider";
+import { useFriend } from "../../store/friendProvider";
 
 const Sidebar = (props) => {
   const { userData } = useUserData();
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
   const { contacts, setContacts } = useContacts();
+  const { friend } = useFriend()
   const [contactsList, setContactsList] = useState([]);
-  const { messages } = useMessages();
 
   const updateFriends = useCallback(async () => {
     const res = await getFriendsData(userData[0].user_id);
@@ -48,59 +48,11 @@ const Sidebar = (props) => {
     }
   }, [friendSearchName, userData, updateFriends, setContacts]);
 
-  // useEffect(() => {
-  //   let sortedContacts = [];
-  //   const reversedMessages = messages.slice().reverse();
-  //   let reversedMessagesIds = [];
-  //   let contactsWithNoMessages = [];
-  //   reversedMessages.forEach((message) => {
-  //     if (
-  //       !reversedMessagesIds.includes(message.author) &&
-  //       !reversedMessagesIds.includes(message.receiver)
-  //     ) {
-  //       if (message.author !== userData[0].user_id) {
-  //         reversedMessagesIds.push(message.author);
-  //       }
-  //       if (message.receiver !== userData[0].user_id) {
-  //         reversedMessagesIds.push(message.receiver);
-  //       }
-  //     }
-  //   });
-  //   let match = 0;
-
-  //   reversedMessagesIds.forEach((id) => {
-  //     contacts.map((contact) => {
-  //       if (contact.user_id === id || contact.friend_with === id) {
-  //         sortedContacts.push(contact);
-  //       }
-  //       return 0;
-  //     });
-  //     return 0;
-  //   });
-
-  //   for (let i = 0; i < sortedContacts.length; i++) {
-  //     if (contacts[i].user_id === reversedMessagesIds[i]) {
-  //       match++;
-  //     }
-
-  //     if (contacts[i].friend_with === reversedMessagesIds[i]) {
-  //       match++;
-  //     }
-  //   }
-
-  //   contacts.map((each) => {
-  //     if (!reversedMessagesIds.includes(parseInt(each.user_id))) {
-  //       contactsWithNoMessages.push(each);
-  //     }
-  //   });
-  //   if (match !== reversedMessagesIds.length) {
-  //     setContacts([...sortedContacts, ...contactsWithNoMessages]);
-  //   }
-  // }, [messages, userData, contacts, setContacts]);
-
   useEffect(() => {
     setContactsList(contacts);
   }, [contacts]);
+
+  console.log(friend)
 
   return (
     <SideBar>
