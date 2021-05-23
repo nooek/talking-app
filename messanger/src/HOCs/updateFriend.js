@@ -2,19 +2,17 @@ import { useState, useCallback, useEffect, cloneElement } from "react";
 import { useSocket } from "../store/socketProvider";
 import { useContacts } from "../store/contactsProvider";
 import { useFriend } from "../store/friendProvider";
-import { useMessages } from "../store/messagesProvider"
-import { useUserData } from "../store/userDataProvider"
-import defaultPfp from "../assets/images/default_pfp.png"
+import { useMessages } from "../store/messagesProvider";
+import { useUserData } from "../store/userDataProvider";
+import defaultPfp from "../assets/images/default_pfp.png";
 
 const GetFriendRealTimeInfo = ({ children }) => {
   const { socket } = useSocket();
   const { contacts, setContacts } = useContacts();
   const { friend, setFriend } = useFriend();
-  const { userData } = useUserData()
-  const { messages } = useMessages()
+  const { userData } = useUserData();
+  const { messages } = useMessages();
   const [friendsOnline, setFriendsOnline] = useState([]);
-  // const [strangersAdd, setStrangersAdd] = useState([])
-  // const [sortedContacts, setSortedContacts] = useState([])
 
   const updateOnlineFriends = useCallback(() => {
     socket.emit("get-users-online");
@@ -37,59 +35,60 @@ const GetFriendRealTimeInfo = ({ children }) => {
 
   useEffect(() => {
     socket.on("update-contact", (data) => {
-      if (data[1] !== "BLOCKED"){
-        const friends = contacts.filter(each => {
-          return each.user_id !== data[0]
-        })
-  
-        const friend = contacts.filter(each => {
-          return each.user_id === data[0]
-        })
-        console.log(data)
-      
-      console.log(friend[0])
-        if (data[1] === "ACCEPTED" && friend[0].status !== "BLOCKED"){
-          friend[0].status = data[1]
-          if (friend.user_id === friend[0].user_id){
-            setFriend(...friend)
-            setContacts(...friends, friend)
+      if (data[1] !== "BLOCKED") {
+        const friends = contacts.filter((each) => {
+          return each.user_id !== data[0];
+        });
+
+        const friend = contacts.filter((each) => {
+          return each.user_id === data[0];
+        });
+        console.log(data);
+
+        console.log(friend[0]);
+        if (data[1] === "ACCEPTED" && friend[0].status !== "BLOCKED") {
+          friend[0].status = data[1];
+          if (friend.user_id === friend[0].user_id) {
+            setFriend(...friend);
+            setContacts(...friends, friend);
           }
         }
 
-        if (data[1] !== "ACCEPTED"){
-          friend[0].status = data[1]
-          setFriend(...friend)
-          setContacts(...friends, ...friend)
+        if (data[1] !== "ACCEPTED") {
+          friend[0].status = data[1];
+          setFriend(...friend);
+          setContacts(...friends, ...friend);
         }
       }
-    })
+    });
     return () => {
       socket.off("update-contact");
     };
   }, [contacts, socket, friend, setContacts, setFriend]);
 
-  useEffect(() => {
-    let sortedContacts = [];
+  const sortMessages = useCallback(() => {
     const reversedMessages = messages.slice().reverse();
-    let reversedMessagesIds = [];
-    let contactsWithNoMessages = [];
+    let sortedMessagesIds = [];
     reversedMessages.forEach((message) => {
       if (
-        !reversedMessagesIds.includes(message.author) &&
-        !reversedMessagesIds.includes(message.receiver)
+        !sortedMessagesIds.includes(message.author) &&
+        !sortedMessagesIds.includes(message.receiver)
       ) {
         if (message.author !== userData[0].user_id) {
-          reversedMessagesIds.push(message.author);
+          sortedMessagesIds.push(message.author);
         }
         if (message.receiver !== userData[0].user_id) {
-          reversedMessagesIds.push(message.receiver);
+          sortedMessagesIds.push(message.receiver);
         }
       }
     });
-    let match = 0;
+    return sortedMessagesIds;
+  }, [messages, userData]);
 
-    
-    reversedMessagesIds.forEach((id) => {
+  const sortContacts = useCallback(() => {
+    let sortedContacts = []
+    const sortedMessagesIds = sortMessages()
+    sortedMessagesIds.forEach((id) => {
       contacts.map((contact) => {
         if (contact.user_id === id || contact.friend_with === id) {
           sortedContacts.push(contact);
@@ -98,55 +97,65 @@ const GetFriendRealTimeInfo = ({ children }) => {
       });
       return 0;
     });
-
-    contacts.map(each => {
-      if (!reversedMessagesIds.includes(each.user_id) && each.status !== "DENIED"){
-        contactsWithNoMessages.push(each)
-      }
-    })
-
-    for (let i = 0; i < sortedContacts.length; i++) {
-      if (contacts[i].user_id === reversedMessagesIds[i]) {
-        match++;
-      }
-
-      if (contacts[i].friend_with === reversedMessagesIds[i]) {
-        match++;
-      }
-    }
-
-    console.log(match)
-    console.log(sortedContacts)
-    console.log(contactsWithNoMessages)
-    console.log(reversedMessagesIds)
-    if (match !== reversedMessagesIds.length) {
-      setContacts([...sortedContacts, ...contactsWithNoMessages])
-    }
-  }, [messages, userData, contacts, setContacts]);
+    return sortedContacts
+  }, [contacts, sortMessages])
 
   useEffect(() => {
-    let inContacts = []
-    contacts.map(each => {
-      return inContacts.push(each.user_id)
-    })
-    let strangersMessageToSee = []
-    messages.map(each => {
-      if (each.author !== userData[0].user_id && !inContacts.includes(each.author)){
-        inContacts.push(each.author)
+    const sortedMessagesIds = sortMessages();
+    const sortedContacts = sortContacts();
+    let contactsWithNoMessages = [];
+    let match = 0;
+
+    contacts.map((each) => {
+      if (
+        !sortedMessagesIds.includes(each.user_id) &&
+        each.status !== "DENIED"
+      ) {
+        contactsWithNoMessages.push(each);
+      }
+      return 0;
+    });
+
+    for (let i = 0; i < sortedContacts.length; i++) {
+      if (contacts[i].user_id === sortedMessagesIds[i]) {
+        match++;
+      }
+
+      if (contacts[i].friend_with === sortedMessagesIds[i]) {
+        match++;
+      }
+    }
+
+    if (match !== sortedMessagesIds.length) {
+      setContacts([...sortedContacts, ...contactsWithNoMessages]);
+    }
+  }, [messages, userData, contacts, setContacts, sortMessages, sortContacts]);
+
+  useEffect(() => {
+    let inContacts = [];
+    contacts.map((each) => {
+      return inContacts.push(each.user_id);
+    });
+    let strangersMessageToSee = [];
+    messages.map((each) => {
+      if (
+        each.author !== userData[0].user_id &&
+        !inContacts.includes(each.author)
+      ) {
+        inContacts.push(each.author);
         return strangersMessageToSee.push({
           user_pfp: defaultPfp,
           user_name: "Not added",
           friend_with: "",
           user_id: each.author,
-          status: "REQUESTED"
-        })
-        
+          status: "REQUESTED",
+        });
       }
-      return null
-    })
+      return null;
+    });
 
-    if (strangersMessageToSee.length > 0){
-      setContacts([...contacts, ...strangersMessageToSee])
+    if (strangersMessageToSee.length > 0) {
+      setContacts([...contacts, ...strangersMessageToSee]);
     }
   }, [messages, userData, setContacts, contacts]);
 

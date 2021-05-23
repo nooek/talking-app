@@ -85,7 +85,6 @@ const Profile = (props) => {
     if (response) setUserData(response.data)
     console.log(response)
   }
-  console.log(pfpPreview)
 
   return (
     <Container>
