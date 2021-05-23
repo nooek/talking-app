@@ -48,55 +48,55 @@ const Sidebar = (props) => {
     }
   }, [friendSearchName, userData, updateFriends, setContacts]);
 
-  useEffect(() => {
-    let sortedContacts = [];
-    const reversedMessages = messages.slice().reverse();
-    let reversedMessagesIds = [];
-    let contactsWithNoMessages = [];
-    reversedMessages.forEach((message) => {
-      if (
-        !reversedMessagesIds.includes(message.author) &&
-        !reversedMessagesIds.includes(message.receiver)
-      ) {
-        if (message.author !== userData[0].user_id) {
-          reversedMessagesIds.push(message.author);
-        }
-        if (message.receiver !== userData[0].user_id) {
-          reversedMessagesIds.push(message.receiver);
-        }
-      }
-    });
-    let match = 0;
+  // useEffect(() => {
+  //   let sortedContacts = [];
+  //   const reversedMessages = messages.slice().reverse();
+  //   let reversedMessagesIds = [];
+  //   let contactsWithNoMessages = [];
+  //   reversedMessages.forEach((message) => {
+  //     if (
+  //       !reversedMessagesIds.includes(message.author) &&
+  //       !reversedMessagesIds.includes(message.receiver)
+  //     ) {
+  //       if (message.author !== userData[0].user_id) {
+  //         reversedMessagesIds.push(message.author);
+  //       }
+  //       if (message.receiver !== userData[0].user_id) {
+  //         reversedMessagesIds.push(message.receiver);
+  //       }
+  //     }
+  //   });
+  //   let match = 0;
 
-    reversedMessagesIds.forEach((id) => {
-      contacts.map((contact) => {
-        if (contact.user_id === id || contact.friend_with === id) {
-          sortedContacts.push(contact);
-        }
-        return 0;
-      });
-      return 0;
-    });
+  //   reversedMessagesIds.forEach((id) => {
+  //     contacts.map((contact) => {
+  //       if (contact.user_id === id || contact.friend_with === id) {
+  //         sortedContacts.push(contact);
+  //       }
+  //       return 0;
+  //     });
+  //     return 0;
+  //   });
 
-    for (let i = 0; i < sortedContacts.length; i++) {
-      if (contacts[i].user_id === reversedMessagesIds[i]) {
-        match++;
-      }
+  //   for (let i = 0; i < sortedContacts.length; i++) {
+  //     if (contacts[i].user_id === reversedMessagesIds[i]) {
+  //       match++;
+  //     }
 
-      if (contacts[i].friend_with === reversedMessagesIds[i]) {
-        match++;
-      }
-    }
+  //     if (contacts[i].friend_with === reversedMessagesIds[i]) {
+  //       match++;
+  //     }
+  //   }
 
-    contacts.map((each) => {
-      if (!reversedMessagesIds.includes(parseInt(each.user_id))) {
-        contactsWithNoMessages.push(each);
-      }
-    });
-    if (match !== reversedMessagesIds.length) {
-      setContacts([...sortedContacts, ...contactsWithNoMessages]);
-    }
-  }, [messages, userData, contacts, setContacts]);
+  //   contacts.map((each) => {
+  //     if (!reversedMessagesIds.includes(parseInt(each.user_id))) {
+  //       contactsWithNoMessages.push(each);
+  //     }
+  //   });
+  //   if (match !== reversedMessagesIds.length) {
+  //     setContacts([...sortedContacts, ...contactsWithNoMessages]);
+  //   }
+  // }, [messages, userData, contacts, setContacts]);
 
   useEffect(() => {
     setContactsList(contacts);
