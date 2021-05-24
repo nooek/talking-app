@@ -11,6 +11,7 @@ import axios from "axios";
 import defaultPfp from "../../assets/images/default_pfp.png";
 import validatePassword from "../../validators/PasswordValidator";
 import validateEmail from "../../validators/EmailValidator";
+import validateUsername from '../../validators/UsernameValidator'
 
 const Login = (props) => {
   const [name, setName] = useState("");
@@ -33,7 +34,8 @@ const Login = (props) => {
   const register = () => {
     const validPassword = validatePassword(password);
     const validEmail = validateEmail(email)
-    if (validPassword === true && validEmail === true) {
+    const validUsername =  validateUsername(name)
+    if (validPassword === true && validEmail === true && validUsername === true) {
       axios
         .post("http://localhost:3001/api/user/register", {
           name: name,
@@ -48,6 +50,7 @@ const Login = (props) => {
     } else {
       if (validPassword.message) setMessage(validPassword.message)
       if (validEmail.message) setMessage(validEmail.message)
+      if (validUsername.message) setMessage(validUsername.message)
     }
   };
 

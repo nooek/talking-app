@@ -9,7 +9,9 @@ import {
 } from "./Styles";
 import axios from "axios";
 import UserFieldInfo from "./UserInfoField/UserInfoField.jsx";
-import { getUserData } from "../../../../services/API/tasks/APItasks" 
+import { getUserData } from "../../../../services/API/tasks/APItasks";
+import validateUsername from "../../../../validators/UsernameValidator";
+import validateDescription from "../../../../validators/DescriptionValidator";
 
 const UserInfo = () => {
   const { userData, setUserData } = useUserData();
@@ -21,34 +23,38 @@ const UserInfo = () => {
   const checkIfEnterPressed = (e) => {
     const code = e.which;
     if (code === 13) {
-      saveUserInfo()
+      saveUserInfo();
     }
   };
 
   const getUser = () => {
-    getUserData(userData[0].user_id).then(res => {
-      setUserData(res.data)
-      console.log(userData)
-    })
-  }
+    getUserData(userData[0].user_id).then((res) => {
+      setUserData(res.data);
+      console.log(userData);
+    });
+  };
 
-  console.log(userData)
+  console.log(userData);
 
   const saveUserInfo = () => {
-    axios
-      .put("http://localhost:3001/api/user", {
-        name: newName === undefined ? '' : newName,
-        desc: newDescription === undefined ? '' : newDescription,
-        pfp: userData[0].user_pfp,
-        onlineStatus: userData[0].online_status,
-        id: userData[0].user_id
-      })
-      .then((res) => {
-        console.log(res);
-        if (!res.data.error){
-          getUser()
-        }
-      });
+    const validUsername = validateUsername(newName);
+    const validDescription = validateDescription(newDescription);
+    if (validUsername && validDescription) {
+      axios
+        .put("http://localhost:3001/api/user", {
+          name: newName === undefined ? "" : newName,
+          desc: newDescription === undefined ? "" : newDescription,
+          pfp: userData[0].user_pfp,
+          onlineStatus: userData[0].online_status,
+          id: userData[0].user_id,
+        })
+        .then((res) => {
+          console.log(res);
+          if (!res.data.error) {
+            getUser();
+          }
+        });
+    }
   };
 
   const openField = (field) => {
