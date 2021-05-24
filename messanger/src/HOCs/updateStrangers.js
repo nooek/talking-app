@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useMessages } from "../store/messagesProvider";
 import { useContacts } from "../store/contactsProvider";
 import { useUserData } from "../store/userDataProvider";

@@ -29,6 +29,8 @@ const Chat = (props) => {
   const { contacts, setContacts } = useContacts();
   const [showGoToLastMsg, setShowGoToLastMsg] = useState(false);
   const [showFindMessage, setShowFindMessage] = useState(false);
+  const [contactsMessages, setContactsMessages] = useState([])
+  const [loadingMessages, setLoadingMessage] = useState(false)
   const chatScrollbarPos = useRef(null);
 
   useEffect(() => {
@@ -49,6 +51,16 @@ const Chat = (props) => {
   useEffect(() => {
     goToLastMessage()
   }, [messages])
+
+  useEffect(() => {
+    const justFriendMessages = messages.filter(each => {
+      return each.receiver === friend.user_id || each.author === friend.user_id
+    })
+    const recentMessages = justFriendMessages.reverse()
+    const slicedMessages = recentMessages.slice(0, 50).reverse()
+    setContactsMessages([...slicedMessages])
+    setLoadingMessage(true)
+  }, [messages, setMessages, friend])
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -125,11 +137,7 @@ const Chat = (props) => {
                 Go back
               </GoToLastMessageButton>
             ) : null}
-            {messages.map((each, index) => {
-              if (
-                each.receiver === friend.user_id ||
-                each.author === friend.user_id
-              ) {
+            {loadingMessages === true ? contactsMessages.map((each, index) => {
                 return (
                   <MessageContainer
                     key={index}
@@ -145,10 +153,8 @@ const Chat = (props) => {
                     ) : null}
                   </MessageContainer>
                 );
-              } else {
-                return null;
-              }
-            })}
+            })
+          : null}
           </MessagesContainer>
           <ChatSendMessage userdata={userData} />
         </ChatSide>

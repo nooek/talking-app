@@ -17,14 +17,12 @@ import { Link } from "react-router-dom";
 import { getFriendsData } from "../../services/API/tasks/APItasks";
 import { searchFriend } from "../../services/API/tasks/FriendsTasks";
 import Friends from "./SidebarFriends/Friends.jsx";
-import { useFriend } from "../../store/friendProvider";
 
 const Sidebar = (props) => {
   const { userData } = useUserData();
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
   const { contacts, setContacts } = useContacts();
-  const { friend } = useFriend()
   const [contactsList, setContactsList] = useState([]);
 
   const updateFriends = useCallback(async () => {
@@ -51,8 +49,6 @@ const Sidebar = (props) => {
   useEffect(() => {
     setContactsList(contacts);
   }, [contacts]);
-
-  console.log(friend)
 
   return (
     <SideBar>

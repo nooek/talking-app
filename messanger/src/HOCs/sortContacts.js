@@ -7,6 +7,7 @@ const SortContacts = ({ children }) => {
     const { messages } = useMessages()
     const { contacts, setContacts } = useContacts() 
     const { userData } = useUserData()
+    
     const sortMessages = useCallback(() => {
         const reversedMessages = messages.slice().reverse();
         let sortedMessagesIds = [];
