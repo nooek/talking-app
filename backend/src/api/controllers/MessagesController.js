@@ -24,8 +24,7 @@ module.exports = {
     ON  m.message_id = ms.message_id and ms.user_id = ${id}
     WHERE (m.receiver = ${id} or m.author = ${id}) AND
     (ms.user_id = ${id} OR isnull(ms.user_id))
-    AND (ms.deleted = 0 or isnull(ms.deleted) or ms.deleted != 1)
-    ORDER BY m.message_id DESC;`
+    AND (ms.deleted = 0 or isnull(ms.deleted) or ms.deleted != 1);`
 
     con.query(query, (error, results) => {
       if (error) {

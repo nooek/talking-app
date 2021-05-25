@@ -56,7 +56,9 @@ const MobileTopbar = (props) => {
     <Container hide={hide} chat={props.chat}>
       <ShowButton onClick={() => setHide(!hide)}>Show Contacts</ShowButton>
       <UserPropertiesContainer hide={hide}>
-        <UserPfp src={userData[0].user_pfp} />
+        <Link to="/profile">
+          <UserPfp src={userData[0].user_pfp} />
+        </Link>
         <div style={{width: "190px", textAlign: "left"}}>
           <UserName>{userData[0].user_name}</UserName>
         </div>

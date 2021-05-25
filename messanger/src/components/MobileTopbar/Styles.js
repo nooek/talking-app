@@ -82,6 +82,7 @@ export const UserPfp = styled.img`
   margin-left: 10px;
   border-radius: 50%;
   border: 1px solid black;
+  cursor: pointer;
 `
 
 export const UserName = styled.h2`

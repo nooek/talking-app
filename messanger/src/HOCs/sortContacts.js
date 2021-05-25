@@ -10,7 +10,8 @@ const SortContacts = ({ children }) => {
 
   const sortMessages = useCallback(() => {
     let sortedMessagesIds = [];
-    messages.forEach((message) => {
+    const sortedMessages = messages.slice().reverse();
+    sortedMessages.forEach((message) => {
       if (
         !sortedMessagesIds.includes(message.author) &&
         !sortedMessagesIds.includes(message.receiver)
@@ -47,34 +48,32 @@ const SortContacts = ({ children }) => {
     let contactsWithNoMessages = [];
     let match = 0;
 
-    if (contacts.length > 0) {
-      contacts.map((each) => {
-        if (
-          !sortedMessagesIds.includes(each.user_id) &&
-          each.status !== "DENIED"
-        ) {
-          contactsWithNoMessages.push(each);
-        }
-        return 0;
-      });
+    contacts.map((each) => {
+      if (
+        !sortedMessagesIds.includes(each.user_id) &&
+        each.status !== "DENIED"
+      ) {
+        contactsWithNoMessages.push(each);
+      }
+      return 0;
+    });
 
-      for (let i = 0; i < sortedContacts.length; i++) {
-        if (contacts[i].user_id === sortedMessagesIds[i]) {
-          match++;
-        }
-
-        if (contacts[i].friend_with === sortedMessagesIds[i]) {
-          match++;
-        }
+    for (let i = 0; i < sortedContacts.length; i++) {
+      if (contacts[i].user_id === sortedMessagesIds[i]) {
+        match++;
       }
 
-      if (match !== sortedMessagesIds.length) {
-        setContacts([...sortedContacts, ...contactsWithNoMessages]);
+      if (contacts[i].friend_with === sortedMessagesIds[i]) {
+        match++;
       }
+    }
+
+    if (match !== sortedMessagesIds.length) {
+      setContacts([...sortedContacts, ...contactsWithNoMessages]);
     }
   }, [messages, userData, contacts, setContacts, sortMessages, sortContacts]);
 
-  return [children]
+  return [children];
 };
 
 export default SortContacts;

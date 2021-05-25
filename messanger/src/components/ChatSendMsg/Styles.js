@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { GrEmoji } from "react-icons/gr"
 
 export const MessageTypeContainer = styled.div`
   width: 100%;
@@ -48,3 +49,9 @@ export const MessageInput = styled.input`
     outline: none;
   }
 `;
+
+export const EmojiIcon = styled(GrEmoji)`
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+`
