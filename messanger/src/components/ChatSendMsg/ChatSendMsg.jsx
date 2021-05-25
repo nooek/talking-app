@@ -4,7 +4,7 @@ import {
   MessageTypeContainer,
   SendMessageButton,
   MessageInput,
-  EmojiIcon
+  EmojiIcon,
 } from "./Styles";
 import { useFriend } from "../../store/friendProvider";
 import { useMessages } from "../../store/messagesProvider";
@@ -13,6 +13,7 @@ import { useUserData } from "../../store/userDataProvider";
 import getDate from "../../functions/formatDate";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
+import validateMessage from "../../validators/MessageValidator";
 
 const ChatSendMessage = () => {
   const { socket } = useSocket();
@@ -35,8 +36,8 @@ const ChatSendMessage = () => {
 
   const sendMessage = async () => {
     const today = getDate();
-    console.log(today);
-    if (message.length > 0) {
+    const isValid = validateMessage(message);
+    if (isValid) {
       const messageData = {
         author: userData.length ? userData[0].user_id : "",
         receiver: friend.user_id,
@@ -50,6 +51,8 @@ const ChatSendMessage = () => {
       console.log(messages);
       sendMessageToDb(messageData);
       setMessage("");
+    } else {
+      console.log("not valid");
     }
   };
 
@@ -79,6 +82,8 @@ const ChatSendMessage = () => {
 
       <EmojiIcon onClick={() => setShowEmoji(!showEmoji)} />
       <MessageInput
+        minLength={1}
+        maxLength={1000}
         placeholder={
           friend.status === "BLOCKED"
             ? "Desblock to send messages"
