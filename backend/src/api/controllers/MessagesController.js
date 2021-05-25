@@ -18,13 +18,14 @@ module.exports = {
   getMessages: (req, res) => {
     const { id } = req.params;
 
-    const query = `SELECT m.message_id, m.message, m.message_date, m.receiver, m.author 
+    const query = `SELECT m.message_id, m.message, m.message_date, m.receiver, m.author, m.message_time 
     FROM  message as m
     LEFT JOIN message_status as ms
     ON  m.message_id = ms.message_id and ms.user_id = ${id}
     WHERE (m.receiver = ${id} or m.author = ${id}) AND
     (ms.user_id = ${id} OR isnull(ms.user_id))
-    AND (ms.deleted = 0 or isnull(ms.deleted) or ms.deleted != 1)`
+    AND (ms.deleted = 0 or isnull(ms.deleted) or ms.deleted != 1)
+    ORDER BY m.message_id DESC;`
 
     con.query(query, (error, results) => {
       if (error) {

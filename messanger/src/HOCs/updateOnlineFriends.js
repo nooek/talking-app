@@ -23,7 +23,7 @@ const UpdateOnlineFriends = ({ children }) => {
   useEffect(() => {
     updateOnlineFriends();
   }, [updateOnlineFriends]);
-
+  
   return cloneElement(children, { friendsOnline: friendsOnline });
 };
 

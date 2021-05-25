@@ -14,12 +14,6 @@ const SidebarFriends = (props) => {
     const { contacts } = useContacts()
     const { friend, setFriend } = useFriend()
     const { socket } = useSocket()
-    
-    const getFriend = (friend) => {
-      contacts.filter(each => {
-        return each.friend_with === friend.user_id
-      })
-    }
 
     useEffect(() => {
       socket.emit('join-friend', friend.user_id)
@@ -34,7 +28,6 @@ const SidebarFriends = (props) => {
                     key={index}
                     onClick={() => {
                       setFriend(each);
-                      getFriend(each)
                     }}
                     selected={friend.user_id === each.user_id ? true : false}
                   >
@@ -44,7 +37,7 @@ const SidebarFriends = (props) => {
                     </div>
                     <LastContactMessage>{each.lastMessage}</LastContactMessage>
                     {
-                      each.newMessage ?
+                      each.newMessage && friend.user_id !== each.user_id ?
                       <p style={{position: "absolute", top: "0px", right: "10px"}}>mensagem!</p>
                      : null}
                     {each.user_id ? (

@@ -34,12 +34,10 @@ const UserInfo = () => {
     });
   };
 
-  console.log(userData);
-
   const saveUserInfo = () => {
     const validUsername = validateUsername(newName);
     const validDescription = validateDescription(newDescription);
-    if (validUsername && validDescription) {
+    if (validUsername === true && validDescription === true) {
       axios
         .put("http://localhost:3001/api/user", {
           name: newName === undefined ? "" : newName,

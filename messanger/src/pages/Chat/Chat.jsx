@@ -26,7 +26,7 @@ const Chat = (props) => {
   const { messages, setMessages } = useMessages();
   const { socket } = useSocket();
   const { friend } = useFriend();
-  const { contacts, setContacts } = useContacts();
+  const { contacts } = useContacts();
   const [showGoToLastMsg, setShowGoToLastMsg] = useState(false);
   const [showFindMessage, setShowFindMessage] = useState(false);
   const [contactsMessages, setContactsMessages] = useState([])
@@ -39,7 +39,7 @@ const Chat = (props) => {
         setMessages(res.data);
       }
     });
-  }, [setMessages, userData, setContacts]);
+  }, [setMessages, userData]);
 
   useEffect(() => {
     chatScrollbarPos.current?.scrollTo(
@@ -90,7 +90,7 @@ const Chat = (props) => {
     return () => {
       socket.off("receive-message");
     };
-  }, [socket, messages, setMessages, userData, contacts, setContacts, friend]);
+  }, [socket, messages, setMessages, userData, contacts, friend]);
 
   const checkPosition = () => {
     if (

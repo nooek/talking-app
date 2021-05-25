@@ -29,7 +29,9 @@ const MobileTopbar = (props) => {
 
   const updateFriends = useCallback(async() => {
     const res = await getFriendsData(userData[0].user_id)
-    setContacts(res.data)
+    if (!res.data[0].message){
+      setContacts(res.data)
+    }
   }, [userData, setContacts]);
 
   useEffect(() => {
