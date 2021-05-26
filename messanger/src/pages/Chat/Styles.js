@@ -66,10 +66,12 @@ export const GoToLastMessageButton = styled.button`
 
 export const MessageContainer = styled.div`
   width: auto;
+  min-width: 200px;
   max-width: 300px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   z-index: 1;
+  position: relative;
   word-break: break-word;
   text-align: left;
   background-color: ${(props) =>
@@ -105,3 +107,11 @@ export const Message = styled.h2`
   font-size: 18px;
   z-index: 2;
 `;
+
+export const MessageTime = styled.h2`
+  font-size: 13px;
+  color: black;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+`

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState, createRef, useCallback } from "react";
 import {
   Container,
   ChatSide,
@@ -6,6 +6,7 @@ import {
   MessageContainer,
   Message,
   GoToLastMessageButton,
+  MessageTime,
 } from "./Styles";
 import { useUserData } from "../../store/userDataProvider";
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
@@ -29,9 +30,8 @@ const Chat = (props) => {
   const { contacts } = useContacts();
   const [showGoToLastMsg, setShowGoToLastMsg] = useState(false);
   const [showFindMessage, setShowFindMessage] = useState(false);
-  const [contactsMessages, setContactsMessages] = useState([])
-  const [loadingMessages, setLoadingMessage] = useState(false)
-  const chatScrollbarPos = useRef(null);
+  const [contactsMessages, setContactsMessages] = useState([]);
+  const chatScrollbarPos = createRef();
 
   useEffect(() => {
     getMessagesData(userData[0].user_id).then((res) => {
@@ -44,28 +44,36 @@ const Chat = (props) => {
   useEffect(() => {
     chatScrollbarPos.current?.scrollTo(
       0,
-      chatScrollbarPos.current?.scrollHeight
+      chatScrollbarPos.current?.scrollHeight 
     );
-  }, [friend]);
+  }, [friend, chatScrollbarPos]);
+
+  const goToLastMessage = useCallback(() => {
+    chatScrollbarPos.current?.scrollTo({
+      bottom: 0,
+      top: chatScrollbarPos.current?.scrollHeight,
+      behavior: "smooth",
+    });
+  }, []);
 
   useEffect(() => {
-    goToLastMessage()
-  }, [messages])
+    goToLastMessage();
+  }, [messages, goToLastMessage]);
 
   useEffect(() => {
-    const justFriendMessages = messages.filter(each => {
-      return each.receiver === friend.user_id || each.author === friend.user_id
-    })
-    const recentMessages = justFriendMessages.reverse()
-    const slicedMessages = recentMessages.slice(0, 50).reverse()
-    setContactsMessages([...slicedMessages])
-    setLoadingMessage(true)
-  }, [messages, setMessages, friend])
+    const justFriendMessages = messages.filter((each) => {
+      return each.receiver === friend.user_id || each.author === friend.user_id;
+    });
+    const recentMessages = justFriendMessages.reverse();
+    const slicedMessages = recentMessages.slice(0, 50).reverse();
+    setContactsMessages([...slicedMessages]);
+    console.log(contactsMessages);
+  }, [messages, setMessages, friend]);
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
       const blockedContactsList = [];
-      console.log(message)
+      console.log(message);
       contacts.map((each) => {
         if (each.status === "BLOCKED") {
           return blockedContactsList.push(each.user_id);
@@ -73,14 +81,14 @@ const Chat = (props) => {
         return null;
       });
 
-      if (message.author !== friend.user_id){
-        message.seen = true  
+      if (message.author !== friend.user_id) {
+        message.seen = true;
         contacts.map((each, index) => {
-          if (each.user_id === message.author){
-            contacts[index].newMessage = true
+          if (each.user_id === message.author) {
+            contacts[index].newMessage = true;
           }
           return 0;
-        })
+        });
       }
 
       if (!blockedContactsList.includes(message.author)) {
@@ -101,14 +109,6 @@ const Chat = (props) => {
     } else {
       setShowGoToLastMsg(false);
     }
-  };
-
-  const goToLastMessage = () => {
-    chatScrollbarPos.current?.scrollTo({
-      bottom: 0,
-      top: chatScrollbarPos.current?.scrollHeight,
-      behavior: "smooth",
-    });
   };
 
   return (
@@ -137,24 +137,24 @@ const Chat = (props) => {
                 Go back
               </GoToLastMessageButton>
             ) : null}
-            {loadingMessages === true ? contactsMessages.map((each, index) => {
-                return (
-                  <MessageContainer
-                    key={index}
-                    sender={each.author === userData[0].user_id ? true : false}
-                  >
-                    <Message>{each.message}</Message>
-                    {each.message_time ? (
+            {contactsMessages.map((each, index) => {
+              console.log("ds")
+              return (
+                <MessageContainer
+                  key={index}
+                  sender={each.author === userData[0].user_id ? true : false}
+                >
+                  <Message>{each.message}</Message>
+                  {each.message_time ? (
                       <p>
                         {each.message_time.split(":")[0] +
                           ":" +
                           each.message_time.split(":")[1]}
                       </p>
                     ) : null}
-                  </MessageContainer>
-                );
-            })
-          : null}
+                </MessageContainer>
+              );
+            })}
           </MessagesContainer>
           <ChatSendMessage userdata={userData} />
         </ChatSide>

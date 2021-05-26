@@ -35,19 +35,19 @@ const ChatSendMessage = () => {
   };
 
   const sendMessage = async () => {
-    const today = getDate();
+    const today = await getDate();
     const isValid = validateMessage(message);
     if (isValid) {
+      console.log(today)
       const messageData = {
         author: userData.length ? userData[0].user_id : "",
         receiver: friend.user_id,
         message: message,
         date: today.date,
         time: today.time,
-        seen: false,
       };
       socket.emit("send-message", messageData);
-      await setMessages([...messages, messageData]);
+      setMessages([...messages, messageData]);
       console.log(messages);
       sendMessageToDb(messageData);
       setMessage("");
