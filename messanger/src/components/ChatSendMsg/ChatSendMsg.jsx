@@ -34,9 +34,10 @@ const ChatSendMessage = () => {
     setMessage(message + emoji.native);
   };
 
-  const sendMessage = async () => {
-    const today = await getDate();
+  const sendMessage = () => {
+    const today = getDate();
     const isValid = validateMessage(message);
+    console.log(isValid)
     if (isValid) {
       console.log(today)
       const messageData = {
@@ -47,7 +48,7 @@ const ChatSendMessage = () => {
         time: today.time,
       };
       socket.emit("send-message", messageData);
-      setMessages([...messages, messageData]);
+      setMessages([ ...messages, messageData]);
       console.log(messages);
       sendMessageToDb(messageData);
       setMessage("");

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useContacts } from "../store/contactsProvider";
 import { useFriend } from "../store/friendProvider";
 import { useSocket } from "../store/socketProvider";
@@ -7,8 +7,10 @@ const UpdateContact = ({ children }) => {
     const { contacts, setContacts } = useContacts()
     const { socket } = useSocket()
     const { friend, setFriend } = useFriend()
+    const _isMounted = useRef(true);
 
     useEffect(() => {
+      if (_isMounted.current){
         socket.on("update-contact", (data) => {
           if (data[1] !== "BLOCKED") {
             const friends = contacts.filter((each) => {
@@ -36,8 +38,10 @@ const UpdateContact = ({ children }) => {
             }
           }
         });
+      }
         return () => {
           socket.off("update-contact");
+          _isMounted.current = false
         };
       }, [contacts, socket, friend, setContacts, setFriend]);
     

@@ -6,7 +6,6 @@ import {
   MessageContainer,
   Message,
   GoToLastMessageButton,
-  MessageTime,
 } from "./Styles";
 import { useUserData } from "../../store/userDataProvider";
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
@@ -31,6 +30,8 @@ const Chat = (props) => {
   const [showGoToLastMsg, setShowGoToLastMsg] = useState(false);
   const [showFindMessage, setShowFindMessage] = useState(false);
   const [contactsMessages, setContactsMessages] = useState([]);
+  const maxMessagesToRender = 50;
+  const [messageMaxToRender, setMessageMaxToRender] = useState(maxMessagesToRender);
   const chatScrollbarPos = createRef();
 
   useEffect(() => {
@@ -41,34 +42,38 @@ const Chat = (props) => {
     });
   }, [setMessages, userData]);
 
-  useEffect(() => {
-    chatScrollbarPos.current?.scrollTo(
-      0,
-      chatScrollbarPos.current?.scrollHeight 
-    );
-  }, [friend, chatScrollbarPos]);
-
   const goToLastMessage = useCallback(() => {
     chatScrollbarPos.current?.scrollTo({
       bottom: 0,
       top: chatScrollbarPos.current?.scrollHeight,
       behavior: "smooth",
     });
-  }, []);
+  }, [chatScrollbarPos]);
 
   useEffect(() => {
-    goToLastMessage();
-  }, [messages, goToLastMessage]);
+    if (
+      chatScrollbarPos.current?.scrollTop ===
+      chatScrollbarPos.current?.scrollHeight
+    ) {
+      goToLastMessage();
+    }
+  }, [messages, goToLastMessage, chatScrollbarPos]);
 
   useEffect(() => {
     const justFriendMessages = messages.filter((each) => {
       return each.receiver === friend.user_id || each.author === friend.user_id;
     });
-    const recentMessages = justFriendMessages.reverse();
-    const slicedMessages = recentMessages.slice(0, 50).reverse();
-    setContactsMessages([...slicedMessages]);
-    console.log(contactsMessages);
-  }, [messages, setMessages, friend]);
+    setContactsMessages([...justFriendMessages]);
+    const restOfAnUnequalDivision =
+      contactsMessages.length % maxMessagesToRender;
+    setMessageMaxToRender(maxMessagesToRender + restOfAnUnequalDivision);
+  }, [
+    messages,
+    setMessages,
+    friend,
+    setMessageMaxToRender,
+    contactsMessages.length,
+  ]);
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -100,15 +105,40 @@ const Chat = (props) => {
     };
   }, [socket, messages, setMessages, userData, contacts, friend]);
 
+  useEffect(() => {
+    if (
+      messageMaxToRender > maxMessagesToRender &&
+      messageMaxToRender !== contactsMessages.length
+    ) {
+      chatScrollbarPos.current?.scrollTo(
+        0,
+        chatScrollbarPos.current?.scrollHeight /
+          (messageMaxToRender / maxMessagesToRender)
+      );
+    }
+  }, [messageMaxToRender, chatScrollbarPos, contactsMessages]);
+
   const checkPosition = () => {
     if (
-      chatScrollbarPos.current?.scrollTop <=
-      chatScrollbarPos.current?.scrollHeight - 2208
+      chatScrollbarPos.current?.scrollTop === 0 &&
+      messageMaxToRender < contactsMessages.length
     ) {
-      setShowGoToLastMsg(true);
-    } else {
-      setShowGoToLastMsg(false);
+      setMessageMaxToRender(messageMaxToRender + 50 + (contactsMessages.length % maxMessagesToRender));
+      chatScrollbarPos.current?.scrollTo(
+        0,
+        chatScrollbarPos.current?.scrollHeight /
+        (messageMaxToRender % contactsMessages.length) + (contactsMessages.length / messageMaxToRender)
+      );
     }
+    
+    // if (
+    //   chatScrollbarPos.current?.scrollTop <=
+    //   chatScrollbarPos.current?.scrollHeight - 2208
+    // ) {
+    //   setShowGoToLastMsg(true);
+    // } else {
+    //   setShowGoToLastMsg(false);
+    // }
   };
 
   return (
@@ -130,6 +160,7 @@ const Chat = (props) => {
           <MessagesContainer
             id="msg-container"
             ref={chatScrollbarPos}
+            className="messages-container"
             onScroll={() => checkPosition()}
           >
             {showGoToLastMsg === true ? (
@@ -138,22 +169,25 @@ const Chat = (props) => {
               </GoToLastMessageButton>
             ) : null}
             {contactsMessages.map((each, index) => {
-              console.log("ds")
-              return (
-                <MessageContainer
-                  key={index}
-                  sender={each.author === userData[0].user_id ? true : false}
-                >
-                  <Message>{each.message}</Message>
-                  {each.message_time ? (
+              if (index >= contactsMessages.length - messageMaxToRender) {
+                return (
+                  <MessageContainer
+                    key={index}
+                    sender={each.author === userData[0].user_id ? true : false}
+                  >
+                    <Message>{each.message}</Message>
+                    {each.message_time ? (
                       <p>
                         {each.message_time.split(":")[0] +
                           ":" +
                           each.message_time.split(":")[1]}
                       </p>
                     ) : null}
-                </MessageContainer>
-              );
+                  </MessageContainer>
+                );
+              } else {
+                return null;
+              }
             })}
           </MessagesContainer>
           <ChatSendMessage userdata={userData} />

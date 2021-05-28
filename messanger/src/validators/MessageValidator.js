@@ -1,4 +1,4 @@
-const validateMessage = async (message) => {
+const validateMessage = (message) => {
     if (message) {
       if (message.length <= 0){
         return false

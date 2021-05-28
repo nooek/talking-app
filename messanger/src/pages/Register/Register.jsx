@@ -35,7 +35,8 @@ const Login = (props) => {
     const validPassword = validatePassword(password);
     const validEmail = validateEmail(email)
     const validUsername =  validateUsername(name)
-    if (validPassword === true && validEmail === true && validUsername === true) {
+    const isValid = validUsername && validEmail && validPassword
+    if (isValid) {
       axios
         .post("http://localhost:3001/api/user/register", {
           name: name,
@@ -48,10 +49,11 @@ const Login = (props) => {
           setMessage(res.data.message);
         });
     } else {
-      if (validPassword.message) setMessage(validPassword.message)
-      if (validEmail.message) setMessage(validEmail.message)
       if (validUsername.message) setMessage(validUsername.message)
+      if (validEmail.message) setMessage(validEmail.message)
+      if (validPassword.message) setMessage(validPassword.message)
     }
+
   };
 
   return (
