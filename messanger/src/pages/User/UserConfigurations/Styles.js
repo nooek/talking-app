@@ -106,12 +106,15 @@ export const UnblockButton = styled.button`
     background: none;
     font-weight: bold;
     font-size: 16px;
+    background: rgb(172, 172, 172);
     right: 0;
     box-shadow: 3px 3px 3px rgb(0, 0, 0);
     border-top: 1px solid black;
     border-left: 1px solid black;
+    cursor: pointer;
     :hover{
         background: white;
+        transform: scale(1.05);
     }
     @media(max-width: 550px){
         position: relative;

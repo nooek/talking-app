@@ -103,3 +103,53 @@ export const GoBackPage = styled(BiArrowBack)`
   left: 10px;
   z-index: 3;
 `;
+
+export const DeleteAccAlert = styled.div`
+  width: 430px;
+  height: 180px;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgb(228, 226, 226);
+  position: absolute;
+  top: 45%;
+  text-align: center;
+`
+
+export const DeleteAccMessageContainer = styled.h2`
+  width: 100%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0px;
+  margin-bottom: 0px;
+`
+
+export const DeleteAccMessage = styled.h2`
+  color: black;
+  font-size: 24px;
+  margin-top: 3px;
+`
+
+export const DeleteAccOptionsContainer = styled.div`
+  width: 100%;
+  height: 20%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 0px;
+`
+
+export const DeleteAccOptions = styled.button`
+  width: 200px;
+  height: 90%;
+  border: 2px solid white;
+  color: white;
+  background: black;
+  cursor: pointer;
+  :focus{
+    outline: none;
+  }
+`

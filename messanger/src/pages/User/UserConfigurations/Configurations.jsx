@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   Category,
   Container,
@@ -22,6 +22,7 @@ const Configurations = () => {
   const { friend, setFriend } = useFriend();
   const [checked, setChecked] = useState(Boolean(userData[0].online_status));
   const [blockList, setBlockList] = useState([]);
+  const _isMounted = useRef(true)
 
   const getBlockedFriends = useCallback(() => {
     getFriendsData(userData[0].user_id).then((res) => {
@@ -33,17 +34,22 @@ const Configurations = () => {
   }, [userData]);
 
   useEffect(() => {
-    getBlockedFriends();
+    if (_isMounted.current){
+      getBlockedFriends();
+    }
+    return () => {
+      _isMounted.current = false
+    }
   }, [getBlockedFriends]);
 
   const unblock = async (friendId) => {
     await axios.put("http://localhost:3001/api/friends/updatestatus", {
       personId: friendId,
       userId: userData[0].user_id,
-      newStatus: "REQUESTED",
+      newStatus: "ACCEPTED",
     });
     getBlockedFriends();
-    setFriend({ ...friend, status: "REQUESTED" });
+    setFriend({ ...friend, status: "ACCEPTED" });
   };
 
   const changeOnlineStatus = async () => {

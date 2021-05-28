@@ -9,6 +9,11 @@ import {
   GoBackPage,
   Change,
   ChangePfpIcon,
+  DeleteAccAlert,
+  DeleteAccMessage,
+  DeleteAccMessageContainer,
+  DeleteAccOptionsContainer,
+  DeleteAccOptions
 } from "./Styles";
 import { useUserData } from "../../../store/userDataProvider";
 import { useSocket } from "../../../store/socketProvider";
@@ -26,6 +31,7 @@ const Profile = (props) => {
   const [pfpPreview, setPfpPreview] = useState("")
   const [imageFile, setImageFile] = useState([]);
   const [uploadLoading, setUploadLoading] = useState(false);
+  const [deleteAccAlert, setDeleteAccAlert] = useState(false) 
 
   const logOut = () => {
     localStorage.removeItem("id");
@@ -129,12 +135,26 @@ const Profile = (props) => {
           Log out
         </Buttons>
         <Buttons
-          onClick={() => deleteAccount()}
+          onClick={() => setDeleteAccAlert(true)}
           color="secondary"
           variant="contained"
         >
           Delete Account
         </Buttons>
+        {
+          deleteAccAlert ?
+            <DeleteAccAlert>
+              <DeleteAccMessageContainer>
+                <DeleteAccMessage>You sure?</DeleteAccMessage>
+                <DeleteAccMessage>You will lose your account and all your contacts</DeleteAccMessage>
+              </DeleteAccMessageContainer>
+              <DeleteAccOptionsContainer>
+                <DeleteAccOptions onClick={() => deleteAccount()}>Yes</DeleteAccOptions>
+                <DeleteAccOptions onClick={() => setDeleteAccAlert(false)}>No</DeleteAccOptions>
+              </DeleteAccOptionsContainer>
+            </DeleteAccAlert>
+          : null
+        }
       </ButtonsContainer>
       {goToLoginPage ? <Redirect to="/login" /> : null}
     </Container>

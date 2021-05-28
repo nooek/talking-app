@@ -17,8 +17,9 @@ import { Chat } from "./pages/index";
 import AppContextsWrapper from "./AppContextsWrapper";
 
 // HOCs
-import CheckUserLogged from "./HOCs/checkUserLogged";
-import GetFriendRealTimeInfo from "./HOCs/updateFriend";
+import { CheckUserLogged } from './HOCs/index'
+import { GetFriendRealTimeInfo } from './HOCs/index'
+// import { GetUserData } from './HOCs/index'
 
 const App = () => {
   return (
