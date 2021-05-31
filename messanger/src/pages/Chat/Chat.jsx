@@ -1,4 +1,10 @@
-import React, { useEffect, useState, createRef, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  createRef,
+  useRef,
+  useCallback,
+} from "react";
 import {
   Container,
   ChatSide,
@@ -31,8 +37,28 @@ const Chat = (props) => {
   const [showFindMessage, setShowFindMessage] = useState(false);
   const [contactsMessages, setContactsMessages] = useState([]);
   const maxMessagesToRender = 50;
-  const [messageMaxToRender, setMessageMaxToRender] = useState(maxMessagesToRender);
+  const [messageMaxToRender, setMessageMaxToRender] =
+    useState(maxMessagesToRender);
   const chatScrollbarPos = createRef();
+  const observer = useRef();
+  const lastMessagePos = useRef()
+  const lastMessageRef = useCallback(
+    (node) => {
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        console.log(entries[0]);
+        if (entries[0].isIntersecting) {
+          console.log("Is being visible");
+          lastMessagePos.current = entries[0].boundingClientRect.y
+          setMessageMaxToRender(messageMaxToRender + 50);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [messageMaxToRender]
+  );
+
+  console.log(lastMessagePos)
 
   useEffect(() => {
     getMessagesData(userData[0].user_id).then((res) => {
@@ -51,6 +77,10 @@ const Chat = (props) => {
   }, [chatScrollbarPos]);
 
   useEffect(() => {
+    setMessageMaxToRender(50);
+  }, [friend]);
+
+  useEffect(() => {
     if (
       chatScrollbarPos.current?.scrollTop ===
       chatScrollbarPos.current?.scrollHeight
@@ -60,19 +90,26 @@ const Chat = (props) => {
   }, [messages, goToLastMessage, chatScrollbarPos]);
 
   useEffect(() => {
-    const justFriendMessages = messages.filter((each) => {
+    
+    const justFriendMessages = messages.filter((each, index) => {
       return each.receiver === friend.user_id || each.author === friend.user_id;
     });
-    setContactsMessages([...justFriendMessages]);
-    const restOfAnUnequalDivision =
-      contactsMessages.length % maxMessagesToRender;
-    setMessageMaxToRender(maxMessagesToRender + restOfAnUnequalDivision);
+    if (messageMaxToRender <= 50) {
+      setMessageMaxToRender(
+        maxMessagesToRender + (justFriendMessages.length % 50)
+      );
+    }
+    const messagesToRender = justFriendMessages.filter((each, index) => {
+      return index >= justFriendMessages.length - messageMaxToRender
+    })
+    setContactsMessages([...messagesToRender])
   }, [
     messages,
     setMessages,
     friend,
     setMessageMaxToRender,
     contactsMessages.length,
+    messageMaxToRender,
   ]);
 
   useEffect(() => {
@@ -106,40 +143,11 @@ const Chat = (props) => {
   }, [socket, messages, setMessages, userData, contacts, friend]);
 
   useEffect(() => {
-    if (
-      messageMaxToRender > maxMessagesToRender &&
-      messageMaxToRender !== contactsMessages.length
-    ) {
-      chatScrollbarPos.current?.scrollTo(
-        0,
-        chatScrollbarPos.current?.scrollHeight /
-          (messageMaxToRender / maxMessagesToRender)
-      );
-    }
-  }, [messageMaxToRender, chatScrollbarPos, contactsMessages]);
-
-  const checkPosition = () => {
-    if (
-      chatScrollbarPos.current?.scrollTop === 0 &&
-      messageMaxToRender < contactsMessages.length
-    ) {
-      setMessageMaxToRender(messageMaxToRender + 50 + (contactsMessages.length % maxMessagesToRender));
-      chatScrollbarPos.current?.scrollTo(
-        0,
-        chatScrollbarPos.current?.scrollHeight /
-        (messageMaxToRender % contactsMessages.length) + (contactsMessages.length / messageMaxToRender)
-      );
-    }
-    
-    // if (
-    //   chatScrollbarPos.current?.scrollTop <=
-    //   chatScrollbarPos.current?.scrollHeight - 2208
-    // ) {
-    //   setShowGoToLastMsg(true);
-    // } else {
-    //   setShowGoToLastMsg(false);
-    // }
-  };
+    chatScrollbarPos.current?.scrollTo(
+      0,
+      chatScrollbarPos.current?.scrollHeight
+    );
+  }, [chatScrollbarPos]);
 
   return (
     <Container>
@@ -161,7 +169,6 @@ const Chat = (props) => {
             id="msg-container"
             ref={chatScrollbarPos}
             className="messages-container"
-            onScroll={() => checkPosition()}
           >
             {showGoToLastMsg === true ? (
               <GoToLastMessageButton onClick={() => goToLastMessage()}>
@@ -169,15 +176,20 @@ const Chat = (props) => {
               </GoToLastMessageButton>
             ) : null}
             {contactsMessages.map((each, index) => {
-              if (index >= contactsMessages.length - messageMaxToRender) {
                 return (
                   <MessageContainer
                     key={index}
+                    className="message-container"
                     sender={each.author === userData[0].user_id ? true : false}
+                    ref={
+                      index === contactsMessages.length - messageMaxToRender
+                        ? lastMessageRef
+                        : null
+                    }
                   >
-                    <Message>{each.message}</Message>
+                    <Message className="message">{each.message}</Message>
                     {each.message_time ? (
-                      <p>
+                      <p className="ddd">
                         {each.message_time.split(":")[0] +
                           ":" +
                           each.message_time.split(":")[1]}
@@ -185,9 +197,7 @@ const Chat = (props) => {
                     ) : null}
                   </MessageContainer>
                 );
-              } else {
-                return null;
-              }
+              
             })}
           </MessagesContainer>
           <ChatSendMessage userdata={userData} />

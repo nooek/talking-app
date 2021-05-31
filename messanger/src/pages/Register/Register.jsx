@@ -53,7 +53,6 @@ const Login = (props) => {
       if (validEmail.message) setMessage(validEmail.message)
       if (validPassword.message) setMessage(validPassword.message)
     }
-
   };
 
   return (

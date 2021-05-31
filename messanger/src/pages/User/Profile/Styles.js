@@ -117,7 +117,7 @@ export const DeleteAccAlert = styled.div`
   text-align: center;
 `
 
-export const DeleteAccMessageContainer = styled.h2`
+export const DeleteAccMessageContainer = styled.div`
   width: 100%;
   height: 80%;
   display: flex;

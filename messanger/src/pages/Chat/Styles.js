@@ -88,7 +88,7 @@ export const MessageContainer = styled.div`
       : "border-bottom-right-radius: 245px"};
   border-bottom-left-radius: 25px;
   margin-bottom: ${(props) => (props.sender === true ? "10px" : "30px")};
-  margin-top: ${(props) => (props.sender === true ? "0px" : "20px")};
+  margin-top: ${(props) => (props.sender === true ? "10px" : "20px")};
   border-right: ${(props) =>
     props.sender === true
       ? "2px solid rgb(68, 68, 241)"

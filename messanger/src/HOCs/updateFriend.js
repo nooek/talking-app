@@ -6,9 +6,13 @@ import UpdateStrangers from "./updateStrangers";
 const GetFriendRealTimeInfo = ({ children }) => {
   return (
     <UpdateContact>
-        <UpdateStrangers>
+      <SortContacts>
+      <UpdateStrangers>
+        
           <UpdateOnlineFriends>{children}</UpdateOnlineFriends>
-        </UpdateStrangers>
+        
+      </UpdateStrangers>
+      </SortContacts>
     </UpdateContact>
   );
 };

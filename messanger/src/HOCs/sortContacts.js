@@ -27,9 +27,15 @@ const SortContacts = ({ children }) => {
     return sortedMessagesIds;
   }, [messages, userData]);
 
-  const sortContacts = useCallback(() => {
-    let sortedContacts = [];
+  const sortContacts = useCallback( () => {
     const sortedMessagesIds = sortMessages();
+    let sortedContacts = [];
+    
+    if (sortedMessagesIds.length > 0){
+
+    
+    console.log(sortedMessagesIds)
+    console.log(contacts)
     sortedMessagesIds.forEach((id) => {
       contacts.map((contact) => {
         if (contact.user_id === id || contact.friend_with === id) {
@@ -39,14 +45,40 @@ const SortContacts = ({ children }) => {
       });
       return 0;
     });
+  
     return sortedContacts;
+  }
   }, [contacts, sortMessages]);
 
+  const checkSorted = useCallback(() => {
+    const sortedMessagesIds = sortMessages();
+    let contactsInOrder = []
+
+    // console.log(contacts)
+
+    contacts.map(contact => {
+      return contactsInOrder.push(contact.user_id)
+    })
+
+    const contactsWithNoRep = [...new Set(contactsInOrder)]    
+    // console.log(contactsWithNoRep)
+    // console.log(sortedMessagesIds)
+
+    if (contactsWithNoRep.length === sortedMessagesIds.length &&
+    contactsWithNoRep.every((v, i) => v === sortedMessagesIds[i])){
+      return true
+    }else{
+      return false
+    } 
+  }, [sortMessages, contacts])
+
   useEffect(() => {
+    let  isSorted = checkSorted()
     const sortedMessagesIds = sortMessages();
     const sortedContacts = sortContacts();
+    
     let contactsWithNoMessages = [];
-    let match = 0;
+    // let match = 0;
 
     contacts.map((each) => {
       if (
@@ -58,20 +90,34 @@ const SortContacts = ({ children }) => {
       return 0;
     });
 
-    for (let i = 0; i < sortedContacts.length; i++) {
-      if (contacts[i].user_id === sortedMessagesIds[i]) {
-        match++;
-      }
+    console.log(contactsWithNoMessages)
 
-      if (contacts[i].friend_with === sortedMessagesIds[i]) {
-        match++;
-      }
-    }
-
-    if (match !== sortedMessagesIds.length) {
+    if (!isSorted && sortedContacts) {
       setContacts([...sortedContacts, ...contactsWithNoMessages]);
+      console.log('Is Not Sorted!!!')
+    } else {
+      console.log('Is Sorted!!!')
     }
-  }, [messages, userData, contacts, setContacts, sortMessages, sortContacts]);
+
+    // for (let i = 0; i < sortedMessagesIds.length; i++) {
+    //   if (sortedContacts[i].user_id === sortedMessagesIds[i]) {
+    //     match++;
+    //   }
+
+    //   if (sortedContacts[i].friend_with === sortedMessagesIds[i]) {
+    //     match++;
+    //   }
+    // }
+
+    // console.log(contacts)
+    // console.log(match)
+    // console.log(sortedContacts)
+    // console.log(sortedMessagesIds)
+    // console.log(contactsWithNoMessages)
+
+    // if (match !== sortedMessagesIds.length) {
+    // }
+  }, [messages, userData, contacts, setContacts, sortMessages, sortContacts, checkSorted]);
 
   return [children];
 };
