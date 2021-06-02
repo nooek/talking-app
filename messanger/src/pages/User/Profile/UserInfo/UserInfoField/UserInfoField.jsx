@@ -7,8 +7,8 @@ import {
 } from "../Styles";
 
 const UserFieldInfo = (props) => {
-  const { showField, fieldselected, save, change, subtitle, keypress, content, maxchars, id } =
-    props;
+  const { showField, fieldselected,
+    save, change, subtitle, keypress, content, maxchars, id } = props;
   if (showField === true && fieldselected === id) {
     return (
       <UserFieldChangeInfoContainer>

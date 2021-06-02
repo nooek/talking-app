@@ -65,6 +65,8 @@ const Profile = (props) => {
         pfp: url,
         onlineStatus: userData[0].online_status,
         id: userData[0].user_id,
+      }, {
+        withCredentials: true,
       })
       .then((res) => {
         console.log(res);

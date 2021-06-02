@@ -9,6 +9,6 @@ route.get("/:id", controller.getUserById)
 
 route.delete("/", controller.deleteUser)
 
-route.put("/", controller.updateUser)
+route.put("/", authenticateUser, controller.updateUser)
 
 module.exports = route

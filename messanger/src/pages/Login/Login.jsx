@@ -23,30 +23,24 @@ const Login = (props) => {
   const { title } = props;
   document.title = title;
 
-  const getUserData = async () => {
-    socket.disconnect();
-
-    const { data } = await axios.get("http://localhost:3001/api/user/getuser", {
-      withCredentials: true,
+  const createNewSocket = async (data) => {
+    await socket.disconnect();
+    const newSocket = await io("http://localhost:3001/", {
+      transports: ["websocket"],
+      query: {
+        room: data[0].user_id,
+        showOnline: data[0].online_status,
+      },
     });
 
-    if (data.user) {
-      setUserData(data.user);
-      localStorage.setItem("id", JSON.parse(data.user[0].user_id));
-      const newSocket = io("http://localhost:3001/", {
-        transports: ["websocket"],
-        query: {
-          room: data.user[0].user_id,
-          showOnline: data.user[0].online_status,
-        },
-      });
+    if (newSocket) {
       setSocket(newSocket);
       setRedirect(true);
     }
   };
 
-  const login = async () => {
-    await axios
+  const login = () => {
+    axios
       .post(
         "http://localhost:3001/api/user/login",
         {
@@ -59,7 +53,8 @@ const Login = (props) => {
         if (res.data.message) {
           setMessage(res.data.message);
         } else {
-          getUserData();
+          setUserData(res.data.user_info);
+          createNewSocket(res.data.user_info);
         }
       });
   };

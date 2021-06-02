@@ -1,19 +1,20 @@
 const jwt = require("jsonwebtoken")
 
-const authenticateUser = (req, res, next) => {
+const authenticateUser = async (req, res, next) => {
     const token = req.cookies.jwt
 
     if (!token){
-        res.send("No token")
+        res.status(400).json("No AuthToken")
     }else{
-        jwt.verify(token, process.env.JWT_KEY, (error, decode) => {
+        await jwt.verify(token, process.env.JWT_KEY, (error, decode) => {
             if (error){
                 console.log(error)
+                res.status(400).json({error: error}) 
             }else{
-                res.status(200).send(decode)
+                req.user = decode
+                return next()
             }
         })
-        return next()
     }
 }
 

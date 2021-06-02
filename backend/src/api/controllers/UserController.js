@@ -50,10 +50,18 @@ module.exports = {
             }else{
               if (results.length > 0){
                 const passwordsMatch = await bcrypt.compare(password, results[0].user_password)
+                const userInfo = [{
+                  user_id: results[0].user_id,
+                  user_name: results[0].user_name,
+                  user_pfp: results[0].user_pfp,
+                  user_desc: results[0].user_desc,
+                  user_email: results[0].user_email,
+                  online_status: results[0].online_status,
+                }]
                 if (passwordsMatch){
                   const token = await jwt.sign({user: results}, process.env.JWT_KEY)
                   res.cookie('jwt', token, { httpOnly: true, secure: false })
-                  res.status(200).json({ token })
+                  res.status(200).json({ token: token, user_info: userInfo })
                 }else{
                   res.status(200).json({message: "Email or password incorrect"})
                 }
@@ -67,7 +75,13 @@ module.exports = {
       }
   },
 
-  getUser: (req, res) => {},
+  getUser: (req, res) => {
+    if (req.user){
+      res.status(200).json({ data: req.user })
+    } else {
+      res.status(400).json({ message: "Something went wrong" })
+    }
+  },
 
   deleteUser: (req, res) => {
     const { id } = req.body

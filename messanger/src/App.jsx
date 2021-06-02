@@ -17,15 +17,15 @@ import {
 
 // Wrappers
 import AppContextsWrapper from "./AppContextsWrapper";
+import AppHOCsWrapper from "./AppHOCsWrapper";
 
-// HOCs
-import { CheckUserLogged, GetFriendRealTimeInfo } from "./HOCs/index";
-// import { GetUserData } from './HOCs/index'
+// Routes HOCs
+import { GetFriendRealTimeInfo } from "./HOCs/index";
 
 const App = () => (
   <StylesProvider injectFirst>
-    <CheckUserLogged>
-      <AppContextsWrapper>
+    <AppContextsWrapper>
+      <AppHOCsWrapper>
         <Router>
           <Switch>
             <Route path="/" exact render={() => <Home title="Home" />} />
@@ -62,8 +62,8 @@ const App = () => (
             />
           </Switch>
         </Router>
-      </AppContextsWrapper>
-    </CheckUserLogged>
+      </AppHOCsWrapper>
+    </AppContextsWrapper>
   </StylesProvider>
 );
 

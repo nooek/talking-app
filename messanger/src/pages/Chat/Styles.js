@@ -77,21 +77,16 @@ export const MessageContainer = styled.div`
   text-align: left;
   background-color: ${(props) => (props.sender === true ? "rgb(123, 123, 240)" : "rgb(7, 194, 7)")};
   align-self: ${(props) => (props.sender === true ? "flex-end" : "flex-start")};
-  ${(props) =>
-    props.sender === true ? "border-top-left-radius: 25px" : "border-top-right-radius: 245px"};
-  ${(props) =>
-    props.sender === true
-      ? "border-bottom-left-radius: 25px"
-      : "border-bottom-right-radius: 245px"};
+  ${(props) => (props.sender === true ? "border-top-left-radius: 25px" : "border-top-right-radius: 245px")};
+  ${(props) => (props.sender === true
+    ? "border-bottom-left-radius: 25px"
+    : "border-bottom-right-radius: 245px")};
   border-bottom-left-radius: 25px;
   margin-bottom: ${(props) => (props.sender === true ? "10px" : "30px")};
   margin-top: ${(props) => (props.sender === true ? "10px" : "20px")};
-  border-right: ${(props) =>
-    props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)"};
-  border-top: ${(props) =>
-    props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)"};
-  border-bottom: ${(props) =>
-    props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)"};
+  border-right: ${(props) => (props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)")};
+  border-top: ${(props) => (props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)")};
+  border-bottom: ${(props) => (props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)")};
 `;
 
 export const Message = styled.h2`
