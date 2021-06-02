@@ -11,41 +11,33 @@ import {
 
 const Friends = (props) => {
   const { friend, setFriend } = useFriend();
+  const { contactList, onlineFriends } = props;
+  let { hide } = props;
   return (
-    <FriendsList hide={props.hide}>
-      {props.contactList.map((each, index) => {
+    <FriendsList hide={hide}>
+      {contactList.map((each) => {
         if (each.status !== "DENIED") {
           return (
             <FriendContainer
-              key={index}
+              key={each.friend_id}
               onClick={() => {
                 setFriend(each);
-                if (props.hide) {
-                  props.hide = !props.hide;
-                }
+                hide = !hide;
               }}
-              selected={friend.user_id === each.user_id ? true : false}
+              selected={friend.user_id === each.user_id}
             >
               {each.user_pfp ? <FriendPfp src={each.user_pfp} /> : null}
-              <div style={{width: "225px"}}>
+              <div style={{ width: "225px" }}>
                 <FriendName>{each.user_name}</FriendName>
               </div>
               <MessageDate>sad</MessageDate>
-              {each.user_id ? (
-                <OnlineBubble
-                  online={
-                    props.onlineFriends &&
-                    props.onlineFriends.includes(each.user_id.toString())
-                      ? true
-                      : false
-                  }
-                />
+              {each.user_id && onlineFriends ? (
+                <OnlineBubble online={!!onlineFriends.includes(each.user_id.toString())} />
               ) : null}
             </FriendContainer>
           );
-        } else {
-          return null;
         }
+        return null;
       })}
       ;
     </FriendsList>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
 import { BiArrowBack } from "react-icons/bi";
-import { IoIosAddCircle } from "react-icons/io"
+import { IoIosAddCircle } from "react-icons/io";
 
 export const Container = styled.div`
   width: 100%;
@@ -27,12 +27,12 @@ export const ChangePfpIcon = styled(IoIosAddCircle)`
   bottom: 25px;
   color: rgb(15, 199, 15);
   cursor: pointer;
-  @media(max-width: 300px){
+  @media (max-width: 300px) {
     width: 35px;
     height: 35px;
     bottom: 18px;
   }
-`
+`;
 
 export const Change = styled.button`
   width: 200px;
@@ -115,7 +115,7 @@ export const DeleteAccAlert = styled.div`
   position: absolute;
   top: 45%;
   text-align: center;
-`
+`;
 
 export const DeleteAccMessageContainer = styled.div`
   width: 100%;
@@ -124,13 +124,13 @@ export const DeleteAccMessageContainer = styled.div`
   flex-direction: column;
   margin-top: 0px;
   margin-bottom: 0px;
-`
+`;
 
 export const DeleteAccMessage = styled.h2`
   color: black;
   font-size: 24px;
   margin-top: 3px;
-`
+`;
 
 export const DeleteAccOptionsContainer = styled.div`
   width: 100%;
@@ -140,7 +140,7 @@ export const DeleteAccOptionsContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   margin-top: 0px;
-`
+`;
 
 export const DeleteAccOptions = styled.button`
   width: 200px;
@@ -149,7 +149,7 @@ export const DeleteAccOptions = styled.button`
   color: white;
   background: black;
   cursor: pointer;
-  :focus{
+  :focus {
     outline: none;
   }
-`
+`;

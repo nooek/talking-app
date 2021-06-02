@@ -4,21 +4,19 @@ import { useSocket } from "../store/socketProvider";
 const UpdateOnlineFriends = ({ children }) => {
   const { socket } = useSocket();
   const [friendsOnline, setFriendsOnline] = useState([]);
-  const _isMounted = useRef(true);
+  const isMounted = useRef(true);
 
   useEffect(() => {
-    if (_isMounted.current) {
+    if (isMounted.current) {
       socket.emit("get-users-online");
       socket.on("get-user-online", (data) => {
-        let onlineList = [];
-        data.map((each) => {
-          return onlineList.push(each.userId);
-        });
+        const onlineList = [];
+        data.map((each) => onlineList.push(each.userId));
         setFriendsOnline(onlineList);
       });
     }
     return () => {
-      _isMounted.current = false;
+      isMounted.current = false;
       socket.off("get-user-online");
     };
   }, [socket]);

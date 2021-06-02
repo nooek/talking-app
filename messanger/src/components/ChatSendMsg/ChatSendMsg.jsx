@@ -1,18 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {
-  MessageTypeContainer,
-  SendMessageButton,
-  MessageInput,
-  EmojiIcon,
-} from "./Styles";
+import { Picker } from "emoji-mart";
+import { MessageTypeContainer, SendMessageButton, MessageInput, EmojiIcon } from "./Styles";
 import { useFriend } from "../../store/friendProvider";
 import { useMessages } from "../../store/messagesProvider";
 import { useSocket } from "../../store/socketProvider";
 import { useUserData } from "../../store/userDataProvider";
 import getDate from "../../functions/formatDate";
 import "emoji-mart/css/emoji-mart.css";
-import { Picker } from "emoji-mart";
 import validateMessage from "../../validators/MessageValidator";
 
 const ChatSendMessage = () => {
@@ -23,6 +18,28 @@ const ChatSendMessage = () => {
   const { friend } = useFriend();
   const [showEmoji, setShowEmoji] = useState(false);
 
+  const sendMessageToDb = (messageData) => {
+    axios.post("http://localhost:3001/api/message", messageData);
+  };
+
+  const sendMessage = () => {
+    const today = getDate();
+    const isValid = validateMessage(message);
+    if (isValid) {
+      const messageData = {
+        author: userData.length ? userData[0].user_id : "",
+        receiver: friend.user_id,
+        message: message,
+        date: today.date,
+        time: today.time,
+      };
+      socket.emit("send-message", messageData);
+      setMessages([...messages, messageData]);
+      sendMessageToDb(messageData);
+      setMessage("");
+    }
+  };
+
   const checkIfEnterPressed = (e, chat) => {
     const code = e.which;
     if (code === 13) {
@@ -32,35 +49,6 @@ const ChatSendMessage = () => {
 
   const handleEmojiChange = (emoji) => {
     setMessage(message + emoji.native);
-  };
-
-  const sendMessage = () => {
-    const today = getDate();
-    const isValid = validateMessage(message);
-    console.log(isValid)
-    if (isValid) {
-      console.log(today)
-      const messageData = {
-        author: userData.length ? userData[0].user_id : "",
-        receiver: friend.user_id,
-        message: message,
-        date: today.date,
-        time: today.time,
-      };
-      socket.emit("send-message", messageData);
-      setMessages([ ...messages, messageData]);
-      console.log(messages);
-      sendMessageToDb(messageData);
-      setMessage("");
-    } else {
-      console.log("not valid");
-    }
-  };
-
-  const sendMessageToDb = (messageData) => {
-    axios.post(`http://localhost:3001/api/message`, messageData).then((res) => {
-      console.log(res);
-    });
   };
 
   return (
@@ -86,18 +74,14 @@ const ChatSendMessage = () => {
         minLength={1}
         maxLength={1000}
         placeholder={
-          friend.status === "BLOCKED"
-            ? "Desblock to send messages"
-            : "Type here your message"
+          friend.status === "BLOCKED" ? "Desblock to send messages" : "Type here your message"
         }
-        disabled={friend.status === "BLOCKED" ? true : false}
+        disabled={friend.status === "BLOCKED"}
         value={message}
         onKeyPress={(e) => checkIfEnterPressed(e, friend.user_id)}
         onChange={(e) => setMessage(e.target.value)}
       />
-      <SendMessageButton onClick={() => sendMessage(friend.user_id)}>
-        Send
-      </SendMessageButton>
+      <SendMessageButton onClick={() => sendMessage(friend.user_id)}>Send</SendMessageButton>
     </MessageTypeContainer>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { useUserData } from "../../../../store/userDataProvider";
 import {
   UserInfoContainer,
@@ -7,8 +8,7 @@ import {
   UserInfoFieldSubTitle,
   ChangeButton,
 } from "./Styles";
-import axios from "axios";
-import UserFieldInfo from "./UserInfoField/UserInfoField.jsx";
+import UserFieldInfo from "./UserInfoField/UserInfoField";
 import { getUserData } from "../../../../services/API/tasks/APItasks";
 import validateUsername from "../../../../validators/UsernameValidator";
 import validateDescription from "../../../../validators/DescriptionValidator";
@@ -19,13 +19,6 @@ const UserInfo = () => {
   const [fieldSelected, setFieldSelected] = useState([]);
   const [newName, setNewName] = useState(userData[0].user_name);
   const [newDescription, setNewDescription] = useState(userData[0].user_desc);
-
-  const checkIfEnterPressed = (e) => {
-    const code = e.which;
-    if (code === 13) {
-      saveUserInfo();
-    }
-  };
 
   const getUser = () => {
     getUserData(userData[0].user_id).then((res) => {
@@ -52,6 +45,13 @@ const UserInfo = () => {
             getUser();
           }
         });
+    }
+  };
+
+  const checkIfEnterPressed = (e) => {
+    const code = e.which;
+    if (code === 13) {
+      saveUserInfo();
     }
   };
 
@@ -91,9 +91,7 @@ const UserInfo = () => {
           save={() => saveUserInfo()}
           maxchars={60}
         />
-        <ChangeButton onClick={() => openField("description")}>
-          change
-        </ChangeButton>
+        <ChangeButton onClick={() => openField("description")}>change</ChangeButton>
       </UserInfoField>
       <UserInfoField>
         <UserInfoFieldSubTitle>Email</UserInfoFieldSubTitle>

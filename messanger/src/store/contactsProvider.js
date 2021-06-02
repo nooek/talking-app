@@ -1,19 +1,16 @@
-import React, { useContext, createContext, useState } from "react"
+import React, { useContext, createContext, useState } from "react";
 
-const contactsContext = createContext()
+const contactsContext = createContext();
 
-export const useContacts  = () => {
-    return useContext(contactsContext)
-}
+export const useContacts = () => useContext(contactsContext);
 
 const ContactsProvider = ({ children }) => {
-    const [contacts, setContacts] = useState([])
-    return(
-        <contactsContext.Provider
-        value={{contacts, setContacts}}>
-            {children}
-        </contactsContext.Provider>
-    )
-}
+  const [contacts, setContacts] = useState([]);
+  return (
+    <contactsContext.Provider value={{ contacts, setContacts }}>
+      {children}
+    </contactsContext.Provider>
+  );
+};
 
-export default ContactsProvider
+export default ContactsProvider;

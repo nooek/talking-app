@@ -9,27 +9,36 @@ const SortContacts = ({ children }) => {
   const { userData } = useUserData();
 
   const sortMessages = useCallback(() => {
-    let sortedMessagesIds = [];
+    const sortedMessagesIds = [];
     const sortedMessages = messages.slice().reverse();
     sortedMessages.forEach((message) => {
-      if (
-        !sortedMessagesIds.includes(message.author) &&
-        !sortedMessagesIds.includes(message.receiver)
-      ) {
-        if (message.author !== userData[0].user_id) {
-          sortedMessagesIds.push(message.author);
-        }
-        if (message.receiver !== userData[0].user_id) {
-          sortedMessagesIds.push(message.receiver);
-        }
+      if (message.author !== userData[0].user_id) {
+        sortedMessagesIds.push(message.author);
+      }
+      if (message.receiver !== userData[0].user_id) {
+        sortedMessagesIds.push(message.receiver);
       }
     });
-    return sortedMessagesIds;
+    return [...new Set(sortedMessagesIds)];
   }, [messages, userData]);
+
+  const getContactsWithNoMessage = useCallback(() => {
+    const contactsWithNoMessages = [];
+    const sortedMessagesIds = sortMessages();
+
+    contacts.map((each) => {
+      if (!sortedMessagesIds.includes(each.user_id) && each.status !== "DENIED") {
+        contactsWithNoMessages.push(each);
+      }
+      return 0;
+    });
+
+    return contactsWithNoMessages;
+  }, [contacts, sortMessages]);
 
   const sortContacts = useCallback(() => {
     const sortedMessagesIds = sortMessages();
-    let sortedContacts = [];
+    const sortedContacts = [];
 
     if (sortedMessagesIds.length > 0) {
       sortedMessagesIds.forEach((id) => {
@@ -44,93 +53,42 @@ const SortContacts = ({ children }) => {
 
       return sortedContacts;
     }
+    return null;
   }, [contacts, sortMessages]);
 
   const checkSorted = useCallback(() => {
     const sortedMessagesIds = sortMessages();
-      let contactsInOrder = [];
-      let contactsWithNoMessages = []
+    const contactsWithNoMessages = getContactsWithNoMessage();
+    const contactsInOrder = [];
 
-      contacts.map((each) => {
-        if (
-          !sortedMessagesIds.includes(each.user_id) &&
-          each.status !== "DENIED"
-        ) {
-          contactsWithNoMessages.push(each.user_id);
-        }
-        return 0;
-      });
-
-      contacts.map((contact) => {
-        if (!contactsWithNoMessages.includes(contact.user_id)){
-          return contactsInOrder.push(contact.user_id);
-        }
-      });
-
-      const contactsWithNoRep = [...new Set(contactsInOrder)];
-      
-      console.log(sortedMessagesIds)
-      console.log(contacts)
-      console.log(contactsWithNoRep)
-
-      if (
-        contactsWithNoRep.length === sortedMessagesIds.length &&
-        contactsWithNoRep.every((v, i) => v === sortedMessagesIds[i])
-      ) {
-        return true;
-      } else {
-        return false;
+    contacts.map((contact) => {
+      if (!contactsWithNoMessages.includes(contact.user_id)) {
+        return contactsInOrder.push(contact.user_id);
       }
-    
-  }, [sortMessages, contacts]);
-
-  useEffect(() => {
-    let isSorted = checkSorted();
-    const sortedMessagesIds = sortMessages();
-    const sortedContacts = sortContacts();
-
-    let contactsWithNoMessages = [];
-    // let match = 0;
-
-    contacts.map((each) => {
-      if (
-        !sortedMessagesIds.includes(each.user_id) &&
-        each.status !== "DENIED"
-      ) {
-        contactsWithNoMessages.push(each);
-      }
-      return 0;
+      return null;
     });
 
-    console.log(contactsWithNoMessages);
+    const contactsWithNoRep = [...new Set(contactsInOrder)];
+
+    if (contactsWithNoRep.length === sortedMessagesIds.length) {
+      if (contactsWithNoRep.every((v, i) => v === sortedMessagesIds[i])) {
+        return true;
+      }
+    }
+    return null;
+  }, [sortMessages, contacts, getContactsWithNoMessage]);
+
+  useEffect(() => {
+    const isSorted = checkSorted();
+    const sortedContacts = sortContacts();
+    const contactsWithNoMessages = getContactsWithNoMessage();
 
     if (!isSorted && sortedContacts) {
       setContacts([...sortedContacts, ...contactsWithNoMessages]);
-      console.log("Is Not Sorted!!!");
+      console.log("not sorted");
     } else {
-      console.log("Is Sorted!!!");
+      console.log("sorted");
     }
-
-    console.log("a")
-
-    // for (let i = 0; i < sortedMessagesIds.length; i++) {
-    //   if (sortedContacts[i].user_id === sortedMessagesIds[i]) {
-    //     match++;
-    //   }
-
-    //   if (sortedContacts[i].friend_with === sortedMessagesIds[i]) {
-    //     match++;
-    //   }
-    // }
-
-    // console.log(contacts)
-    // console.log(match)
-    // console.log(sortedContacts)
-    // console.log(sortedMessagesIds)
-    // console.log(contactsWithNoMessages)
-
-    // if (match !== sortedMessagesIds.length) {
-    // }
   }, [
     messages,
     userData,
@@ -139,6 +97,7 @@ const SortContacts = ({ children }) => {
     sortMessages,
     sortContacts,
     checkSorted,
+    getContactsWithNoMessage,
   ]);
 
   return [children];

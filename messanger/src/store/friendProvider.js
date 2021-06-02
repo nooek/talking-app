@@ -1,19 +1,12 @@
-import React, { useState, createContext, useContext } from "react"
+import React, { useState, createContext, useContext } from "react";
 
-const friendContext = createContext()
+const friendContext = createContext();
 
-export const useFriend = () => {
-    return useContext(friendContext)
-}
+export const useFriend = () => useContext(friendContext);
 
 const FriendProvider = ({ children }) => {
-    const [friend, setFriend] = useState([])
-    return(
-        <friendContext.Provider
-        value={{friend, setFriend}}>
-            {children}
-        </friendContext.Provider>
-    )
-}
+  const [friend, setFriend] = useState([]);
+  return <friendContext.Provider value={{ friend, setFriend }}>{children}</friendContext.Provider>;
+};
 
-export default FriendProvider
+export default FriendProvider;

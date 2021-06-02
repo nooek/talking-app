@@ -54,7 +54,7 @@ export const AddFriendIcon = styled(MdGroupAdd)`
   width: 35px;
   height: 35px;
   color: black;
-  margin-right: 10px;  
+  margin-right: 10px;
   cursor: pointer;
 `;
 
@@ -116,9 +116,9 @@ export const FriendContainer = styled.div`
   border-bottom: 2px solid black;
   margin-top: 10px;
   position: relative;
-  background: ${props => props.selected === true ? "rgb(197, 197, 197)" : "none"};
-  :hover{
-	  background: rgb(150, 150, 150);
+  background: ${(props) => (props.selected === true ? "rgb(197, 197, 197)" : "none")};
+  :hover {
+    background: rgb(150, 150, 150);
   }
 `;
 
@@ -140,22 +140,22 @@ export const OnlineBubble = styled.div`
   width: 18px;
   height: 18px;
   border: 2px solid black;
-  background: ${props => props.online === true ? "rgb(3, 207, 3)" : "rgba(87, 87, 87, 0.829)"};
+  background: ${(props) => (props.online === true ? "rgb(3, 207, 3)" : "rgba(87, 87, 87, 0.829)")};
   position: absolute;
   border-radius: 50%;
   bottom: 5px;
   right: 10px;
-`
+`;
 
 export const MessageDate = styled.h4`
   position: absolute;
   top: 2px;
   margin-top: 0;
   right: 7px;
-`
+`;
 
 export const LastContactMessage = styled.h3`
-  position: relative;  
+  position: relative;
   top: 30%;
   font-size: 16px;
-`
+`;

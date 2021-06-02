@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const FriendsList = styled.div`
   width: 100%;
@@ -31,9 +31,9 @@ export const FriendContainer = styled.div`
   flex-direction: row;
   margin-bottom: 10px;
   position: relative;
-  background: ${props => props.selected === true ? "rgb(197, 197, 197)" : "none"};
-  :hover{
-	  background: rgb(197, 197, 197);
+  background: ${(props) => (props.selected === true ? "rgb(197, 197, 197)" : "none")};
+  :hover {
+    background: rgb(197, 197, 197);
   }
 `;
 
@@ -43,7 +43,7 @@ export const FriendPfp = styled.img`
   margin-left: 10px;
   border: 1px solid black;
   border-radius: 50%;
-`
+`;
 
 export const FriendName = styled.h2`
   color: black;
@@ -52,22 +52,22 @@ export const FriendName = styled.h2`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-`
+`;
 
 export const MessageDate = styled.h4`
   position: absolute;
   top: 2px;
   margin-top: 0;
   right: 7px;
-`
+`;
 
 export const OnlineBubble = styled.div`
   width: 18px;
   height: 18px;
   border: 2px solid black;
-  background: ${props => props.online === true ? "rgb(3, 207, 3)" : "rgba(87, 87, 87, 0.829)"};
+  background: ${(props) => (props.online === true ? "rgb(3, 207, 3)" : "rgba(87, 87, 87, 0.829)")};
   position: absolute;
   border-radius: 50%;
   bottom: 5px;
   right: 10px;
-`
+`;

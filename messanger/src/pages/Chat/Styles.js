@@ -5,7 +5,7 @@ export const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: row;
-  @media(max-width: 700px){
+  @media (max-width: 700px) {
     flex-direction: column;
   }
 `;
@@ -17,7 +17,7 @@ export const ChatSide = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  @media(max-width: 700px){
+  @media (max-width: 700px) {
     width: 100%;
     height: 100%;
   }
@@ -30,7 +30,7 @@ export const MessagesContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   overflow-x: auto;
-  z-index: 2; 
+  z-index: 2;
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
@@ -46,7 +46,7 @@ export const MessagesContainer = styled.div`
   :first-child {
     margin-top: 20px;
   }
-  @media(max-width: 700px){
+  @media (max-width: 700px) {
     height: 100%;
   }
 `;
@@ -62,7 +62,7 @@ export const GoToLastMessageButton = styled.button`
   border: 2px solid white;
   z-index: 15;
   cursor: pointer;
-`
+`;
 
 export const MessageContainer = styled.div`
   width: auto;
@@ -75,13 +75,10 @@ export const MessageContainer = styled.div`
   position: relative;
   word-break: break-word;
   text-align: left;
-  background-color: ${(props) =>
-    props.sender === true ? "rgb(123, 123, 240)" : "rgb(7, 194, 7)"};
+  background-color: ${(props) => (props.sender === true ? "rgb(123, 123, 240)" : "rgb(7, 194, 7)")};
   align-self: ${(props) => (props.sender === true ? "flex-end" : "flex-start")};
   ${(props) =>
-    props.sender === true
-      ? "border-top-left-radius: 25px"
-      : "border-top-right-radius: 245px"};
+    props.sender === true ? "border-top-left-radius: 25px" : "border-top-right-radius: 245px"};
   ${(props) =>
     props.sender === true
       ? "border-bottom-left-radius: 25px"
@@ -90,17 +87,11 @@ export const MessageContainer = styled.div`
   margin-bottom: ${(props) => (props.sender === true ? "10px" : "30px")};
   margin-top: ${(props) => (props.sender === true ? "10px" : "20px")};
   border-right: ${(props) =>
-    props.sender === true
-      ? "2px solid rgb(68, 68, 241)"
-      : "2px solid rgb(15, 124, 15)"};
+    props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)"};
   border-top: ${(props) =>
-    props.sender === true
-      ? "2px solid rgb(68, 68, 241)"
-      : "2px solid rgb(15, 124, 15)"};
+    props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)"};
   border-bottom: ${(props) =>
-    props.sender === true
-      ? "2px solid rgb(68, 68, 241)"
-      : "2px solid rgb(15, 124, 15)"};
+    props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)"};
 `;
 
 export const Message = styled.h2`
@@ -115,4 +106,4 @@ export const MessageTime = styled.h2`
   position: absolute;
   bottom: 0;
   right: 0;
-`
+`;

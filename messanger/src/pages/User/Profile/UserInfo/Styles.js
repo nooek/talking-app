@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { VscSaveAs } from "react-icons/vsc"
+import { VscSaveAs } from "react-icons/vsc";
 
 export const UserInfoContainer = styled.div`
   width: 100%;
@@ -48,7 +48,7 @@ export const UserFieldChangeInfoContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-` 
+`;
 
 export const UserFieldChangeInfo = styled.input`
   width: 200px;
@@ -57,10 +57,10 @@ export const UserFieldChangeInfo = styled.input`
   margin-bottom: 20px;
   border-radius: 5px;
   margin-top: 20px;
-  :focus{
+  :focus {
     outline: none;
   }
-`
+`;
 
 export const ChangeButton = styled.button`
   width: 200px;
@@ -70,20 +70,20 @@ export const ChangeButton = styled.button`
   border: 2px solid white;
   color: white;
   margin-bottom: 10px;
-  :hover{
+  :hover {
     background: black;
   }
-  :focus{
+  :focus {
     outline: none;
   }
-  @media(max-width: 300px){
+  @media (max-width: 300px) {
     width: 100%;
   }
-`
+`;
 
 export const Save = styled(VscSaveAs)`
   width: 35px;
   height: 33px;
   color: green;
   margin-left: 10px;
-`
+`;

@@ -1,5 +1,4 @@
-import { useRef } from "react";
-import { useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useMessages } from "../store/messagesProvider";
 import { useContacts } from "../store/contactsProvider";
 import { useUserData } from "../store/userDataProvider";
@@ -9,20 +8,15 @@ const UpdateStrangers = ({ children }) => {
   const { messages } = useMessages();
   const { contacts, setContacts } = useContacts();
   const { userData } = useUserData();
-  const _isMounted = useRef(true);
+  const isMounted = useRef(true);
 
   useEffect(() => {
-    if (_isMounted.current) {
-      let inContacts = [];
-      contacts.map((each) => {
-        return inContacts.push(each.user_id);
-      });
-      let strangersMessageToSee = [];
+    if (isMounted.current) {
+      const inContacts = [];
+      contacts.map((each) => inContacts.push(each.user_id));
+      const strangersMessageToSee = [];
       messages.map((each) => {
-        if (
-          each.author !== userData[0].user_id &&
-          !inContacts.includes(each.author)
-        ) {
+        if (each.author !== userData[0].user_id && !inContacts.includes(each.author)) {
           inContacts.push(each.author);
           return strangersMessageToSee.push({
             user_pfp: defaultPfp,
@@ -38,9 +32,8 @@ const UpdateStrangers = ({ children }) => {
         setContacts([...contacts, ...strangersMessageToSee]);
       }
     }
-    
     return () => {
-      _isMounted.current = false;
+      isMounted.current = false;
     };
   }, [messages, userData, setContacts, contacts]);
 

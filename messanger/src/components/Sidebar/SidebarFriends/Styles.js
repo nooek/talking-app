@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const FriendsContainer = styled.div`
   flex: 1;
@@ -31,10 +31,10 @@ export const FriendContainer = styled.div`
   margin-top: 10px;
   position: relative;
   cursor: pointer;
-  background: ${props => props.selected === true ? "rgb(197, 197, 197)" : "none"};
+  background: ${(props) => (props.selected === true ? "rgb(197, 197, 197)" : "none")};
   overflow: hidden;
-  :hover{
-	  background: rgb(150, 150, 150);
+  :hover {
+    background: rgb(150, 150, 150);
   }
 `;
 
@@ -59,15 +59,15 @@ export const OnlineBubble = styled.div`
   width: 18px;
   height: 18px;
   border: 2px solid black;
-  background: ${props => props.online === true ? "rgb(3, 207, 3)" : "rgba(87, 87, 87, 0.829)"};
+  background: ${(props) => (props.online === true ? "rgb(3, 207, 3)" : "rgba(87, 87, 87, 0.829)")};
   position: absolute;
   border-radius: 50%;
   bottom: 5px;
   right: 10px;
-`
+`;
 
 export const LastContactMessage = styled.h3`
-  position: relative;  
+  position: relative;
   top: 30%;
   font-size: 16px;
-`
+`;

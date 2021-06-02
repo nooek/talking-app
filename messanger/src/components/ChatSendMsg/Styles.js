@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GrEmoji } from "react-icons/gr"
+import { GrEmoji } from "react-icons/gr";
 
 export const MessageTypeContainer = styled.div`
   width: 100%;
@@ -25,10 +25,10 @@ export const SendMessageButton = styled.button`
   font-size: 15px;
   right: 0;
   cursor: pointer;
-  :hover{
-    background: rgb(120, 120, 120)
+  :hover {
+    background: rgb(120, 120, 120);
   }
-  @media(max-width: 400px){
+  @media (max-width: 400px) {
     width: 30%;
   }
 `;
@@ -49,4 +49,4 @@ export const EmojiIcon = styled(GrEmoji)`
   width: 40px;
   height: 40px;
   cursor: pointer;
-`
+`;

@@ -1,27 +1,28 @@
 import React from "react";
-import { 
+import {
   UserInfoFieldInfo,
-  UserFieldChangeInfo, 
-  UserFieldChangeInfoContainer, 
-  Save
+  UserFieldChangeInfo,
+  UserFieldChangeInfoContainer,
+  Save,
 } from "../Styles";
 
 const UserFieldInfo = (props) => {
-  if (props.showField === true && props.fieldselected === props.id) {
+  const { showField, fieldselected, save, change, subtitle, keypress, content, maxchars, id } =
+    props;
+  if (showField === true && fieldselected === id) {
     return (
       <UserFieldChangeInfoContainer>
         <UserFieldChangeInfo
-          placeholder={"New " + props.subtitle}
-          onChange={props.change}
-          onKeyPress={props.keypress}
-          maxLength={props.maxchars}
+          placeholder={`New ${subtitle}`}
+          onChange={change}
+          onKeyPress={keypress}
+          maxLength={maxchars}
         />
-        <Save onClick={props.save} />
+        <Save onClick={save} />
       </UserFieldChangeInfoContainer>
     );
-  } else {
-    return <UserInfoFieldInfo>{props.content}</UserInfoFieldInfo>;
   }
+  return <UserInfoFieldInfo>{content}</UserInfoFieldInfo>;
 };
 
 export default UserFieldInfo;

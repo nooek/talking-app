@@ -1,3 +1,4 @@
+// eslint-disable-next-line object-curly-newline
 import React, { createContext, useContext, useEffect, useState } from "react";
 import io from "socket.io-client";
 
@@ -11,7 +12,7 @@ export function SocketProvider({ children }) {
   const [socket, setSocket] = useState();
 
   useEffect(() => {
-    const id = localStorage.getItem('id')
+    const id = localStorage.getItem("id");
     const newSocket = io("http://localhost:3001/", {
       transports: ["websocket"],
       query: `userid=${id}`,
@@ -20,7 +21,5 @@ export function SocketProvider({ children }) {
     return () => newSocket.close();
   }, []);
 
-  return (
-    <SocketContext.Provider value={{socket, setSocket}}>{children}</SocketContext.Provider>
-  );
+  return <SocketContext.Provider value={{ socket, setSocket }}>{children}</SocketContext.Provider>;
 }

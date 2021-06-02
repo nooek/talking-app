@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import {
   SideBar,
   SideTopbar,
@@ -10,19 +11,19 @@ import {
   MoreIcons,
   SearchFriends,
 } from "./Styles";
-import Dropdown from "./Dropdown/Dropdown.jsx";
+import Dropdown from "./Dropdown/Dropdown";
 import { useUserData } from "../../store/userDataProvider";
 import { useContacts } from "../../store/contactsProvider";
-import { Link } from "react-router-dom";
 import { getFriendsData } from "../../services/API/tasks/APItasks";
-import { searchFriend } from "../../services/API/tasks/FriendsTasks";
-import Friends from "./SidebarFriends/Friends.jsx";
+import searchFriend from "../../services/API/tasks/FriendsTasks";
+import Friends from "./SidebarFriends/Friends";
 
 const Sidebar = (props) => {
   const { userData } = useUserData();
   const [showDropdown, setShowDropdown] = useState(false);
   const [friendSearchName, setFriendSearchName] = useState("");
   const { contacts, setContacts } = useContacts();
+  const { onlineFriend } = props;
   const [contactsList, setContactsList] = useState([]);
 
   const updateFriends = useCallback(async () => {
@@ -82,10 +83,7 @@ const Sidebar = (props) => {
         />
       </SearchBarContainer>
       <FriendsContainer>
-        <Friends
-          onlineFriends={props.onlineFriend}
-          contactList={contactsList}
-        />
+        <Friends onlineFriends={onlineFriend} contactList={contactsList} />
       </FriendsContainer>
     </SideBar>
   );

@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
-import { MdGroupAdd } from "react-icons/md"
-import { FiMoreVertical } from "react-icons/fi"
+import { MdGroupAdd } from "react-icons/md";
+import { FiMoreVertical } from "react-icons/fi";
 
 const openingAnimation = keyframes`
     from {height: 0px}
@@ -17,7 +17,7 @@ export const Container = styled.div`
     animation-name: ${(props) => (props.hide === true ? "" : openingAnimation)};
     animation-duration: 800ms;
     background: rgb(230, 230, 230);
-    position: ${props => props.hide && props.chat === true ? "" : "absolute"};
+    position: ${(props) => (props.hide && props.chat === true ? "" : "absolute")};
     z-index: 15;
     top: 0;
   }
@@ -83,7 +83,7 @@ export const UserPfp = styled.img`
   border-radius: 50%;
   border: 1px solid black;
   cursor: pointer;
-`
+`;
 
 export const UserName = styled.h2`
   color: black;
@@ -92,17 +92,17 @@ export const UserName = styled.h2`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-`
+`;
 
 export const AddFriendIcon = styled(MdGroupAdd)`
-    width: 35px;
-    height: 35px;
-    color: black;
-    margin-right: 10px;
-`
+  width: 35px;
+  height: 35px;
+  color: black;
+  margin-right: 10px;
+`;
 
 export const MoreIcons = styled(FiMoreVertical)`
-    width: 30px;
-    height: 30px;
-    color: black;
-`
+  width: 30px;
+  height: 30px;
+  color: black;
+`;

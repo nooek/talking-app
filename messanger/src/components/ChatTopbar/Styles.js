@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { FiMoreVertical } from "react-icons/fi";
-import { GoSearch } from "react-icons/go"
+import { GoSearch } from "react-icons/go";
 
 export const ChatTopBar = styled.div`
   width: 100%;
@@ -9,7 +9,7 @@ export const ChatTopBar = styled.div`
   flex-direction: row;
   justify-content: space-between;
   background-color: rgb(167, 167, 167);
-  @media(max-width: 700px){
+  @media (max-width: 700px) {
     margin-bottom: auto;
     position: relative;
   }
@@ -31,7 +31,7 @@ export const TopbarMoreActionsContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  @media(max-width: 700px){
+  @media (max-width: 700px) {
     width: 30%;
   }
 `;
@@ -65,4 +65,4 @@ export const SearchIcon = styled(GoSearch)`
   color: black;
   margin-right: 20px;
   cursor: pointer;
-`
+`;

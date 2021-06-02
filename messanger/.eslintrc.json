@@ -1,0 +1,16 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "quotes": ["error", "double"],
+    "linebreak-style": "off",
+    "react/prop-types": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "import/extensions": "off",
+    "no-param-reassign": "off",
+    "object-shorthand": ["error", "consistent"],
+    "object-curly-newline": "off"
+  }
+}

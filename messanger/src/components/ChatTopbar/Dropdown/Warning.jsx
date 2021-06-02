@@ -7,12 +7,13 @@ import {
 } from "./Styles";
 
 const Warning = (props) => {
+  const { msg, action, toggle } = props;
   return (
     <WarningContainer>
-      <WarningMessage>{props.msg}</WarningMessage>
+      <WarningMessage>{msg}</WarningMessage>
       <OptionsContainer>
-        <Options onClick={props.action}>Yes</Options>
-        <Options onClick={props.toggle}>No</Options>
+        <Options onClick={action}>Yes</Options>
+        <Options onClick={toggle}>No</Options>
       </OptionsContainer>
     </WarningContainer>
   );

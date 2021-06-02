@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Container,
   Header,
@@ -8,10 +9,10 @@ import {
   ButtonsContainer,
   MainButtons,
 } from "./Styles";
-import { Link } from "react-router-dom";
 
 const Home = (props) => {
-  document.title = props.title;
+  const { title } = props;
+  document.title = title;
   return (
     <Container>
       <Header>
@@ -20,12 +21,12 @@ const Home = (props) => {
       <MainContainer>
         <MainText>Create an account or Log in to continue</MainText>
         <ButtonsContainer>
-          <Link to="/register" style={{width: "100%", textDecoration: "none"}}>
+          <Link to="/register" style={{ width: "100%", textDecoration: "none" }}>
             <MainButtons variant="contained" color="primary">
               Register
             </MainButtons>
           </Link>
-          <Link to="/login" style={{width: "100%", textDecoration: "none"}}>
+          <Link to="/login" style={{ width: "100%", textDecoration: "none" }}>
             <MainButtons variant="contained" color="primary">
               Login
             </MainButtons>

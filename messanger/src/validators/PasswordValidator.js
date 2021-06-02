@@ -5,7 +5,7 @@ const validatePassword = (password) => {
     }
 
     if (password.length >= 50) {
-      return { message: "Your password must have less than 51 characters "};
+      return { message: "Your password must have less than 51 characters " };
     }
 
     const hasNumber = /\d/;
@@ -21,9 +21,8 @@ const validatePassword = (password) => {
     }
 
     return true;
-  } else {
-    return { message: "You must provide a password " };
   }
+  return { message: "You must provide a password " };
 };
 
 export default validatePassword;

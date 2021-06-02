@@ -1,4 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from "react";
+import { Link, Redirect } from "react-router-dom";
+import axios from "axios";
 import {
   Container,
   NameAndPfpContainer,
@@ -13,30 +16,29 @@ import {
   DeleteAccMessage,
   DeleteAccMessageContainer,
   DeleteAccOptionsContainer,
-  DeleteAccOptions
+  DeleteAccOptions,
 } from "./Styles";
 import { useUserData } from "../../../store/userDataProvider";
 import { useSocket } from "../../../store/socketProvider";
-import { Link, Redirect } from "react-router-dom";
-import axios from "axios";
-import UserInfo from "./UserInfo/UserInfo.jsx";
-import { getUserData } from "../../../services/API/tasks/APItasks"
+import UserInfo from "./UserInfo/UserInfo";
+import { getUserData } from "../../../services/API/tasks/APItasks";
 
 const Profile = (props) => {
-  document.title = props.title;
+  const { title } = props;
+  document.title = title;
   const { userData, setUserData } = useUserData();
   const [goToLoginPage, setGoToLogin] = useState();
   const { socket } = useSocket();
   const [profilePic, setProfilePic] = useState(userData[0].user_pfp);
-  const [pfpPreview, setPfpPreview] = useState("")
+  const [pfpPreview, setPfpPreview] = useState("");
   const [imageFile, setImageFile] = useState([]);
   const [uploadLoading, setUploadLoading] = useState(false);
-  const [deleteAccAlert, setDeleteAccAlert] = useState(false) 
+  const [deleteAccAlert, setDeleteAccAlert] = useState(false);
 
   const logOut = () => {
     localStorage.removeItem("id");
     setGoToLogin(true);
-    socket.disconnect()
+    socket.disconnect();
   };
 
   const deleteAccount = async () => {
@@ -44,29 +46,15 @@ const Profile = (props) => {
       data: {
         id: userData[0].user_id,
       },
-    })
+    });
     localStorage.removeItem("id");
     setGoToLogin(true);
   };
 
-  const uploadProfilePicToCloud = async () => {
-    const data = new FormData();
-    data.append("file", imageFile);
-    data.append("upload_preset", "User Profile Pic");
-    setUploadLoading(true);
-
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/dl6nr4es9/image/upload",
-      {
-        method: "POST",
-        body: data,
-      }
-    );
-    const file = await res.json();
-
-    await setProfilePic(file.secure_url);
-    setUploadLoading(false);
-    await uploadProfilePicToDb(file.secure_url)
+  const updateUser = async () => {
+    const response = await getUserData(userData[0].user_id);
+    if (response) setUserData(response.data);
+    console.log(response);
   };
 
   const uploadProfilePicToDb = async (url) => {
@@ -76,21 +64,36 @@ const Profile = (props) => {
         desc: userData[0].user_desc,
         pfp: url,
         onlineStatus: userData[0].online_status,
-        id: userData[0].user_id
+        id: userData[0].user_id,
       })
       .then((res) => {
         console.log(res);
-        if (!res.data.error){
-          updateUser()
+        if (!res.data.error) {
+          updateUser();
         }
       });
   };
 
-  const updateUser = async () => {
-    const response = await getUserData(userData[0].user_id)
-    if (response) setUserData(response.data)
-    console.log(response)
-  }
+  const uploadProfilePicToCloud = async () => {
+    console.log("dasda");
+    const data = new FormData();
+    data.append("file", imageFile);
+    data.append("upload_preset", "User Profile Pic");
+    setUploadLoading(true);
+
+    const res = await fetch("https://api.cloudinary.com/v1_1/dl6nr4es9/image/upload", {
+      method: "POST",
+      body: data,
+    });
+    const file = await res.json();
+
+    await setProfilePic(file.secure_url);
+    setUploadLoading(false);
+    console.log(file.secure_url);
+    await uploadProfilePicToDb(file.secure_url);
+  };
+
+  console.log(uploadLoading);
 
   return (
     <Container>
@@ -102,7 +105,7 @@ const Profile = (props) => {
         <UserPfp src={pfpPreview ? URL.createObjectURL(imageFile) : profilePic} />
         {uploadLoading === false ? (
           <div>
-            <label htmlFor="file-input">
+            <label htmlFor="file-input" label="photo-input">
               <ChangePfpIcon />
             </label>
             <input
@@ -111,21 +114,16 @@ const Profile = (props) => {
               id="file-input"
               accept="image/*"
               onChange={(e) => {
-                setImageFile(e.target.files[0])
-                setPfpPreview(e.target.files[0])
+                setImageFile(e.target.files[0]);
+                setPfpPreview(e.target.files[0]);
               }}
-              style={{display: "none"}}
+              style={{ display: "none" }}
             />
-            
           </div>
         ) : (
           <p style={{ color: "white" }}>Loading...</p>
         )}
-        <Change
-          disabled={uploadLoading === false ? false : true}
-          type="submit"
-          onClick={() => uploadProfilePicToCloud()}
-        >
+        <Change disabled={uploadLoading} type="submit" onClick={() => uploadProfilePicToCloud()}>
           Update pfp
         </Change>
       </NameAndPfpContainer>
@@ -134,27 +132,21 @@ const Profile = (props) => {
         <Buttons onClick={() => logOut()} color="primary" variant="contained">
           Log out
         </Buttons>
-        <Buttons
-          onClick={() => setDeleteAccAlert(true)}
-          color="secondary"
-          variant="contained"
-        >
+        <Buttons onClick={() => setDeleteAccAlert(true)} color="secondary" variant="contained">
           Delete Account
         </Buttons>
-        {
-          deleteAccAlert ?
-            <DeleteAccAlert>
-              <DeleteAccMessageContainer>
-                <DeleteAccMessage>You sure?</DeleteAccMessage>
-                <DeleteAccMessage>You will lose your account and all your contacts</DeleteAccMessage>
-              </DeleteAccMessageContainer>
-              <DeleteAccOptionsContainer>
-                <DeleteAccOptions onClick={() => deleteAccount()}>Yes</DeleteAccOptions>
-                <DeleteAccOptions onClick={() => setDeleteAccAlert(false)}>No</DeleteAccOptions>
-              </DeleteAccOptionsContainer>
-            </DeleteAccAlert>
-          : null
-        }
+        {deleteAccAlert ? (
+          <DeleteAccAlert>
+            <DeleteAccMessageContainer>
+              <DeleteAccMessage>You sure?</DeleteAccMessage>
+              <DeleteAccMessage>You will lose your account and all your contacts</DeleteAccMessage>
+            </DeleteAccMessageContainer>
+            <DeleteAccOptionsContainer>
+              <DeleteAccOptions onClick={() => deleteAccount()}>Yes</DeleteAccOptions>
+              <DeleteAccOptions onClick={() => setDeleteAccAlert(false)}>No</DeleteAccOptions>
+            </DeleteAccOptionsContainer>
+          </DeleteAccAlert>
+        ) : null}
       </ButtonsContainer>
       {goToLoginPage ? <Redirect to="/login" /> : null}
     </Container>

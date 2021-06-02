@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Container,
   Card,
@@ -7,11 +8,10 @@ import {
   Fields,
   SubmitButton,
 } from "../../styles/RegisterAndLoginForm/Styles";
-import axios from "axios";
 import defaultPfp from "../../assets/images/default_pfp.png";
 import validatePassword from "../../validators/PasswordValidator";
 import validateEmail from "../../validators/EmailValidator";
-import validateUsername from '../../validators/UsernameValidator'
+import validateUsername from "../../validators/UsernameValidator";
 
 const Login = (props) => {
   const [name, setName] = useState("");
@@ -19,7 +19,8 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [blockButton, setBlockButton] = useState(true);
-  document.title = props.title;
+  const { title } = props;
+  document.title = title;
 
   useEffect(() => {
     const params = [name, email, password];
@@ -33,9 +34,9 @@ const Login = (props) => {
 
   const register = () => {
     const validPassword = validatePassword(password);
-    const validEmail = validateEmail(email)
-    const validUsername =  validateUsername(name)
-    const isValid = validUsername && validEmail && validPassword
+    const validEmail = validateEmail(email);
+    const validUsername = validateUsername(name);
+    const isValid = validUsername && validEmail && validPassword;
     if (isValid) {
       axios
         .post("http://localhost:3001/api/user/register", {
@@ -49,9 +50,9 @@ const Login = (props) => {
           setMessage(res.data.message);
         });
     } else {
-      if (validUsername.message) setMessage(validUsername.message)
-      if (validEmail.message) setMessage(validEmail.message)
-      if (validPassword.message) setMessage(validPassword.message)
+      if (validUsername.message) setMessage(validUsername.message);
+      if (validEmail.message) setMessage(validEmail.message);
+      if (validPassword.message) setMessage(validPassword.message);
     }
   };
 
@@ -60,20 +61,9 @@ const Login = (props) => {
       <Card>
         <Text>Register</Text>
         <FieldsWrapper>
-          <Fields
-            placeholder="Name"
-            onChange={(e) => setName(e.target.value)}
-            maxLength={30}
-          />
-          <Fields
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-            maxLength={120}
-          />
-          <Fields
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <Fields placeholder="Name" onChange={(e) => setName(e.target.value)} maxLength={30} />
+          <Fields placeholder="Email" onChange={(e) => setEmail(e.target.value)} maxLength={120} />
+          <Fields placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
         </FieldsWrapper>
         <SubmitButton disabled={blockButton} onClick={() => register()}>
           Register

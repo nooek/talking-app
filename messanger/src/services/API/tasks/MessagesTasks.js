@@ -1,21 +1,18 @@
-import axios from "axios"
+import axios from "axios";
 
 const API_ADDRESS = "http://localhost:3001/api/message";
 
 export const findMessage = async (userId, searchKey, friendId) => {
-    const res = await axios
-    .get(`${API_ADDRESS}/find/${userId}/${searchKey}/${friendId}`)
+  const res = await axios.get(`${API_ADDRESS}/find/${userId}/${searchKey}/${friendId}`);
 
-    if (res.data.error){
-        console.error(res.data.error)
-    }
+  if (res.data.error) {
+    console.error(res.data.error);
+  }
 
-    if (res.data){
-       return res
-    }
-    return console.error("Something went wrong")    
-}
+  if (res.data) {
+    return res;
+  }
+  return console.error("Something went wrong");
+};
 
-export const getChatMessagesData = () => {
-
-}
+export const getChatMessagesData = () => {};

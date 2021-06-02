@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFriend } from "../../store/friendProvider";
-import Dropdown from "./Dropdown/Dropdown.jsx";
+import Dropdown from "./Dropdown/Dropdown";
 import {
   ChatTopBar,
   TopbarUserInfoContainer,
@@ -13,6 +13,7 @@ import {
 
 const ChatTopbar = (props) => {
   const { friend } = useFriend();
+  const { clickSearch } = props;
   const [showDropdown, setShowDropdown] = useState(false);
   return (
     <ChatTopBar>
@@ -21,7 +22,7 @@ const ChatTopbar = (props) => {
         <FriendName>{friend.user_name}</FriendName>
       </TopbarUserInfoContainer>
       <TopbarMoreActionsContainer>
-        <SearchIcon onClick={props.clickSearch} />
+        <SearchIcon onClick={clickSearch} />
         <DropdownOpen onClick={() => setShowDropdown(!showDropdown)} />
         {showDropdown === true ? <Dropdown /> : null}
       </TopbarMoreActionsContainer>
