@@ -1,15 +1,10 @@
 import React from "react";
-import {
-  CheckUserLogged,
-  GetUserData,
-} from "./HOCs/index";
+import { GetUserData } from "./HOCs/index";
 
 const AppHOCsWrapper = ({ children }) => (
-  <CheckUserLogged>
-    <GetUserData>
-      { children }
-    </GetUserData>
-  </CheckUserLogged>
+  <GetUserData>
+    {children}
+  </GetUserData>
 );
 
 export default AppHOCsWrapper;

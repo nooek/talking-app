@@ -77,7 +77,21 @@ module.exports = {
 
   getUser: (req, res) => {
     if (req.user){
-      res.status(200).json({ data: req.user })
+      console.log(req.user)
+      // res.status(200).json({ data: req.user })
+      const query = `SELECT * FROM user WHERE user_id = ${req.user.user[0].user_id}`
+      con.query(query, (error, results) => {
+        if (error) {
+          res.status(400).json({ error: error })
+        }
+        if (results) {
+          if (results.length > 0) {
+            res.status(200).json({ user: results })
+          } else {
+            res.status(200).json({message: "User not found" })
+          }
+        }
+      })
     } else {
       res.status(400).json({ message: "Something went wrong" })
     }

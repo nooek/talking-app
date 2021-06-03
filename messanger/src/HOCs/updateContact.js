@@ -17,6 +17,7 @@ const UpdateContact = ({ children }) => {
           const friendFiltered = contacts.filter((each) => each.user_id === data[0]);
 
           const newStatus = data[1];
+          const newUserInfo = data[2];
           if (data[1] === "ACCEPTED" && friend[0].status !== "BLOCKED") {
             friendFiltered[0].status = newStatus;
             if (friend.user_id === friend[0].user_id) {
@@ -28,6 +29,16 @@ const UpdateContact = ({ children }) => {
             friendFiltered[0].status = newStatus;
             setFriend(...friend);
             setContacts(...friends, ...friendFiltered);
+          }
+
+          if (data[1] === "PFP_C") {
+            friendFiltered[0].user_pfp = newUserInfo;
+            setContacts(...friends, friendFiltered);
+          }
+
+          if (data[1] === "NAME_C") {
+            friendFiltered[0].user_name = newUserInfo;
+            setContacts(...friends, friendFiltered);
           }
         }
       });

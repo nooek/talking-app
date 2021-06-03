@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 import io from "socket.io-client";
@@ -23,6 +23,16 @@ const Login = (props) => {
   const { title } = props;
   document.title = title;
 
+  useEffect(() => {
+    const reloadCount = sessionStorage.getItem("reloadCount");
+    if (reloadCount < 1) {
+      sessionStorage.setItem("reloadCount", String(reloadCount + 1));
+      window.location.reload();
+    } else {
+      sessionStorage.removeItem("reloadCount");
+    }
+  }, []);
+
   const createNewSocket = async (data) => {
     await socket.disconnect();
     const newSocket = await io("http://localhost:3001/", {
@@ -40,6 +50,7 @@ const Login = (props) => {
   };
 
   const login = () => {
+    setUserData([]);
     axios
       .post(
         "http://localhost:3001/api/user/login",

@@ -4,7 +4,7 @@ const authenticateUser = async (req, res, next) => {
     const token = req.cookies.jwt
 
     if (!token){
-        res.status(400).json("No AuthToken")
+        res.status(400).json({ error: "No AuthToken" })
     }else{
         await jwt.verify(token, process.env.JWT_KEY, (error, decode) => {
             if (error){

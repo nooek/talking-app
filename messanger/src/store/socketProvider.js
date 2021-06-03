@@ -12,10 +12,8 @@ export function SocketProvider({ children }) {
   const [socket, setSocket] = useState();
 
   useEffect(() => {
-    const id = localStorage.getItem("id");
     const newSocket = io("http://localhost:3001/", {
       transports: ["websocket"],
-      query: `userid=${id}`,
     });
     setSocket(newSocket);
     return () => newSocket.close();
