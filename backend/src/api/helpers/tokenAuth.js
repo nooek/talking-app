@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken")
 
 const authenticateUser = async (req, res, next) => {
     const token = req.cookies.jwt
-
+    console.log("das")
     if (!token){
         res.status(400).json({ error: "No AuthToken" })
     }else{

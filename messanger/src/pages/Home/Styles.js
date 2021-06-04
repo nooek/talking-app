@@ -4,12 +4,14 @@ import { Button } from "@material-ui/core";
 export const Container = styled.div`
   width: 100%;
   height: 100%;
+  color: white;
 `;
+
 export const Header = styled.div`
   width: 100%;
   height: 300px;
-  background-color: white;
-  color: black;
+  background: rgb(18,18,18);
+  color: white;
   position: absolute;
   top: 0;
   border-bottom-right-radius: 25px;
@@ -32,6 +34,7 @@ export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
+  background: rgb(53,53,53);
   bottom: 0;
   width: 100%;
   height: calc(100% - 300px);

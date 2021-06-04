@@ -30,6 +30,7 @@ io.on("connection", (socket) => {
     showOnline: socket.handshake.query.showOnline,
     room: ''
   });
+  console.log(users)
 
   usersFiltered = users.filter((each) => {
     return each.showOnline !== "0";
@@ -38,9 +39,7 @@ io.on("connection", (socket) => {
 
   socket.on('join-friend', (friendRoom) => {
     users.map((each, index) => {
-      console.log(each)
       if (parseInt(each.userId) === friendRoom){
-        console.log("fsdf")
         users[index].room = friendRoom
       }
     })
@@ -54,16 +53,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("update-friend-status", (friendId, userId, newStatus) => {
-    console.log("sdada")
       let userToUpdateSocket = "";
-      console.log(userId, newStatus);
       users.map((each) => {
         if (parseInt(each.userId) === parseInt(friendId)) {
           return (userToUpdateSocket = each.socketId);
         }
         return null;
       });
-      console.log(userToUpdateSocket);
       if (userToUpdateSocket.length > 0) {
         socket.broadcast
           .to(userToUpdateSocket)
@@ -94,7 +90,6 @@ io.on("connection", (socket) => {
     });
     users.splice(userInd, 1);
     io.emit("get-user-online", users);
-    console.log(users);
   });
 });
 

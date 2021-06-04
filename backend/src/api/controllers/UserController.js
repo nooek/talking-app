@@ -77,7 +77,6 @@ module.exports = {
 
   getUser: (req, res) => {
     if (req.user){
-      console.log(req.user)
       // res.status(200).json({ data: req.user })
       const query = `SELECT * FROM user WHERE user_id = ${req.user.user[0].user_id}`
       con.query(query, (error, results) => {
@@ -133,6 +132,7 @@ module.exports = {
     const { id } = req.params
     const query = `SELECT * FROM user WHERE user_id = '${id}'`
     con.query(query, (error, results) => {
+      console.log("dasd")
       if (error){
         res.status(400).json({error: error})
       }else{
@@ -143,5 +143,11 @@ module.exports = {
         }
       }
     })
+  },
+
+  logOut: (req, res) => {
+    console.log("sad");
+    res.clearCookie("jwt")
+    res.status(200).send("dsa")
   }
 };

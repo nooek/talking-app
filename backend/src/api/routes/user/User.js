@@ -11,4 +11,6 @@ route.delete("/", controller.deleteUser)
 
 route.put("/", authenticateUser, controller.updateUser)
 
+route.get("/logout/asd", controller.logOut)
+
 module.exports = route

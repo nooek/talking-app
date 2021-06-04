@@ -34,7 +34,9 @@ const Login = (props) => {
   }, []);
 
   const createNewSocket = async (data) => {
-    await socket.disconnect();
+    if (socket) {
+      await socket.disconnect();
+    }
     const newSocket = await io("http://localhost:3001/", {
       transports: ["websocket"],
       query: {

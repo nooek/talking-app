@@ -12,20 +12,25 @@ const GetUserData = ({ children }) => {
   const location = window.location.pathname;
 
   const createNewSocket = async (data) => {
+    console.log(data[0].user_id);
     if (socket) {
       await socket.disconnect();
-      const newSocket = await io("http://localhost:3001/", {
-        transports: ["websocket"],
-        query: {
-          room: data[0].user_id,
-          showOnline: data[0].online_status,
-        },
-      });
-
-      if (newSocket) {
-        setSocket(newSocket);
-      }
     }
+    console.log("dsa");
+    const newSocket = await io("http://localhost:3001/", {
+      transports: ["websocket"],
+      query: {
+        room: data[0].user_id,
+        showOnline: data[0].online_status,
+      },
+    });
+    console.log("dasda");
+    if (newSocket) {
+      console.log("dasda");
+      setSocket(newSocket);
+      setLoading(false);
+    }
+    return () => newSocket.close();
   };
 
   useEffect(() => {
@@ -41,7 +46,6 @@ const GetUserData = ({ children }) => {
           console.log(res);
           createNewSocket(res.data.user);
           setUserData(res.data.user);
-          setLoading(false);
         });
     }
     return () => {
