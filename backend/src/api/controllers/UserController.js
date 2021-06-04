@@ -59,8 +59,12 @@ module.exports = {
                   online_status: results[0].online_status,
                 }]
                 if (passwordsMatch){
-                  const token = await jwt.sign({user: results}, process.env.JWT_KEY)
-                  res.cookie('jwt', token, { httpOnly: true, secure: false })
+                  const token = await jwt.sign({user: userInfo}, process.env.JWT_KEY)
+                  res.cookie('jwt', token, { 
+                    httpOnly: true, 
+                    secure: false,
+                    maxAge: new Date(Date.now() + 90000000)
+                  });
                   res.status(200).json({ token: token, user_info: userInfo })
                 }else{
                   res.status(200).json({message: "Email or password incorrect"})

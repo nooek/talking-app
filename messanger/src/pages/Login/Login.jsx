@@ -83,7 +83,7 @@ const Login = (props) => {
         <SubmitButton onClick={() => login()}>Login</SubmitButton>
       </Card>
       {message ? <h2 style={{ color: "white" }}>{message}</h2> : null}
-      {redirect === true ? <Redirect to="/chat" /> : null}
+      {redirect === true ? <Redirect to="/" /> : null}
     </Container>
   );
 };

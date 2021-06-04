@@ -30,19 +30,20 @@ const App = () => (
         <Router>
           <AppHOCsWrapper>
             <Switch>
-              <Route path="/" exact render={() => <Home title="Home" />} />
-              <Route path="/login" render={() => <Login title="Login" />} />
               <Route
-                path="/register"
-                render={() => <Register title="Register" />}
-              />
-              <Route
-                path="/chat"
+                path="/"
+                exact
                 render={() => (
                   <GetFriendRealTimeInfo>
                     <Chat title="Chat" />
                   </GetFriendRealTimeInfo>
                 )}
+              />
+              <Route path="/home" exact render={() => <Home title="Home" />} />
+              <Route path="/login" render={() => <Login title="Login" />} />
+              <Route
+                path="/register"
+                render={() => <Register title="Register" />}
               />
               <Route
                 path="/friends/add"
