@@ -99,7 +99,7 @@ const Profile = (props) => {
 
   return (
     <Container>
-      <Link to="/chat">
+      <Link to="/">
         <GoBackPage />
       </Link>
       <NameAndPfpContainer>
