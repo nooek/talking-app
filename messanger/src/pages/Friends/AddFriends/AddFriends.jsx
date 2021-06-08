@@ -21,6 +21,9 @@ const AddFriends = () => {
   const [contactsList, setContactsList] = useState([]);
   const { userData } = useUserData();
   const { contacts } = useContacts();
+  const TEXT_STYLE = {
+    color: "white",
+  };
 
   useEffect(() => {
     if (!contacts.message) {
@@ -37,7 +40,11 @@ const AddFriends = () => {
 
   useEffect(() => {
     if (name.length > 0) {
-      axios.get(`http://localhost:3001/api/search/friends/${name}`).then((res) => {
+      const cancelTokenSource = axios.CancelToken.source();
+      axios.get(`http://localhost:3001/api/search/friends/${name}`, {
+        cancelToken: cancelTokenSource.token,
+      }).then((res) => {
+        console.log(res.data);
         if (res.data.message) {
           setMessage(res.data.message);
           setPeople([]);
@@ -45,11 +52,16 @@ const AddFriends = () => {
           setPeople(res.data);
           setMessage("");
         }
+      }).catch((err) => {
+        if (!axios.isCancel(err)) console.log(err);
       });
-    } else {
-      setPeople([]);
-      setMessage("");
+      return () => {
+        cancelTokenSource.cancel();
+      };
     }
+    setPeople([]);
+    setMessage("");
+    return () => {};
   }, [name]);
 
   const addFriend = (person) => {
@@ -66,8 +78,8 @@ const AddFriends = () => {
         <SearchBar placeholder="Friend Name" onChange={(e) => setName(e.target.value)} />
       </div>
       <PeopleList>
-        {message ? <h2 style={{ color: "white" }}>{message}</h2> : null}
-        {people.length > 0 ? (
+
+        {
           people.map((each) => {
             if (each.user_id !== userData[0].user_id && !contactsList.includes(each.user_id)) {
               return (
@@ -82,9 +94,9 @@ const AddFriends = () => {
             }
             return null;
           })
-        ) : (
-          <h2 style={{ color: "white" }}>Start Typing</h2>
-        )}
+        }
+        {message ? <h2 style={TEXT_STYLE}>{message}</h2> : null}
+        {!message && people.length <= 0 ? <h2 style={TEXT_STYLE}>Start Typing</h2> : null}
       </PeopleList>
     </Container>
   );
