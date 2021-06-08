@@ -85,9 +85,6 @@ const SortContacts = ({ children }) => {
 
     if (!isSorted && sortedContacts) {
       setContacts([...sortedContacts, ...contactsWithNoMessages]);
-      console.log("not sorted");
-    } else {
-      console.log("sorted");
     }
   }, [
     messages,

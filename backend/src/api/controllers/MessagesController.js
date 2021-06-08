@@ -87,6 +87,29 @@ module.exports = {
         }
       }
     })
+  },
 
+  getContactMessage: (req, res) => {
+    const { friendId, id, page } = req.params;
+    const query = `SELECT m.message_id, m.message, m.message_date, m.receiver, m.author
+      FROM  message as m
+      LEFT JOIN message_status as ms
+      ON  m.message_id = ms.message_id and ms.user_id = 58
+      WHERE (m.receiver = ${friendId} AND m.author = ${id}) 
+      OR (m.receiver = ${id} AND m.author = ${friendId}) AND
+      (ms.user_id = ${id} OR isnull(ms.user_id))
+      AND (ms.deleted = 0 or isnull(ms.deleted) or ms.deleted != 1);
+    `
+
+    con.query(query, (error, results) => {
+      if (error) {
+        res.status(400).json({ error })
+      }
+      if (results) {
+        console.log(results.length)
+        const pagination = results.reverse().slice((page - 1) * 50, page * 50);
+        res.status(200).json(pagination)
+      }
+    })
   }
 };

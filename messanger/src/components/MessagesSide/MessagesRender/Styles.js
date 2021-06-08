@@ -3,8 +3,8 @@ import styled from "styled-components";
 export const MessageContainer = styled.div`
   width: auto;
   min-width: 200px;
-  height: auto;
   max-width: 300px;
+  height: auto;
   display: flex;
   flex-direction: row;
   z-index: 1;

@@ -1,31 +1,49 @@
-import React, { useState, useEffect } from "react";
-import { getMessagesData } from "../../../services/API/tasks/APItasks";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import axios from "axios";
 import { useContacts } from "../../../store/contactsProvider";
 import { useFriend } from "../../../store/friendProvider";
 import { useMessages } from "../../../store/messagesProvider";
 import { useSocket } from "../../../store/socketProvider";
 import { useUserData } from "../../../store/userDataProvider";
-import {
-  MessageContainer,
-  Message,
-//   MessageTime
-} from "./Styles";
+import { MessageContainer, Message, MessageTime } from "./Styles";
+import { useContactMessages } from "../../../store/contactMessagesProvider";
 
 const MessagesRender = () => {
-  const [contactsMessages, setContactsMessages] = useState([]);
   const { messages, setMessages } = useMessages();
   const { userData } = useUserData();
   const { friend } = useFriend();
   const { socket } = useSocket();
   const { contacts } = useContacts();
-
-  useEffect(() => {
-    getMessagesData(userData[0].user_id).then((res) => {
-      if (!res.data.message) {
-        setMessages(res.data);
+  const { contactMessages, setContactMessages } = useContactMessages();
+  const [page, setPage] = useState(1);
+  const observer = useRef();
+  const lastMessagePos = useRef();
+  const lastMessageRef = useCallback((node) => {
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        lastMessagePos.current = entries[0].boundingClientRect.y;
+        console.log("seing");
+        setPage((prevPage) => prevPage + 1);
       }
     });
-  }, [setMessages, userData]);
+    if (node) observer.current.observe(node);
+  }, []);
+
+  useEffect(() => {
+    setPage(1);
+    setContactMessages([]);
+  }, [friend]);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/api/message/contactmessage/${friend.user_id}/${userData[0].user_id}/${page}`)
+      .then((res) => {
+        if (res.data) {
+          setContactMessages((prevCtMessages) => [...prevCtMessages, ...res.data]);
+        }
+      });
+  }, [friend, page]);
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -51,32 +69,21 @@ const MessagesRender = () => {
     };
   }, [socket, messages, setMessages, userData, contacts, friend]);
 
-  useEffect(() => {
-    const justFriendMessages = messages.filter(
-      (each) => each.receiver === friend.user_id || each.author === friend.user_id,
+  return contactMessages.map((each, index) => {
+    each.seen = true;
+    return (
+      <MessageContainer
+        // eslint-disable-next-line react/no-array-index-key
+        key={index}
+        className="message-container"
+        sender={each.author === userData[0].user_id}
+        ref={index === contactMessages.length - 1 ? lastMessageRef : null}
+      >
+        <Message className="message">{each.message}</Message>
+        <MessageTime>{each.message_time}</MessageTime>
+      </MessageContainer>
     );
-    setContactsMessages([...justFriendMessages]);
-  }, [
-    messages,
-    setMessages,
-    friend,
-    contactsMessages.length,
-  ]);
-
-  return (
-    contactsMessages.map((each) => {
-      each.seen = true;
-      return (
-        <MessageContainer
-          key={each.message_id}
-          className="message-container"
-          sender={each.author === userData[0].user_id}
-        >
-          <Message className="message">{each.message}</Message>
-        </MessageContainer>
-      );
-    })
-  );
+  });
 };
 
 export default MessagesRender;

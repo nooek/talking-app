@@ -1,26 +1,23 @@
 import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import { useSocket } from "../../../store/socketProvider";
 import { Buttons, Container } from "./Styles";
 
 const Dropdown = () => {
   const [goToLoginPage, setGoToLoginPage] = useState(false);
   const { socket } = useSocket();
-  const [cookies] = useCookies(["jwt"]);
 
-  console.log(cookies);
   console.log("dsada");
-  const logOut = async () => {
+  const logOut = () => {
     localStorage.removeItem("id");
-    await axios.get("http://localhost:3001/api/user/logout/asd", {
+    axios.get("http://localhost:3001/api/user/logout/asd", {
       withCredentials: true,
     })
       .then((res) => {
         console.log(res);
-        setGoToLoginPage(true);
         socket.disconnect();
+        setGoToLoginPage(true);
       });
   };
 

@@ -9,6 +9,7 @@ import { useUserData } from "../../store/userDataProvider";
 import getDate from "../../functions/formatDate";
 import "emoji-mart/css/emoji-mart.css";
 import validateMessage from "../../validators/MessageValidator";
+import { useContactMessages } from "../../store/contactMessagesProvider";
 
 const ChatSendMessage = () => {
   const { socket } = useSocket();
@@ -17,6 +18,7 @@ const ChatSendMessage = () => {
   const { userData } = useUserData();
   const { friend } = useFriend();
   const [showEmoji, setShowEmoji] = useState(false);
+  const { contactMessages, setContactMessages } = useContactMessages();
 
   const sendMessageToDb = (messageData) => {
     axios.post("http://localhost:3001/api/message", messageData);
@@ -35,6 +37,7 @@ const ChatSendMessage = () => {
       };
       socket.emit("send-message", messageData);
       setMessages([...messages, messageData]);
+      setContactMessages([messageData, ...contactMessages]);
       sendMessageToDb(messageData);
       setMessage("");
     }

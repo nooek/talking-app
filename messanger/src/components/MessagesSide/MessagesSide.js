@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useFriend } from "../../store/friendProvider";
 import { useUserData } from "../../store/userDataProvider";
 import ChatSendMessage from "../ChatSendMsg/ChatSendMsg";
@@ -9,13 +9,30 @@ import MessagesRender from "./MessagesRender/MessagesRender";
 import {
   ChatSide,
   MessagesContainer,
+  GoToLastMessageButton,
 } from "./Styles";
 
 const MessagesSide = () => {
   const { userData } = useUserData();
   const { friend } = useFriend();
-  // const [showGoToLastMsg] = useState(false);
   const [showFindMessage, setShowFindMessage] = useState(false);
+  const [goLastMessage, setGoLastMessage] = useState(false);
+  const messagesContainerRef = useRef();
+  const goToLastSendedMessage = () => {
+    messagesContainerRef?.current.scrollTo({
+      bottom: "0",
+      top: "0",
+      behavior: "smooth",
+    });
+  };
+
+  const handleScroll = () => {
+    if (messagesContainerRef?.current?.scrollTop > 300) {
+      setGoLastMessage(true);
+    } else {
+      setGoLastMessage(false);
+    }
+  };
 
   return (
     <ChatSide id="chat-side">
@@ -24,10 +41,19 @@ const MessagesSide = () => {
       {friend.status === "REQUESTED" && friend.friend_with !== userData[0].user_id ? (
         <NotFriendAlert />
       ) : null}
-      <MessagesContainer id="msg-container" className="messages-container">
-        {/* {showGoToLastMsg === true ? (
-          <GoToLastMessageButton onClick={() => goToLastMessage()}>Go back</GoToLastMessageButton>
-        ) : null} */}
+      <MessagesContainer
+        onScroll={handleScroll}
+        id="msg-container"
+        className="messages-container"
+        ref={(el) => { messagesContainerRef.current = el; }}
+      >
+        {goLastMessage === true ? (
+          <GoToLastMessageButton
+            onClick={() => goToLastSendedMessage()}
+          >
+            Go back
+          </GoToLastMessageButton>
+        ) : null}
         <MessagesRender />
       </MessagesContainer>
       <ChatSendMessage userdata={userData} />
