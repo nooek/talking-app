@@ -10,6 +10,7 @@ import getDate from "../../functions/formatDate";
 import "emoji-mart/css/emoji-mart.css";
 import validateMessage from "../../validators/MessageValidator";
 import { useContactMessages } from "../../store/contactMessagesProvider";
+import { useContacts } from "../../store/contactsProvider";
 
 const ChatSendMessage = () => {
   const { socket } = useSocket();
@@ -19,9 +20,13 @@ const ChatSendMessage = () => {
   const { friend } = useFriend();
   const [showEmoji, setShowEmoji] = useState(false);
   const { contactMessages, setContactMessages } = useContactMessages();
+  const { contacts, setContacts } = useContacts();
 
   const sendMessageToDb = (messageData) => {
-    axios.post("http://localhost:3001/api/message", messageData);
+    axios.post("http://localhost:3001/api/message", messageData).then(() => {
+      const contactsWithoutFriend = contacts.filter((each) => each.user_id !== friend.user_id);
+      setContacts([friend, ...contactsWithoutFriend]);
+    });
   };
 
   const sendMessage = () => {

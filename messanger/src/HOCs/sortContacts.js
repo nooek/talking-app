@@ -110,12 +110,7 @@ const SortContacts = ({ children }) => {
   }, [
     messages,
     userData,
-    contacts,
     setContacts,
-    sortMessages,
-    sortContacts,
-    checkSorted,
-    getContactsWithNoMessage,
   ]);
 
   return [children];

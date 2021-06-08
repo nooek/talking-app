@@ -13,7 +13,7 @@ const MessagesRender = () => {
   const { userData } = useUserData();
   const { friend } = useFriend();
   const { socket } = useSocket();
-  const { contacts } = useContacts();
+  const { contacts, setContacts } = useContacts();
   const { contactMessages, setContactMessages } = useContactMessages();
   const [page, setPage] = useState(1);
   const observer = useRef();
@@ -60,8 +60,14 @@ const MessagesRender = () => {
         message.seen = false;
       }
 
+      console.log(message);
+
       if (!blockedContactsList.includes(message.author)) {
-        setMessages([...messages, message]);
+        setMessages([message, ...messages]);
+        setContactMessages([message, ...contactMessages]);
+        const contactsWithoutFriend = contacts.filter((each) => each.user_id !== message.author);
+        const messageAuthor = contacts.filter((each) => each.user_id === message.author);
+        setContacts([...messageAuthor, ...contactsWithoutFriend]);
       }
     });
     return () => {

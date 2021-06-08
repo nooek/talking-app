@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Container,
@@ -15,7 +15,7 @@ import {
 import { useUserData } from "../../store/userDataProvider";
 import Dropdown from "../Sidebar/Dropdown/Dropdown";
 import { useContacts } from "../../store/contactsProvider";
-import { getFriendsData } from "../../services/API/tasks/APItasks";
+// import { getFriendsData } from "../../services/API/tasks/APItasks";
 import searchFriend from "../../services/API/tasks/FriendsTasks";
 import Friends from "./MobiletopbarFriends/MobileTopbarFriends";
 
@@ -28,17 +28,6 @@ const MobileTopbar = (props) => {
   const { contacts, setContacts } = useContacts();
   const { onlineFriends, chat } = props;
 
-  const updateFriends = useCallback(async () => {
-    const res = await getFriendsData(userData[0].user_id);
-    if (!res.data[0].message) {
-      setContacts(res.data);
-    }
-  }, [userData, setContacts]);
-
-  useEffect(() => {
-    updateFriends();
-  }, [updateFriends]);
-
   useEffect(() => {
     setContactsList(contacts);
   }, [contacts]);
@@ -48,10 +37,8 @@ const MobileTopbar = (props) => {
       searchFriend(userData[0].user_id, friendSearchName).then((res) => {
         setContactsList(res.data);
       });
-    } else {
-      updateFriends();
     }
-  }, [friendSearchName, updateFriends, userData, setContacts]);
+  }, [friendSearchName, userData, setContacts]);
 
   return (
     <Container hide={hide} chat={chat}>

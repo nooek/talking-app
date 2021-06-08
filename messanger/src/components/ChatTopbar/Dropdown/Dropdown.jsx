@@ -20,6 +20,8 @@ const Dropdown = () => {
   const { setMessages } = useMessages();
   const { socket } = useSocket();
 
+  console.log("dsada");
+
   const openWarning = (message, func) => {
     if (!message) return;
     if (!func) return;

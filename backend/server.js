@@ -69,6 +69,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send-message", (data) => {
+    console.log(data)
     if ((data.blocked === true) | 1) {
       let messageReceiver = "";
       users.map((each, index) => {
@@ -76,6 +77,7 @@ io.on("connection", (socket) => {
           return (messageReceiver = each.socketId);
         }
       });
+      console.log(messageReceiver)
       socket.broadcast.to(messageReceiver).emit("receive-message", data);
     }
   });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   SideBar,
@@ -14,7 +14,7 @@ import {
 import Dropdown from "./Dropdown/Dropdown";
 import { useUserData } from "../../store/userDataProvider";
 import { useContacts } from "../../store/contactsProvider";
-import { getFriendsData } from "../../services/API/tasks/APItasks";
+// import { getFriendsData } from "../../services/API/tasks/APItasks";
 import searchFriend from "../../services/API/tasks/FriendsTasks";
 import Friends from "./SidebarFriends/Friends";
 
@@ -24,32 +24,20 @@ const Sidebar = (props) => {
   const [friendSearchName, setFriendSearchName] = useState("");
   const { contacts, setContacts } = useContacts();
   const { onlineFriend } = props;
-  const [contactsList, setContactsList] = useState([]);
-
-  const updateFriends = useCallback(async () => {
-    const res = await getFriendsData(userData[0].user_id);
-    if (!res.data[0].message) {
-      setContacts(res.data);
-    }
-  }, [userData, setContacts]);
-
-  useEffect(() => {
-    updateFriends();
-  }, [updateFriends]);
+  // const [contactsList, setContactsList] = useState([]);
 
   useEffect(() => {
     if (friendSearchName.length > 0) {
       searchFriend(userData[0].user_id, friendSearchName).then((res) => {
-        setContactsList(res.data);
+        // setContactsList(res.data);
+        console.log(res);
       });
-    } else {
-      updateFriends();
     }
-  }, [friendSearchName, userData, updateFriends, setContacts]);
+  }, [friendSearchName, userData, setContacts]);
 
-  useEffect(() => {
-    setContactsList(contacts);
-  }, [contacts]);
+  // useEffect(() => {
+  //   setContactsList(contacts);
+  // }, [contacts]);
 
   return (
     <SideBar>
@@ -83,7 +71,7 @@ const Sidebar = (props) => {
         />
       </SearchBarContainer>
       <FriendsContainer>
-        <Friends onlineFriends={onlineFriend} contactList={contactsList} />
+        <Friends onlineFriends={onlineFriend} contactList={contacts} />
       </FriendsContainer>
     </SideBar>
   );

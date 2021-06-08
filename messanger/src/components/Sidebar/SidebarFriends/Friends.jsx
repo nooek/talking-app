@@ -34,9 +34,7 @@ const SidebarFriends = (props) => {
         return (
           <FriendContainer
             key={each.friend_id}
-            onClick={() => {
-              setFriend(each);
-            }}
+            onClick={() => setFriend(each)}
             selected={friend.user_id === each.user_id}
           >
             {each.user_pfp ? <FriendPfp src={each.user_pfp} /> : null}
