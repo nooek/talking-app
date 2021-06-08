@@ -1,6 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useFriend } from "../../store/friendProvider";
 import { useUserData } from "../../store/userDataProvider";
+import { useContactMessages } from "../../store/contactMessagesProvider";
 import ChatSendMessage from "../ChatSendMsg/ChatSendMsg";
 import ChatTopbar from "../ChatTopbar/ChatTopbar";
 import MobileTopbar from "../MobileTopbar/MobileTopbar";
@@ -17,7 +18,9 @@ const MessagesSide = () => {
   const { friend } = useFriend();
   const [showFindMessage, setShowFindMessage] = useState(false);
   const [goLastMessage, setGoLastMessage] = useState(false);
+  const { contactMessages } = useContactMessages();
   const messagesContainerRef = useRef();
+
   const goToLastSendedMessage = () => {
     messagesContainerRef?.current.scrollTo({
       bottom: "0",
@@ -33,6 +36,16 @@ const MessagesSide = () => {
       setGoLastMessage(false);
     }
   };
+
+  useEffect(() => {
+    if (contactMessages && contactMessages.length > 0) {
+      const lastMessage = contactMessages.length - 1;
+      console.log(contactMessages[lastMessage]);
+      if (contactMessages[lastMessage].receiver === friend.user_id) {
+        goToLastSendedMessage();
+      }
+    }
+  }, [contactMessages]);
 
   return (
     <ChatSide id="chat-side">
