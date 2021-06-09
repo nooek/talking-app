@@ -11,6 +11,6 @@
     "import/extensions": "off",
     "no-param-reassign": "off",
     "object-shorthand": ["error", "consistent"],
-    "object-curly-newline": "off",
+    "object-curly-newline": "off"
   }
 }

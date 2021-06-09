@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import {
   Container,
   FindFriendsContainer,
@@ -29,15 +30,25 @@ const MobileTopbar = (props) => {
   const { onlineFriends, chat } = props;
 
   useEffect(() => {
-    setContactsList(contacts);
+    if (friendSearchName.length <= 0) {
+      setContactsList(contacts);
+    }
   }, [contacts]);
 
   useEffect(() => {
+    const axiosCancelToken = axios.CancelToken.source();
     if (friendSearchName.length > 0) {
-      searchFriend(userData[0].user_id, friendSearchName).then((res) => {
-        setContactsList(res.data);
+      searchFriend(userData[0].user_id, friendSearchName, axiosCancelToken.token).then((res) => {
+        if (res) {
+          setContactsList(res.data);
+        }
       });
+    } else {
+      setContactsList(contacts);
     }
+    return () => {
+      axiosCancelToken.cancel();
+    };
   }, [friendSearchName, userData, setContacts]);
 
   return (

@@ -22,7 +22,7 @@ const MessagesSide = () => {
   const messagesContainerRef = useRef();
 
   const goToLastSendedMessage = () => {
-    messagesContainerRef?.current.scrollTo({
+    messagesContainerRef?.current?.scrollTo({
       bottom: "0",
       top: "0",
       behavior: "smooth",

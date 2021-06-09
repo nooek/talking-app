@@ -100,11 +100,11 @@ module.exports = {
       (ms.user_id = ${id} OR isnull(ms.user_id))
       AND (ms.deleted = 0 or isnull(ms.deleted) or ms.deleted != 1);
     `
-
     con.query(query, (error, results) => {
       if (error) {
         res.status(400).json({ error })
       }
+
       if (results) {
         console.log(results.length)
         const pagination = results.reverse().slice((page - 1) * 50, page * 50);

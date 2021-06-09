@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+// import { Link } from "react-router-dom";
 import axios from "axios";
 import io from "socket.io-client";
 import { useUserData } from "../store/userDataProvider";
@@ -8,15 +9,14 @@ const GetUserData = ({ children }) => {
   const { userData, setUserData } = useUserData();
   const { socket, setSocket } = useSocket();
   const [loading, setLoading] = useState(true);
+  const [logged, setLogged] = useState(true);
   const isMounted = useRef(true);
   const location = window.location.pathname;
 
   const createNewSocket = async (data) => {
-    console.log(data[0].user_id);
     if (socket) {
       await socket.disconnect();
     }
-    console.log("dsa");
     const newSocket = await io("http://localhost:3001/", {
       transports: ["websocket"],
       query: {
@@ -24,9 +24,7 @@ const GetUserData = ({ children }) => {
         showOnline: data[0].online_status,
       },
     });
-    console.log("dasda");
     if (newSocket) {
-      console.log("dasda");
       setSocket(newSocket);
       setLoading(false);
     }
@@ -37,6 +35,9 @@ const GetUserData = ({ children }) => {
     if (isMounted.current) {
       if (location === "/login" || location === "/register") {
         setLoading(false);
+        return () => {
+          isMounted.current = false;
+        };
       }
       axios
         .get("http://localhost:3001/api/user/getuser", {
@@ -44,8 +45,14 @@ const GetUserData = ({ children }) => {
         })
         .then((res) => {
           console.log(res);
-          createNewSocket(res.data.user);
-          setUserData(res.data.user);
+          if (res.data.user) {
+            createNewSocket(res.data.user);
+            setUserData(res.data.user);
+          }
+          if (!res.data.user) {
+            setLogged(false);
+          }
+          setLoading(false);
         });
     }
     return () => {
@@ -55,8 +62,13 @@ const GetUserData = ({ children }) => {
 
   console.log(userData);
 
-  if (!loading) {
+  if (!loading && logged) {
     return children;
+  }
+
+  if (!loading && !logged) {
+    // eslint-disable-next-line react/jsx-one-expression-per-line
+    window.location.href = "http://localhost:3000/login";
   }
   return <></>;
 };
