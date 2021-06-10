@@ -13,20 +13,22 @@ export const MessageContainer = styled.div`
   text-align: left;
   background-color: ${(props) => (props.sender === true ? "rgb(123, 123, 240)" : "rgb(7, 194, 7)")};
   align-self: ${(props) => (props.sender === true ? "flex-end" : "flex-start")};
-  ${(props) => (props.sender === true ? "border-top-left-radius: 25px" : "border-top-right-radius: 245px")};
-  ${(props) => (props.sender === true
-    ? "border-bottom-left-radius: 25px"
-    : "border-bottom-right-radius: 245px")};
-  border-bottom-left-radius: 25px;
   margin-bottom: ${(props) => (props.sender === true ? "10px" : "30px")};
   margin-top: ${(props) => (props.sender === true ? "10px" : "20px")};
-  border-right: ${(props) => (props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)")};
-  border-top: ${(props) => (props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)")};
-  border-bottom: ${(props) => (props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)")};
+  /* border-right: ${(props) => (props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)")}; */
+  /* border-top: ${(props) => (props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)")}; */
+  /* border-bottom: ${(props) => (props.sender === true ? "2px solid rgb(68, 68, 241)" : "2px solid rgb(15, 124, 15)")}; */
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  border-left: ${(props) => (props.sender === true ? "2px solid black" : "")};
+  border-right: ${(props) => (props.sender === false ? "2px solid black" : "")};
 `;
 
 export const Message = styled.h2`
-  margin: 10px;
+  margin-bottom: 30px;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 5px;
   font-size: 18px;
   z-index: 2;
 `;
@@ -36,5 +38,5 @@ export const MessageTime = styled.h2`
   color: black;
   position: absolute;
   bottom: 0;
-  right: 0;
+  left: 10px;
 `;

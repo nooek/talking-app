@@ -1,8 +1,6 @@
 /* eslint-disable import/no-named-as-default */
 import React, { useState } from "react";
-import {
-  Container,
-} from "./Styles";
+import Container from "./Styles";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { useFriend } from "../../store/friendProvider";
 import DefaultChat from "../../components/DefaultChat/DefaultChat";

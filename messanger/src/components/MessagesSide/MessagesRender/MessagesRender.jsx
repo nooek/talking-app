@@ -15,9 +15,11 @@ const MessagesRender = () => {
   const { socket } = useSocket();
   const { contacts, setContacts } = useContacts();
   const { contactMessages, setContactMessages } = useContactMessages();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
+  const [tradeFriend, setTradeFriend] = useState(false);
   const observer = useRef();
   const lastMessagePos = useRef();
+
   const lastMessageRef = useCallback((node) => {
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver((entries) => {
@@ -30,26 +32,28 @@ const MessagesRender = () => {
     if (node) observer.current.observe(node);
   }, []);
 
+  console.log(page);
+  console.log(contactMessages.length);
+
   useEffect(() => {
-    setPage(1);
     setContactMessages([]);
+    setPage(1);
+    setTradeFriend(!tradeFriend);
   }, [friend]);
 
   useEffect(() => {
     axios
       .get(`http://localhost:3001/api/message/contactmessage/${friend.user_id}/${userData[0].user_id}/${page}`)
       .then((res) => {
-        console.log("dsad");
         if (res.data) {
-          console.log("123");
-          const newMessages = res.data;
-          setContactMessages([...contactMessages, ...newMessages]);
-          console.log(contactMessages);
+          if (res.data.maxResults !== contactMessages.length) {
+            const newMessages = res.data.messages;
+            console.log(res.data);
+            setContactMessages([...contactMessages, ...newMessages]);
+          }
         }
       });
-  }, [page, friend]);
-
-  console.log(contactMessages);
+  }, [page, tradeFriend]);
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -93,7 +97,7 @@ const MessagesRender = () => {
       >
         <Message className="message">{each.message}</Message>
         {
-          each.message_time !== undefined
+          each.message_time !== undefined && each.message_time !== null
             ? <MessageTime>{`${each.message_time.split(":")[0]}:${each.message_time.split(":")[1]}`}</MessageTime>
             : null
         }

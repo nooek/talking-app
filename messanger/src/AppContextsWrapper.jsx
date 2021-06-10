@@ -9,13 +9,15 @@ import { SocketProvider } from "./store/socketProvider";
 const AppContextsWrapper = ({ children }) => (
   <SocketProvider>
     <UserDataProvider>
-      <MessagesProvider>
+      <FriendProvider>
         <ContactMessagesProvider>
-          <ContactsProvider>
-            <FriendProvider>{children}</FriendProvider>
-          </ContactsProvider>
+          <MessagesProvider>
+            <ContactsProvider>
+              {children}
+            </ContactsProvider>
+          </MessagesProvider>
         </ContactMessagesProvider>
-      </MessagesProvider>
+      </FriendProvider>
     </UserDataProvider>
   </SocketProvider>
 );
