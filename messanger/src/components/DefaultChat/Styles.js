@@ -6,7 +6,6 @@ export const Container = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
   @media (max-width: 700px) {
     width: 100%;
@@ -25,6 +24,7 @@ export const PresentionalTextContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   text-align: center;
+  margin-top: 100px;
 `;
 
 export const PresentionalText = styled.h2`

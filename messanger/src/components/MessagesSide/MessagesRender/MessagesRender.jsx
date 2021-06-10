@@ -39,11 +39,17 @@ const MessagesRender = () => {
     axios
       .get(`http://localhost:3001/api/message/contactmessage/${friend.user_id}/${userData[0].user_id}/${page}`)
       .then((res) => {
+        console.log("dsad");
         if (res.data) {
-          setContactMessages((prevCtMessages) => [...prevCtMessages, ...res.data]);
+          console.log("123");
+          const newMessages = res.data;
+          setContactMessages([...contactMessages, ...newMessages]);
+          console.log(contactMessages);
         }
       });
-  }, [friend, page]);
+  }, [page, friend]);
+
+  console.log(contactMessages);
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -60,11 +66,11 @@ const MessagesRender = () => {
         message.seen = false;
       }
 
-      console.log(message);
-
       if (!blockedContactsList.includes(message.author)) {
         setMessages([message, ...messages]);
+        console.log(contactMessages);
         setContactMessages([message, ...contactMessages]);
+        console.log(contactMessages);
         const contactsWithoutFriend = contacts.filter((each) => each.user_id !== message.author);
         const messageAuthor = contacts.filter((each) => each.user_id === message.author);
         setContacts([...messageAuthor, ...contactsWithoutFriend]);
@@ -86,7 +92,11 @@ const MessagesRender = () => {
         ref={index === contactMessages.length - 1 ? lastMessageRef : null}
       >
         <Message className="message">{each.message}</Message>
-        <MessageTime>{each.message_time}</MessageTime>
+        {
+          each.message_time !== undefined
+            ? <MessageTime>{`${each.message_time.split(":")[0]}:${each.message_time.split(":")[1]}`}</MessageTime>
+            : null
+        }
       </MessageContainer>
     );
   });

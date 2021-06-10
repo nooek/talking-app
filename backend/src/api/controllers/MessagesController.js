@@ -2,10 +2,10 @@ const { con, config } = require("../../config/dbConfig");
 
 module.exports = {
   createMessage: (req, res) => {
-    const { message, date, receiver, author, time } = req.body;
-    console.log(time)
+    const { message, date, receiver, author, message_time } = req.body;
+    console.log(message_time)
     const addMessageQuery = `INSERT INTO message VALUES 
-        (DEFAULT, '${message}', '${date}', '${receiver}', '${author}', '${time}')`;
+        (DEFAULT, '${message}', '${date}', '${receiver}', '${author}', '${message_time}')`;
     con.query(addMessageQuery, (error, results) => {
       if (error) {
         res.json({ error: error });
@@ -91,7 +91,7 @@ module.exports = {
 
   getContactMessage: (req, res) => {
     const { friendId, id, page } = req.params;
-    const query = `SELECT m.message_id, m.message, m.message_date, m.receiver, m.author
+    const query = `SELECT m.message_id, m.message, m.message_date, m.receiver, m.author, m.message_time
       FROM  message as m
       LEFT JOIN message_status as ms
       ON  m.message_id = ms.message_id and ms.user_id = 58

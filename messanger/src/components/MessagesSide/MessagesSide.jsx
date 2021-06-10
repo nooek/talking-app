@@ -13,13 +13,16 @@ import {
   GoToLastMessageButton,
 } from "./Styles";
 
-const MessagesSide = () => {
+const MessagesSide = (props) => {
   const { userData } = useUserData();
   const { friend } = useFriend();
   const [showFindMessage, setShowFindMessage] = useState(false);
   const [goLastMessage, setGoLastMessage] = useState(false);
   const { contactMessages } = useContactMessages();
+  const { onlineFriends } = props;
   const messagesContainerRef = useRef();
+
+  console.log(props);
 
   const goToLastSendedMessage = () => {
     messagesContainerRef?.current?.scrollTo({
@@ -39,9 +42,7 @@ const MessagesSide = () => {
 
   useEffect(() => {
     if (contactMessages && contactMessages.length > 0) {
-      const lastMessage = contactMessages.length - 1;
-      console.log(contactMessages[lastMessage]);
-      if (contactMessages[lastMessage].receiver === friend.user_id) {
+      if (contactMessages[0].author === userData[0].user_id) {
         goToLastSendedMessage();
       }
     }
@@ -49,7 +50,7 @@ const MessagesSide = () => {
 
   return (
     <ChatSide id="chat-side">
-      <MobileTopbar />
+      <MobileTopbar onlineFriends={onlineFriends} />
       <ChatTopbar clickSearch={() => setShowFindMessage(!showFindMessage)} />
       {friend.status === "REQUESTED" && friend.friend_with !== userData[0].user_id ? (
         <NotFriendAlert />
