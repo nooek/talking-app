@@ -93,7 +93,7 @@ const ChatSendMessage = () => {
         onKeyPress={(e) => checkIfEnterPressed(e, friend.user_id)}
         onChange={(e) => setMessage(e.target.value)}
       />
-      <SendMessageButton onClick={() => sendMessage(friend.user_id)}>Send</SendMessageButton>
+      <SendMessageButton onClick={() => sendMessage()}>Send</SendMessageButton>
     </MessageTypeContainer>
   );
 };

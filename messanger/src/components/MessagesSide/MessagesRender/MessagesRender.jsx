@@ -7,6 +7,7 @@ import { useSocket } from "../../../store/socketProvider";
 import { useUserData } from "../../../store/userDataProvider";
 import { MessageContainer, Message, MessageTime } from "./Styles";
 import { useContactMessages } from "../../../store/contactMessagesProvider";
+import messageNotificationSound from "../../../assets/sounds/message-notification.ogg";
 
 const MessagesRender = () => {
   const { messages, setMessages } = useMessages();
@@ -32,9 +33,6 @@ const MessagesRender = () => {
     if (node) observer.current.observe(node);
   }, []);
 
-  console.log(page);
-  console.log(contactMessages.length);
-
   useEffect(() => {
     setContactMessages([]);
     setPage(1);
@@ -42,18 +40,24 @@ const MessagesRender = () => {
   }, [friend]);
 
   useEffect(() => {
+    console.log("das");
     axios
       .get(`http://localhost:3001/api/message/contactmessage/${friend.user_id}/${userData[0].user_id}/${page}`)
       .then((res) => {
         if (res.data) {
           if (res.data.maxResults !== contactMessages.length) {
             const newMessages = res.data.messages;
-            console.log(res.data);
             setContactMessages([...contactMessages, ...newMessages]);
           }
         }
       });
-  }, [page, tradeFriend]);
+  }, [tradeFriend, page]);
+
+  const playAudio = (audio) => {
+    audio.play();
+  };
+
+  console.log(contactMessages);
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -71,13 +75,13 @@ const MessagesRender = () => {
       }
 
       if (!blockedContactsList.includes(message.author)) {
+        console.log(contactMessages);
+        setContactMessages((prevContactMessages) => [message, ...prevContactMessages]);
         setMessages([message, ...messages]);
-        console.log(contactMessages);
-        setContactMessages([message, ...contactMessages]);
-        console.log(contactMessages);
         const contactsWithoutFriend = contacts.filter((each) => each.user_id !== message.author);
         const messageAuthor = contacts.filter((each) => each.user_id === message.author);
         setContacts([...messageAuthor, ...contactsWithoutFriend]);
+        playAudio(new Audio(messageNotificationSound));
       }
     });
     return () => {
