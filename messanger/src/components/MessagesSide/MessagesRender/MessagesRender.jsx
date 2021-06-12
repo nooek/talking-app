@@ -76,7 +76,7 @@ const MessagesRender = () => {
 
       if (!blockedContactsList.includes(message.author)) {
         console.log(contactMessages);
-        setContactMessages((prevContactMessages) => [message, ...prevContactMessages]);
+        setContactMessages((prevContactMessages) => [message, ...prevContactMessages.reverse()]);
         setMessages([message, ...messages]);
         const contactsWithoutFriend = contacts.filter((each) => each.user_id !== message.author);
         const messageAuthor = contacts.filter((each) => each.user_id === message.author);

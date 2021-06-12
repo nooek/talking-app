@@ -106,14 +106,12 @@ module.exports = {
       }
 
       if (results) {
-        console.log(results.length)
-        console.log(results.length % 50)
-        console.log(results[results.length - 1]);
-        console.log(page);
+        const resultsRestOf50 = results.length % 50;
         results = results.reverse()
         if (page === '1') {
           console.log("lol é ruim");
-          const pagination = results.slice((page - 1) * (50 + (results.length % 50)), page * 50 + (results.length % 50))
+          const pagination = results.slice((page - 1) * 50 + (resultsRestOf50), page * 50 + (resultsRestOf50))
+          console.log(pagination);
           res.status(200).json({
             messages: pagination,
             maxResults: results.length
