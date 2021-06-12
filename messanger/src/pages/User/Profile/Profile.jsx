@@ -54,7 +54,6 @@ const Profile = (props) => {
   const updateUser = async () => {
     const response = await getUserData(userData[0].user_id);
     if (response) setUserData(response.data);
-    console.log(response);
   };
 
   const uploadProfilePicToDb = async (url) => {
@@ -69,7 +68,6 @@ const Profile = (props) => {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res);
         if (!res.data.error) {
           updateUser();
         }
@@ -77,7 +75,6 @@ const Profile = (props) => {
   };
 
   const uploadProfilePicToCloud = async () => {
-    console.log("dasda");
     const data = new FormData();
     data.append("file", imageFile);
     data.append("upload_preset", "User Profile Pic");
@@ -91,11 +88,8 @@ const Profile = (props) => {
 
     await setProfilePic(file.secure_url);
     setUploadLoading(false);
-    console.log(file.secure_url);
     await uploadProfilePicToDb(file.secure_url);
   };
-
-  console.log(uploadLoading);
 
   return (
     <Container>

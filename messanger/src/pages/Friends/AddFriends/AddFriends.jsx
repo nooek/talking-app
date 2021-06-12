@@ -44,7 +44,6 @@ const AddFriends = () => {
       axios.get(`http://localhost:3001/api/search/friends/${name}`, {
         cancelToken: cancelTokenSource.token,
       }).then((res) => {
-        console.log(res.data);
         if (res.data.message) {
           setMessage(res.data.message);
           setPeople([]);

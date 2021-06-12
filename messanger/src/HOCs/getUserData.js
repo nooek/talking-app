@@ -6,7 +6,7 @@ import { useUserData } from "../store/userDataProvider";
 import { useSocket } from "../store/socketProvider";
 
 const GetUserData = ({ children }) => {
-  const { userData, setUserData } = useUserData();
+  const { setUserData } = useUserData();
   const { socket, setSocket } = useSocket();
   const [loading, setLoading] = useState(true);
   const [logged, setLogged] = useState(true);
@@ -44,7 +44,6 @@ const GetUserData = ({ children }) => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res);
           if (res.data.user) {
             createNewSocket(res.data.user);
             setUserData(res.data.user);
@@ -59,8 +58,6 @@ const GetUserData = ({ children }) => {
       isMounted.current = false;
     };
   }, []);
-
-  console.log(userData);
 
   if (!loading && logged) {
     return children;

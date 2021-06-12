@@ -21,8 +21,6 @@ const MessagesSide = (props) => {
   const { onlineFriends } = props;
   const messagesContainerRef = useRef();
 
-  console.log(props);
-
   const goToLastSendedMessage = () => {
     messagesContainerRef?.current?.scrollTo({
       bottom: "0",

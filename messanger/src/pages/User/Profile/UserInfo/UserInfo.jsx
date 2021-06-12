@@ -23,7 +23,6 @@ const UserInfo = () => {
   const getUser = () => {
     getUserData(userData[0].user_id).then((res) => {
       setUserData(res.data);
-      console.log(userData);
     });
   };
 
@@ -42,7 +41,6 @@ const UserInfo = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res);
           if (!res.data.error) {
             getUser();
           }

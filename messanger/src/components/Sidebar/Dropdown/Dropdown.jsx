@@ -8,14 +8,12 @@ const Dropdown = () => {
   const [goToLoginPage, setGoToLoginPage] = useState(false);
   const { socket } = useSocket();
 
-  console.log("dsada");
   const logOut = () => {
     localStorage.removeItem("id");
     axios.get("http://localhost:3001/api/user/logout/asd", {
       withCredentials: true,
     })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         socket.disconnect();
         setGoToLoginPage(true);
       });

@@ -32,9 +32,7 @@ const ChatSendMessage = () => {
   const sendMessage = () => {
     const today = getDate();
     const isValid = validateMessage(message);
-    console.log(today);
     if (isValid) {
-      console.log(userData);
       const messageData = {
         author: userData[0].user_id,
         receiver: friend.user_id,
@@ -43,7 +41,6 @@ const ChatSendMessage = () => {
         message_time: today.time,
       };
 
-      console.log(messageData);
       socket.emit("send-message", messageData);
       setMessages([...messages, messageData]);
       setContactMessages([messageData, ...contactMessages]);

@@ -107,16 +107,17 @@ module.exports = {
 
       if (results) {
         const resultsRestOf50 = results.length % 50;
+        console.log(results.length);
         results = results.reverse()
-        if (page === '1') {
+        if (page === '1' && results.length >= 50) {
           console.log("lol é ruim");
           const pagination = results.slice((page - 1) * 50 + (resultsRestOf50), page * 50 + (resultsRestOf50))
-          console.log(pagination);
           res.status(200).json({
             messages: pagination,
             maxResults: results.length
           })
-        } else {
+        }
+        if (page > '1' || results.length < 50) {
           const pagination = results.slice((page - 1) * 50, page * 50);
           res.status(200).json({
             messages: pagination,

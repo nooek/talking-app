@@ -40,7 +40,6 @@ const MessagesRender = () => {
   }, [friend]);
 
   useEffect(() => {
-    console.log("das");
     axios
       .get(`http://localhost:3001/api/message/contactmessage/${friend.user_id}/${userData[0].user_id}/${page}`)
       .then((res) => {
@@ -56,8 +55,6 @@ const MessagesRender = () => {
   const playAudio = (audio) => {
     audio.play();
   };
-
-  console.log(contactMessages);
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -75,7 +72,6 @@ const MessagesRender = () => {
       }
 
       if (!blockedContactsList.includes(message.author)) {
-        console.log(contactMessages);
         setContactMessages((prevContactMessages) => [message, ...prevContactMessages.reverse()]);
         setMessages([message, ...messages]);
         const contactsWithoutFriend = contacts.filter((each) => each.user_id !== message.author);

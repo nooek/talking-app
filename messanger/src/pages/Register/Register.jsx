@@ -47,7 +47,6 @@ const Login = (props) => {
           pfp: defaultPfp,
         })
         .then((res) => {
-          console.log(res);
           setMessage(res.data.message);
         });
     } else {
