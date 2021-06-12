@@ -16,7 +16,6 @@ import {
 const MessagesSide = (props) => {
   const { userData } = useUserData();
   const { friend } = useFriend();
-  const [showFindMessage, setShowFindMessage] = useState(false);
   const [goLastMessage, setGoLastMessage] = useState(false);
   // const { contactMessages } = useContactMessages();
   const { onlineFriends } = props;
@@ -51,7 +50,7 @@ const MessagesSide = (props) => {
   return (
     <ChatSide id="chat-side">
       <MobileTopbar onlineFriends={onlineFriends} />
-      <ChatTopbar clickSearch={() => setShowFindMessage(!showFindMessage)} />
+      <ChatTopbar />
       {friend.status === "REQUESTED" && friend.friend_with !== userData[0].user_id ? (
         <NotFriendAlert />
       ) : null}

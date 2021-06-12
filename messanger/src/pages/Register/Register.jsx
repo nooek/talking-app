@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import {
   Container,
@@ -70,6 +71,10 @@ const Login = (props) => {
         </SubmitButton>
       </Card>
       {message ? <h2 style={{ color: "white" }}>{message}</h2> : null}
+      <h2 style={{ color: "white", fontSize: "20px" }}>
+        If you already have an account,
+        <Link to="/login">login</Link>
+      </h2>
     </Container>
   );
 };

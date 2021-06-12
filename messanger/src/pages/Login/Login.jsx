@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import io from "socket.io-client";
 import {
   Container,
@@ -84,6 +84,10 @@ const Login = (props) => {
       </Card>
       {message ? <h2 style={{ color: "white" }}>{message}</h2> : null}
       {redirect === true ? <Redirect to="/" /> : null}
+      <h2 style={{ color: "white" }}>
+        If you dont have an account,
+        <Link to="/register">register</Link>
+      </h2>
     </Container>
   );
 };

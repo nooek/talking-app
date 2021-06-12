@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useFriend } from "../../store/friendProvider";
 import Dropdown from "./Dropdown/Dropdown";
+import FindMessage from "../FindMessage/FindMessage";
 import {
   ChatTopBar,
   TopbarUserInfoContainer,
@@ -11,10 +12,10 @@ import {
   SearchIcon,
 } from "./Styles";
 
-const ChatTopbar = (props) => {
+const ChatTopbar = () => {
   const { friend } = useFriend();
-  const { clickSearch } = props;
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showMessageSearch, setShowMessageSearch] = useState(false);
   return (
     <ChatTopBar>
       <TopbarUserInfoContainer>
@@ -22,9 +23,14 @@ const ChatTopbar = (props) => {
         <FriendName>{friend.user_name}</FriendName>
       </TopbarUserInfoContainer>
       <TopbarMoreActionsContainer>
-        <SearchIcon onClick={clickSearch} />
+        <SearchIcon
+          onClick={() => setShowMessageSearch(!showMessageSearch)}
+        />
         <DropdownOpen onClick={() => setShowDropdown(!showDropdown)} />
         {showDropdown === true ? <Dropdown /> : null}
+        {showMessageSearch === true
+          ? <FindMessage click={() => setShowMessageSearch(!showMessageSearch)} />
+          : null}
       </TopbarMoreActionsContainer>
     </ChatTopBar>
   );
