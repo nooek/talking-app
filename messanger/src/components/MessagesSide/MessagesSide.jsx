@@ -49,7 +49,7 @@ const MessagesSide = (props) => {
 
   return (
     <ChatSide id="chat-side">
-      <MobileTopbar onlineFriends={onlineFriends} />
+      <MobileTopbar onlineFriends={onlineFriends} chat />
       <ChatTopbar />
       {friend.status === "REQUESTED" && friend.friend_with !== userData[0].user_id ? (
         <NotFriendAlert />

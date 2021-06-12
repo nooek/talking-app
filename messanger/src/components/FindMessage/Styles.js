@@ -12,6 +12,7 @@ export const Container = styled.div`
   @media (max-width: 400px) {
     width: 100%;
     height: 96.8%;
+    position: absolute;
     bottom: 0;
     top: 30px;
   }

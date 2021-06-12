@@ -19,9 +19,10 @@ export const Parent = styled.div`
 export const ContactImage = styled.img`
   width: 250px;
   height: 250px;
+  border-radius: 50%;
   @media (max-width: 300px) {
-    width: 100%;
-    height: auto;
+    width: 80%;
+    height: 230px;
   }
 `;
 

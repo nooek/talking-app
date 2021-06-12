@@ -17,7 +17,7 @@ export const Container = styled.div`
     animation-name: ${(props) => (props.hide === true ? "" : openingAnimation)};
     animation-duration: 800ms;
     background: rgb(230, 230, 230);
-    position: ${(props) => (props.hide && props.chat === true ? "" : "absolute")};
+    position: ${(props) => (props.hide && props.chat === true ? "relative" : "absolute")};
     z-index: 15;
     top: 0;
   }

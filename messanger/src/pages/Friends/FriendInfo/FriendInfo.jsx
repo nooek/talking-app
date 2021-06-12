@@ -27,7 +27,7 @@ const FriendInfo = () => {
 
   return (
     <Container>
-      <Link to="/chat">
+      <Link to="/">
         <GoBack />
       </Link>
       <Parent>
