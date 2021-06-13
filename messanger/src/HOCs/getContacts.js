@@ -11,10 +11,11 @@ const GetContacts = ({ children }) => {
   useEffect(() => {
     setLoading(true);
     getFriendsData(userData[0].user_id).then((res) => {
+      console.log(res);
       if (!res.data[0].message) {
         setContacts(res.data);
-        setLoading(false);
       }
+      setLoading(false);
     });
   }, [userData, setContacts]);
 

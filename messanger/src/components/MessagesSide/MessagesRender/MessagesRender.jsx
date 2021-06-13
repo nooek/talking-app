@@ -1,20 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
-import { useContacts } from "../../../store/contactsProvider";
 import { useFriend } from "../../../store/friendProvider";
-import { useMessages } from "../../../store/messagesProvider";
-import { useSocket } from "../../../store/socketProvider";
 import { useUserData } from "../../../store/userDataProvider";
 import { MessageContainer, Message, MessageTime } from "./Styles";
 import { useContactMessages } from "../../../store/contactMessagesProvider";
-import messageNotificationSound from "../../../assets/sounds/message-notification.ogg";
 
 const MessagesRender = () => {
-  const { messages, setMessages } = useMessages();
   const { userData } = useUserData();
   const { friend } = useFriend();
-  const { socket } = useSocket();
-  const { contacts, setContacts } = useContacts();
   const { contactMessages, setContactMessages } = useContactMessages();
   const [page, setPage] = useState(0);
   const [tradeFriend, setTradeFriend] = useState(false);
@@ -51,39 +44,6 @@ const MessagesRender = () => {
         }
       });
   }, [tradeFriend, page]);
-
-  const playAudio = (audio) => {
-    audio.play();
-  };
-
-  useEffect(() => {
-    socket.on("receive-message", (message) => {
-      const blockedContactsList = [];
-
-      contacts.map((each) => {
-        if (each.status === "BLOCKED") {
-          return blockedContactsList.push(each.user_id);
-        }
-        return null;
-      });
-
-      if (message.author !== friend.user_id) {
-        message.seen = false;
-      }
-
-      if (!blockedContactsList.includes(message.author)) {
-        setContactMessages((prevContactMessages) => [message, ...prevContactMessages.reverse()]);
-        setMessages([message, ...messages]);
-        const contactsWithoutFriend = contacts.filter((each) => each.user_id !== message.author);
-        const messageAuthor = contacts.filter((each) => each.user_id === message.author);
-        setContacts([...messageAuthor, ...contactsWithoutFriend]);
-        playAudio(new Audio(messageNotificationSound));
-      }
-    });
-    return () => {
-      socket.off("receive-message");
-    };
-  }, [socket, messages, setMessages, userData, contacts, friend]);
 
   return contactMessages.map((each, index) => {
     each.seen = true;

@@ -25,6 +25,7 @@ const SortContacts = ({ children }) => {
   const sortMessages = useCallback(() => {
     const sortedMessagesIds = [];
     if (messages) {
+      console.log(messages.length);
       const sortedMessages = messages.slice().reverse();
       sortedMessages.forEach((message) => {
         if (message.author !== userData[0].user_id) {

@@ -38,22 +38,33 @@ const Login = (props) => {
     const validEmail = validateEmail(email);
     const validUsername = validateUsername(name);
     const isValid = validUsername && validEmail && validPassword;
-    if (isValid) {
-      axios
-        .post("http://localhost:3001/api/user/register", {
-          name: name,
-          password: password,
-          userEmail: email,
-          pfp: defaultPfp,
-        })
-        .then((res) => {
-          setMessage(res.data.message);
-        });
-    } else {
-      if (validUsername.message) setMessage(validUsername.message);
-      if (validEmail.message) setMessage(validEmail.message);
-      if (validPassword.message) setMessage(validPassword.message);
-    }
+    console.log(isValid);
+    // if (isValid) {
+    //   axios
+    //     .post("http://localhost:3001/api/user/register", {
+    //       name: name,
+    //       password: password,
+    //       userEmail: email,
+    //       pfp: defaultPfp,
+    //     })
+    //     .then((res) => {
+    //       setMessage(res.data.message);
+    //     });
+    // } else {
+    //   if (validUsername.message) setMessage(validUsername.message);
+    //   if (validEmail.message) setMessage(validEmail.message);
+    //   if (validPassword.message) setMessage(validPassword.message);
+    // }
+    axios
+      .post("http://localhost:3001/api/user/register", {
+        name: name,
+        password: password,
+        userEmail: email,
+        pfp: defaultPfp,
+      })
+      .then((res) => {
+        setMessage(res.data.message);
+      });
   };
 
   return (

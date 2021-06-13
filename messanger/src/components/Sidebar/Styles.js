@@ -89,7 +89,7 @@ export const SearchFriends = styled.input`
 export const FriendsContainer = styled.div`
   flex: 1;
   overflow-x: auto;
-  border-top: 2px solid blue;
+  border-top: 1px solid black;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   ::-webkit-scrollbar-track {

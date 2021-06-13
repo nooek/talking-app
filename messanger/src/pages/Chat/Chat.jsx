@@ -10,6 +10,7 @@ import FindMessage from "../../components/FindMessage/FindMessage";
 // eslint-disable-next-line import/no-named-as-default
 // eslint-disable-next-line import/no-named-as-default-member
 import MessagesSide from "../../components/MessagesSide/MessagesSide.jsx";
+import ReceiveMessage from "../../HOCs/receiveMessage";
 
 const Chat = (props) => {
   const { friend } = useFriend();
@@ -17,17 +18,19 @@ const Chat = (props) => {
   const { friendsOnline } = props;
 
   return (
-    <Container>
-      <Sidebar onlineFriend={friendsOnline} />
-      {showFindMessage === true ? (
-        <FindMessage click={() => setShowFindMessage(!showFindMessage)} />
-      ) : null}
-      {friend.user_id !== undefined ? (
-        <MessagesSide onlineFriends={friendsOnline} />
-      ) : (
-        <DefaultChat onlineFriends={friendsOnline} />
-      )}
-    </Container>
+    <ReceiveMessage>
+      <Container>
+        <Sidebar onlineFriend={friendsOnline} />
+        {showFindMessage === true ? (
+          <FindMessage click={() => setShowFindMessage(!showFindMessage)} />
+        ) : null}
+        {friend.user_id !== undefined ? (
+          <MessagesSide onlineFriends={friendsOnline} />
+        ) : (
+          <DefaultChat onlineFriends={friendsOnline} />
+        )}
+      </Container>
+    </ReceiveMessage>
   );
 };
 

@@ -33,7 +33,7 @@ const SidebarFriends = (props) => {
       if (each.status !== "DENIED") {
         return (
           <FriendContainer
-            key={each.friend_id}
+            key={each.user_id + Math.random()}
             onClick={() => setFriend(each)}
             selected={friend.user_id === each.user_id}
           >
