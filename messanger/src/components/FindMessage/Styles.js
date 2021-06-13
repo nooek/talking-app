@@ -9,9 +9,9 @@ export const Container = styled.div`
   top: 0;
   z-index: 17;
   text-align: center;
-  @media (max-width: 400px) {
+  @media (max-width: 450px) {
     width: 100%;
-    height: 96.8%;
+    height: calc(100% - 135px);
     position: absolute;
     bottom: 0;
     top: 30px;
