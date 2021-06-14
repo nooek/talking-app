@@ -64,7 +64,7 @@ const Dropdown = () => {
 
   const updateMessages = () => {
     axios.get(`http://localhost:3001/api/message/${userData[0].user_id}`).then((res) => {
-      if (res.data) {
+      if (res.datalocal) {
         setMessages(res.data);
       }
     });
@@ -74,10 +74,11 @@ const Dropdown = () => {
     const { data } = await axios.get(`http://localhost:3001/api/message/${userData[0].user_id}`);
 
     if (data) {
-      const chatMessages = data.filter((each) => each.receiver || each.author === friend.user_id);
       await axios.post("http://localhost:3001/api/message/clearchat", {
         user: userData[0].user_id,
-        messages: chatMessages,
+        friendId: friend.user_id,
+      }).then((res) => {
+        console.log(res);
       });
       updateMessages();
     }

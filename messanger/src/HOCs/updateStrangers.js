@@ -48,8 +48,6 @@ const UpdateStrangers = ({ children }) => {
         }
 
         if (!blockedContactsList.includes(message.author)) {
-          console.log("dsa543");
-          setMessages([message, ...messages]);
           const inContacts = [];
           contacts.map((each) => inContacts.push(each.user_id));
           const strangersMessageToSee = [];
@@ -63,8 +61,10 @@ const UpdateStrangers = ({ children }) => {
               status: "REQUESTED",
             });
           }
+          console.log(strangersMessageToSee);
           if (strangersMessageToSee.length > 0) {
             setContacts([...strangersMessageToSee, ...contacts]);
+            setMessages([message, ...messages]);
           }
           playAudio(new Audio(messageNotificationSound));
         }

@@ -8,8 +8,10 @@ module.exports = {
         (DEFAULT, '${message}', '${date}', '${receiver}', '${author}', '${message_time}')`;
     con.query(addMessageQuery, (error, results) => {
       if (error) {
+        console.log(error)
         res.json({ error: error });
       } else {
+        console.log(results)
         res.status(200).json(results);
       }
     });
@@ -38,25 +40,47 @@ module.exports = {
   deleteMessage: (req, res) => {},
 
   clearChat: (req, res) => {
-    const { user, messages } = req.body;
+    const { user, friendId } = req.body;
+    let messageIds = []
+    let deleteMessagesQueryResults;
+    let deleteMessagesQueryError;
 
-    messages.map((each, index) => {
-      const query = `INSERT INTO message_status VALUE (${user}, ${each.message_id}, TRUE, DEFAULT)`;
-      con.query(query, (error, results) => {
-        if (error) {
-          if (index <= 0) {
-            console.log(error);
-            res.status(400).send({ error: error });
-          }
+    const getMessagesQuery = `SELECT m.message_id, m.message, m.message_date, m.receiver, m.author, m.message_time, ms.deleted
+    FROM  message as m
+    LEFT JOIN message_status as ms
+    ON  m.message_id = ms.message_id and ms.user_id = ${user}
+    WHERE (m.receiver = ${friendId} AND m.author = ${user}) 
+    OR (m.receiver = ${user} AND m.author = ${friendId}) AND
+    (ms.user_id = ${user} OR isnull(ms.user_id))
+    AND (ms.deleted = 0 or isnull(ms.deleted) or ms.deleted != 1);`
+
+    con.query(getMessagesQuery, (error, results) => {
+      if (error) {
+        res.status(400).json({ error: error })
+      }
+      if (results) {
+        results.map((each) => {
+          messageIds.push(each.message_id)
+        })
+        console.log(messageIds);
+        if (messageIds.length > 0) {
+          console.log("dsa");
+          messageIds.forEach((messageId) => {
+            const deleteMessagesQuery = `INSERT INTO message_status VALUE (${user}, ${messageId}, DEFAULT, TRUE)`
+            console.log("dsad");
+            con.query(deleteMessagesQuery, (error, results) => {
+              if (error) {
+                deleteMessagesQueryError = error;
+              }
+              if (results) {
+                deleteMessagesQueryResults = results;
+              }
+            })
+          })      
+          res.status(200).json({message: "Finished"})
         }
-        if (results){
-          if (index <= 0){
-            console.log(results)
-            res.status(200).send(results);
-          }
-        }
-      });
-    });
+      }
+    })
   },
 
   findMessage: (req, res) => {
@@ -91,14 +115,14 @@ module.exports = {
 
   getContactMessage: (req, res) => {
     const { friendId, id, page } = req.params;
-    const query = `SELECT m.message_id, m.message, m.message_date, m.receiver, m.author, m.message_time
-    FROM  message as m
-    LEFT JOIN message_status as ms
-    ON  m.message_id = ms.message_id and ms.user_id = 58
-    WHERE (m.receiver = ${friendId} AND m.author = ${id}) 
-    OR (m.receiver = ${id} AND m.author = ${friendId}) AND
-    (ms.user_id = ${id} OR isnull(ms.user_id))
-    AND (ms.deleted = 0 or isnull(ms.deleted) or ms.deleted != 1);;
+    const query = `SELECT m.message_id, m.message, m.message_date, m.receiver, m.author, m.message_time, ms.deleted
+      FROM  message as m
+      LEFT JOIN message_status as ms
+      ON  m.message_id = ms.message_id and ms.user_id = ${id}
+      WHERE (m.receiver = ${friendId} AND m.author = ${id}) 
+      OR (m.receiver = ${id} AND m.author = ${friendId}) AND
+      (ms.user_id = ${id} OR isnull(ms.user_id))
+      AND (ms.deleted = 0 or isnull(ms.deleted) or ms.deleted != 1);
     `
     con.query(query, (error, results) => {
       if (error) {
@@ -111,7 +135,8 @@ module.exports = {
         results = results.reverse()
         if (page === '1' && results.length >= 50) {
           console.log("lol é ruim");
-          const pagination = results.slice((page - 1) * 50 + (resultsRestOf50), page * 50 + (resultsRestOf50))
+          console.log(results[0]);
+          const pagination = results.slice((page - 1) * 50, page * 50)
           res.status(200).json({
             messages: pagination,
             maxResults: results.length

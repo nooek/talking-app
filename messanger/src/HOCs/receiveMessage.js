@@ -23,7 +23,7 @@ const ReceiveMessage = ({ children }) => {
     if (socket) {
       socket.on("receive-message", (message) => {
         const blockedContactsList = [];
-
+        console.log(message);
         contacts.map((each) => {
           if (each.status === "BLOCKED") {
             return blockedContactsList.push(each.user_id);
@@ -38,7 +38,7 @@ const ReceiveMessage = ({ children }) => {
         if (!blockedContactsList.includes(message.author)) {
           if (message.author === friend.user_id) {
             // eslint-disable-next-line max-len
-            setContactMessages((prevContactMessages) => [message, ...prevContactMessages.reverse()]);
+            setContactMessages((prevContactMessages) => [message, ...prevContactMessages]);
           }
           setMessages([message, ...messages]);
           const contactsWithoutFriend = contacts.filter((each) => each.user_id !== message.author);

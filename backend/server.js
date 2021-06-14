@@ -30,7 +30,6 @@ io.on("connection", (socket) => {
     showOnline: socket.handshake.query.showOnline,
     room: ''
   });
-  console.log(users)
 
   usersFiltered = users.filter((each) => {
     return each.showOnline !== "0";
@@ -77,7 +76,8 @@ io.on("connection", (socket) => {
           return (messageReceiver = each.socketId);
         }
       });
-      console.log(messageReceiver)
+      console.log(users);
+      console.log(messageReceiver);
       socket.broadcast.to(messageReceiver).emit("receive-message", data);
     }
   });
