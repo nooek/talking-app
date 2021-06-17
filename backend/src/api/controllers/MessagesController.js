@@ -1,17 +1,14 @@
-const { con, config } = require("../../config/dbConfig");
+const { con } = require("../../config/dbConfig");
 
 module.exports = {
   createMessage: (req, res) => {
     const { message, date, receiver, author, message_time } = req.body;
-    console.log(message_time)
     const addMessageQuery = `INSERT INTO message VALUES 
         (DEFAULT, '${message}', '${date}', '${receiver}', '${author}', '${message_time}')`;
     con.query(addMessageQuery, (error, results) => {
       if (error) {
-        console.log(error)
         res.json({ error: error });
       } else {
-        console.log(results)
         res.status(200).json(results);
       }
     });
@@ -42,8 +39,6 @@ module.exports = {
   clearChat: (req, res) => {
     const { user, friendId } = req.body;
     let messageIds = []
-    let deleteMessagesQueryResults;
-    let deleteMessagesQueryError;
 
     const getMessagesQuery = `SELECT m.message_id, m.message, m.message_date, m.receiver, m.author, m.message_time, ms.deleted
     FROM  message as m
@@ -115,12 +110,13 @@ module.exports = {
 
   getContactMessage: (req, res) => {
     const { friendId, id, page } = req.params;
+    console.log(friendId);
     const query = `SELECT m.message_id, m.message, m.message_date, m.receiver, m.author, m.message_time, ms.deleted
       FROM  message as m
       LEFT JOIN message_status as ms
       ON  m.message_id = ms.message_id and ms.user_id = ${id}
-      WHERE (m.receiver = ${friendId} AND m.author = ${id}) 
-      OR (m.receiver = ${id} AND m.author = ${friendId}) AND
+      WHERE ((m.receiver = ${friendId} AND m.author = ${id}) 
+      OR (m.receiver = ${id} AND m.author = ${friendId})) AND
       (ms.user_id = ${id} OR isnull(ms.user_id))
       AND (ms.deleted = 0 or isnull(ms.deleted) or ms.deleted != 1);
     `
@@ -130,25 +126,13 @@ module.exports = {
       }
 
       if (results) {
-        const resultsRestOf50 = results.length % 50;
-        console.log(results.length);
         results = results.reverse()
-        if (page === '1' && results.length >= 50) {
-          console.log("lol é ruim");
-          console.log(results[0]);
-          const pagination = results.slice((page - 1) * 50, page * 50)
-          res.status(200).json({
-            messages: pagination,
-            maxResults: results.length
-          })
-        }
-        if (page > '1' || results.length < 50) {
-          const pagination = results.slice((page - 1) * 50, page * 50);
-          res.status(200).json({
-            messages: pagination,
-            maxResults: results.length
-          })
-        }
+        console.log(results.length)
+        const pagination = results.slice((page - 1) * 50, page * 50)
+        res.status(200).json({
+          messages: pagination,
+          maxResults: results.length
+        })
       }
     })
   }

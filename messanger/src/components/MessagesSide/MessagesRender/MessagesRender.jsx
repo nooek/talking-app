@@ -48,25 +48,22 @@ const MessagesRender = () => {
 
   return contactMessages.map((each, index) => {
     each.seen = true;
-    if (!each.deleted) {
-      return (
-        <MessageContainer
-            // eslint-disable-next-line react/no-array-index-key
-          key={index}
-          className="message-container"
-          sender={each.author === userData[0].user_id}
-          ref={index === contactMessages.length - 1 ? lastMessageRef : null}
-        >
-          <Message className="message">{each.message}</Message>
-          {
-              each.message_time !== undefined && each.message_time !== null
-                ? <MessageTime>{`${each.message_time.split(":")[0]}:${each.message_time.split(":")[1]}`}</MessageTime>
-                : null
-            }
-        </MessageContainer>
-      );
-    }
-    return null;
+    return (
+      <MessageContainer
+          // eslint-disable-next-line react/no-array-index-key
+        key={index}
+        className="message-container"
+        sender={each.author === userData[0].user_id}
+        ref={index === contactMessages.length - 1 ? lastMessageRef : null}
+      >
+        <Message className="message">{each.message}</Message>
+        {
+          each.message_time !== undefined && each.message_time !== null
+            ? <MessageTime>{`${each.message_time.split(":")[0]}:${each.message_time.split(":")[1]}`}</MessageTime>
+            : null
+      }
+      </MessageContainer>
+    );
   });
 };
 
